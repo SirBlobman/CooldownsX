@@ -1,0 +1,34 @@
+# Configuration Options for Enderpearl Cooldown
+options:
+  # A list of worlds that Enderpearl Cooldown should not mess with
+  # Don't forget the "" around the name of the world
+  disabled worlds:
+  - "disabled world 1"
+  - "disabled_world_2"
+  
+  # The amount of time to make players wait before using enderpearls again
+  # This is in seconds, 60 is a minute
+  # Default: 30
+  time in seconds: 30
+  
+  # Players with this permission will not have a cooldown
+  bypass permission: "epearlcooldown.bypass"
+  
+# Custom Messages for Enderpearl Cooldown
+# Set a message to "" to disabel it
+# Action Bar messages cannot be disabled
+# You can use {time_left_decimal} (ex 10.4 seconds) or {time_left} (ex 10 seconds)
+messages:
+  blocked: "&eYou cannot use an enderpearl for &c{time_left}&e seconds."
+  action bar: "&6&lEnderpearl Cooldown: &c{time_left} seconds" 
+  end cooldown: "&aYou can now use an ender pearl."
+  zero seconds: "&aReady"
+  
+  
+# Only enable this if asked to by SirBlobman
+# You can also enable it if you like seeing spam in your console
+debug: false
+
+# This will check the PlayerInteractEvent for interfering plugins and give information about them
+# Only use this if there is a major issue
+extreme debug: false
