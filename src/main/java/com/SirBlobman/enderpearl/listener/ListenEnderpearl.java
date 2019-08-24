@@ -1,7 +1,12 @@
 package com.SirBlobman.enderpearl.listener;
 
+import java.util.List;
+
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventException;
 import org.bukkit.event.EventHandler;
@@ -10,16 +15,16 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.RegisteredListener;
 
+import com.SirBlobman.enderpearl.EnderpearlCooldown;
 import com.SirBlobman.enderpearl.config.ConfigSettings;
 import com.SirBlobman.enderpearl.utility.ECooldownUtil;
 import com.SirBlobman.enderpearl.utility.Util;
-
-import java.util.List;
 
 public class ListenEnderpearl implements Listener {
     @EventHandler(priority=EventPriority.LOWEST, ignoreCancelled=false)
@@ -45,6 +50,12 @@ public class ListenEnderpearl implements Listener {
         if(itemUsed == null) {
             Util.debug("The item in the event is null. Ignoring event.");
             return;
+        }
+        
+        Block block = e.getClickedBlock();
+        if(block != null) {
+        	BlockState state = block.getState();
+        	if(state instanceof InventoryHolder) return;
         }
         
         Material type = itemUsed.getType();
@@ -74,6 +85,8 @@ public class ListenEnderpearl implements Listener {
         
         String messageBlocked = ConfigSettings.getOption("messages.blocked", "").replace("{time_left}", Integer.toString(timeLeft));
         Util.sendMessage(player, messageBlocked);
+        
+        Bukkit.getScheduler().runTaskLater(EnderpearlCooldown.INSTANCE, () -> player.updateInventory(), 1L);
     }
     
     @SuppressWarnings("deprecation")
