@@ -1,7 +1,11 @@
 name: ${project.artifactId}
 prefix: ${project.name}
-version: ${project.version}
 description: ${project.description}
 author: SirBlobman
-main: com.SirBlobman.enderpearl.EnderpearlCooldown
-softdepend: [PlaceholderAPI, MVdWPlaceholderAPI]
+
+main: "com.SirBlobman.enderpearl.cooldown.EnderpearlCooldown"
+version: ${project.version}
+
+softdepend:
+- MVdWPlaceholderAPI
+- PlaceholderAPI

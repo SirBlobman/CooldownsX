@@ -13,7 +13,7 @@
 
 	<groupId>com.SirBlobman</groupId>
 	<artifactId>EnderpearlCooldown</artifactId>
-	<version>2.9</version>
+	<version>3.0</version>
 
 	<name>Enderpearl Cooldown</name>
 	<description>Simple enderpearl cooldown with a customizable message and timer</description>
@@ -36,21 +36,15 @@
 		<dependency>
 			<groupId>com.SirBlobman.api</groupId>
 			<artifactId>SirBlobmanAPI</artifactId>
-			<version>1.5</version>
+			<version>1.6</version>
 			<scope>compile</scope>
 		</dependency>
 
-		<!-- Spigot 1.14.4 -->
+		<!-- Spigot API 1.8 -->
 		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot-api</artifactId>
-			<version>1.14.4-R0.1-SNAPSHOT</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.spigotmc</groupId>
-			<artifactId>spigot</artifactId>
-			<version>1.14.4-R0.1-SNAPSHOT</version>
+			<version>1.8-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 
