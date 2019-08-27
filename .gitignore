@@ -6,6 +6,10 @@
 *.project
 *.classpath
 
+# IntelliJ IDEA
+.idea/
+*.iml
+
 # Maven
 target/
 *dependency-reduced-pom.xml

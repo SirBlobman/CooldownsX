@@ -96,6 +96,7 @@
 							<goal>shade</goal>
 						</goals>
 						<configuration>
+							<createDependencyReducedPom>false</createDependencyReducedPom>
 							<relocations>
 								<relocation>
 									<pattern>com.SirBlobman.api.utility</pattern>
