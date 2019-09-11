@@ -1,10 +1,10 @@
-name: ${project.artifactId}
-prefix: ${project.name}
-description: ${project.description}
+name: "${project.artifactId}"
+prefix: "${project.name}"
+description: "${project.description}"
 author: SirBlobman
 
 main: "com.SirBlobman.enderpearl.cooldown.EnderpearlCooldown"
-version: ${project.version}
+version: "${project.version}"
 
 softdepend:
 - MVdWPlaceholderAPI

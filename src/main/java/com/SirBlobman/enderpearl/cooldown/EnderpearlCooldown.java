@@ -3,7 +3,7 @@ package com.SirBlobman.enderpearl.cooldown;
 import com.SirBlobman.api.utility.Util;
 import com.SirBlobman.enderpearl.cooldown.hook.placeholder.PlaceholderHookClip;
 import com.SirBlobman.enderpearl.cooldown.hook.placeholder.PlaceholderHookMVdW;
-import com.SirBlobman.enderpearl.cooldown.listener.ListenEnderpearls;
+import com.SirBlobman.enderpearl.cooldown.listener.ListenerEnderpearlCooldown;
 import com.SirBlobman.enderpearl.cooldown.task.EnderpearlCooldownTask;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -16,7 +16,7 @@ public class EnderpearlCooldown extends JavaPlugin {
         saveDefaultConfig();
 
         PluginManager manager = Bukkit.getPluginManager();
-        manager.registerEvents(new ListenEnderpearls(this), this);
+        manager.registerEvents(new ListenerEnderpearlCooldown(this), this);
 
         EnderpearlCooldownTask task = new EnderpearlCooldownTask(this);
         task.runTaskTimerAsynchronously(this, 0L, 1L);

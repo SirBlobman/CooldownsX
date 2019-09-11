@@ -13,20 +13,27 @@
 
 	<groupId>com.SirBlobman</groupId>
 	<artifactId>EnderpearlCooldown</artifactId>
-	<version>3.0</version>
+	<version>3.1</version>
 
 	<name>Enderpearl Cooldown</name>
 	<description>Simple enderpearl cooldown with a customizable message and timer</description>
 
 	<repositories>
+		<!-- Spigot API -->
 		<repository>
-			<id>mvdw-software</id>
-			<name>MVdW Public Repositories</name>
+			<id>hub.spigotmc.org</id>
+			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+		</repository>
+
+		<!-- MVdWPlaceholderAPI -->
+		<repository>
+			<id>repo.mvdw-software.com</id>
 			<url>http://repo.mvdw-software.com/content/groups/public/</url>
 		</repository>
 
+		<!-- PlaceholderAPI -->
 		<repository>
-			<id>placeholderapi</id>
+			<id>repo.extendedclip.com</id>
 			<url>http://repo.extendedclip.com/content/repositories/placeholderapi/</url>
 		</repository>
 	</repositories>
@@ -36,7 +43,7 @@
 		<dependency>
 			<groupId>com.SirBlobman.api</groupId>
 			<artifactId>SirBlobmanAPI</artifactId>
-			<version>1.6</version>
+			<version>1.8</version>
 			<scope>compile</scope>
 		</dependency>
 
@@ -67,6 +74,10 @@
 					<groupId>org.spigotmc</groupId>
 					<artifactId>spigot</artifactId>
 				</exclusion>
+				<exclusion>
+					<groupId>be.maximvdw</groupId>
+					<artifactId>MVdWUpdater</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 	</dependencies>
@@ -78,6 +89,7 @@
 				<filtering>true</filtering>
 			</resource>
 		</resources>
+
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -90,15 +102,10 @@
 							<goal>shade</goal>
 						</goals>
 						<configuration>
-							<createDependencyReducedPom>false</createDependencyReducedPom>
 							<relocations>
 								<relocation>
-									<pattern>com.SirBlobman.api.utility</pattern>
-									<shadedPattern>com.SirBlobman.enderpearl.utility.api</shadedPattern>
-								</relocation>
-								<relocation>
-									<pattern>com.SirBlobman.api.nms</pattern>
-									<shadedPattern>com.SirBlobman.enderpearl.nms</shadedPattern>
+									<pattern>com.SirBlobman.api</pattern>
+									<shadedPattern>com.SirBlobman.enderpearl.cooldown.api</shadedPattern>
 								</relocation>
 							</relocations>
 						</configuration>

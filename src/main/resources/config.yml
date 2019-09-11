@@ -14,6 +14,17 @@ debug: false
 disabled worlds:
 - "None"
 
+# A list of blocks that will be ignored when Enderpearl Cooldown checks interaction
+#
+# Default:
+# - "ENDER_CHEST"
+# - "CHEST"
+# - "CRAFTING_TABLE"
+ignore interaction blocks:
+- "ENDER_CHEST"
+- "CHEST"
+- "CRAFTING_TABLE"
+
 # How should the cooldown timer be detected
 # Possible Options:
 # - NORMAL - All players have the same timer based on the config option
