@@ -25,7 +25,7 @@ public class PlaceholderHookClip extends PlaceholderExpansion {
 
     @Override
     public String getVersion() {
-        return "3.0";
+        return "3.3";
     }
 
     @Override

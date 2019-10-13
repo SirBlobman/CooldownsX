@@ -18,7 +18,6 @@ public class PlaceholderHook {
     }
 
     public final String getPlaceholder(Player player, String id) {
-        this.plugin.getLogger().info("Getting placeholder '" + id + "'.");
         if(player == null || id == null) return null;
 
         switch(id) {
