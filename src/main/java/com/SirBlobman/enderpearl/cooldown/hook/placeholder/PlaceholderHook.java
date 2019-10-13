@@ -1,10 +1,11 @@
 package com.SirBlobman.enderpearl.cooldown.hook.placeholder;
 
+import java.text.DecimalFormat;
+
 import com.SirBlobman.enderpearl.cooldown.EnderpearlCooldown;
 import com.SirBlobman.enderpearl.cooldown.api.ECooldownAPI;
-import org.bukkit.entity.Player;
 
-import java.text.DecimalFormat;
+import org.bukkit.entity.Player;
 
 public class PlaceholderHook {
     private final EnderpearlCooldown plugin;
@@ -17,6 +18,7 @@ public class PlaceholderHook {
     }
 
     public final String getPlaceholder(Player player, String id) {
+        this.plugin.getLogger().info("Getting placeholder '" + id + "'.");
         if(player == null || id == null) return null;
 
         switch(id) {

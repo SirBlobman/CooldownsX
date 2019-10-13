@@ -1,9 +1,11 @@
 package com.SirBlobman.enderpearl.cooldown.hook.placeholder;
 
 import com.SirBlobman.enderpearl.cooldown.EnderpearlCooldown;
-import me.clip.placeholderapi.expansion.PlaceholderExpansion;
+
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+
+import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 
 public class PlaceholderHookClip extends PlaceholderExpansion {
     private final PlaceholderHook hook;
@@ -12,13 +14,8 @@ public class PlaceholderHookClip extends PlaceholderExpansion {
     }
 
     @Override
-    public boolean canRegister() {
-        return true;
-    }
-
-    @Override
     public String getIdentifier() {
-        return "enderpearl_cooldown";
+        return "enderpearlcooldown";
     }
 
     @Override
@@ -29,6 +26,16 @@ public class PlaceholderHookClip extends PlaceholderExpansion {
     @Override
     public String getVersion() {
         return "3.0";
+    }
+
+    @Override
+    public boolean persist() {
+        return true;
+    }
+
+    @Override
+    public boolean canRegister() {
+        return true;
     }
 
     @Override
