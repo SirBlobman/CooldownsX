@@ -98,7 +98,7 @@
     </dependencies>
     
     <build>
-        <finalName>EnderpearlCooldown-${bukkit.plugin.version}</finalName>
+        <finalName>${bukkit.plugin.name}-${bukkit.plugin.version}</finalName>
 
         <resources>
             <resource>
