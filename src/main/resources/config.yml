@@ -1,0 +1,67 @@
+# Default Enderpearl Cooldown Configuration File
+# Made by SirBlobman for v${bukkit.plugin.version}
+
+# Enable this to log extra information to your server console
+# You only need it if there is an issue or if SirBlobman asks for it.
+#
+# Default: false
+debug-mode: false
+
+# This is a list of worlds where there will not be a cooldown
+# World names are case sensitive, "world" is not the same as "wOrLd"
+#
+# Default:
+#   - "world_the_end"
+disabled-world-list:
+  - "world_the_end"
+
+# This is a list of blocks that interaction will be ignored on
+# Be careful when adding to this list as it may create bypasses
+#
+# Make sure to use the proper material names for your version
+# Data/Damage is not supported
+#
+# Default
+#  - "ENDER_CHEST"
+#  - "CHEST"
+#  - "CRAFTING_TABLE"
+ignored-block-types:
+  - "ENDER_CHEST"
+  - "CHEST"
+  - "CRAFTING_TABLE"
+
+# What type of cooldown timer do you want to use?
+# Possible Options:
+#   NORMAL: All players have the same cooldown, based on the config option
+#   PERMISSION_BASED: Timer is based on a permission node, if a permission could not be detected it will use the config option.
+#     permission node: "enderpearl.cooldown.timer.<seconds>"
+#
+# Default: NORMAL
+cooldown-mode: NORMAL
+
+# What is the default expire time for the cooldown?
+# The timer is in seconds.
+#
+# Default: 30
+default-timer: 30
+
+# If you give a player this permission, they will only have the vanilla cooldown
+# You must explicitly give this permission to a player/group, OPs do not have it by default
+#
+# In 1.8.9 and below, the vanilla cooldown is nearly 0
+# In 1.9 and above, the vanilla cooldown is about 1 second
+#
+# Default: "enderpearl.cooldown.bypass"
+bypass-permission: "enderpearl.cooldown.bypass"
+
+# Set any message to "" or '' to disable it
+# DO NOT blank out messages
+# DO NOT set messages to null
+messages:
+  in-cooldown: "&cYou must wait &a{time_left} seconds&c before using an enderpearl."
+  end-cooldown: "&aYou may now use an ender pearl."
+  zero-time-left: "&a&lReady!"
+
+  action-bar:
+    timer: "&6&lEnderpearl Cooldown &7\u00BB &c{time_left} seconds."
+    end-timer: "&a&lReady!"
