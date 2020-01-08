@@ -1,11 +1,12 @@
-name: "${project.artifactId}"
-prefix: "${project.name}"
-description: "${project.description}"
-author: SirBlobman
+name: "${bukkit.plugin.name}"
+prefix: "${bukkit.plugin.prefix}"
+description: "${bukkit.plugin.description}"
 
-main: "com.SirBlobman.enderpearl.cooldown.EnderpearlCooldown"
-version: "${project.version}"
+main: "${bukkit.plugin.main}"
+version: "${bukkit.plugin.version}"
+
+author: "SirBlobman"
 
 softdepend:
-- MVdWPlaceholderAPI
-- PlaceholderAPI
+  - "MVdWPlaceholderAPI"
+  - "PlaceholderAPI"

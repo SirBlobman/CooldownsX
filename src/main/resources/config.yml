@@ -1,52 +1,67 @@
-# Enderpearl Cooldown Configuration (Default made by SirBlobman)
-# Made for version ${project.version}
+# Default Enderpearl Cooldown Configuration File
+# Made by SirBlobman for v${bukkit.plugin.version}
 
-# Debug Mode is only necessary if you want to see extra information.
-# SirBlobman may ask you to enable this option if you need help with an issue.
+# Enable this to log extra information to your server console
+# You only need it if there is an issue or if SirBlobman asks for it.
 #
 # Default: false
-debug: false
+debug-mode: false
 
-# A list of worlds that will be ignored for Enderpearl Cooldown
+# This is a list of worlds where there will not be a cooldown
+# World names are case sensitive, "world" is not the same as "wOrLd"
 #
 # Default:
-# - "None"
-disabled worlds:
-- "None"
+#   - "world_the_end"
+disabled-world-list:
+  - "world_the_end"
 
-# A list of blocks that will be ignored when Enderpearl Cooldown checks interaction
+# This is a list of blocks that interaction will be ignored on
+# Be careful when adding to this list as it may create bypasses
 #
-# Default:
-# - "ENDER_CHEST"
-# - "CHEST"
-# - "CRAFTING_TABLE"
-ignore interaction blocks:
-- "ENDER_CHEST"
-- "CHEST"
-- "CRAFTING_TABLE"
+# Make sure to use the proper material names for your version
+# Data/Damage is not supported
+#
+# Default
+#  - "ENDER_CHEST"
+#  - "CHEST"
+#  - "CRAFTING_TABLE"
+ignored-block-types:
+  - "ENDER_CHEST"
+  - "CHEST"
+  - "CRAFTING_TABLE"
 
-# How should the cooldown timer be detected
+# What type of cooldown timer do you want to use?
 # Possible Options:
-# - NORMAL - All players have the same timer based on the config option
-# - PERMISSION_BASED - Timer is based on permissions (enderpearl.cooldown.timer.<seconds>), if a permission can't be detected it will default to the config option
+#   NORMAL: All players have the same cooldown, based on the config option
+#   PERMISSION_BASED: Timer is based on a permission node, if a permission could not be detected it will use the config option.
+#     permission node: "enderpearl.cooldown.timer.<seconds>"
 #
 # Default: NORMAL
-cooldown mode: NORMAL
+cooldown-mode: NORMAL
 
-# What is the default time for the cooldown?
-# The timer is in seconds
+# What is the default expire time for the cooldown?
+# The timer is in seconds.
 #
 # Default: 30
-default timer: 30
+default-timer: 30
 
-# Players with this permission will only have the vanilla cooldown.
+# If you give a player this permission, they will only have the vanilla cooldown
+# You must explicitly give this permission to a player/group, OPs do not have it by default
+#
+# In 1.8.9 and below, the vanilla cooldown is nearly 0
+# In 1.9 and above, the vanilla cooldown is about 1 second
 #
 # Default: "enderpearl.cooldown.bypass"
-bypass permission: "enderpearl.cooldown.bypass"
+bypass-permission: "enderpearl.cooldown.bypass"
 
+# Set any message to "" or '' to disable it
+# DO NOT blank out messages
+# DO NOT set messages to null
 messages:
-  in cooldown: "&cYou cannot use an ender pearl for &a{time_left}&e seconds."
-  end cooldown: "&aYou can now use an ender pearl."
-  action bar:
+  in-cooldown: "&cYou must wait &a{time_left} seconds&c before using an enderpearl."
+  end-cooldown: "&aYou may now use an ender pearl."
+  zero-time-left: "&a&lReady!"
+
+  action-bar:
     timer: "&6&lEnderpearl Cooldown &7\u00BB &c{time_left} seconds."
-    end timer: "&a&lReady!"
+    end-timer: "&a&lReady!"

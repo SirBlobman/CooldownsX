@@ -1,14 +1,19 @@
 package com.SirBlobman.enderpearl.cooldown;
 
-import com.SirBlobman.api.utility.Util;
-import com.SirBlobman.enderpearl.cooldown.hook.placeholder.PlaceholderHookClip;
-import com.SirBlobman.enderpearl.cooldown.hook.placeholder.PlaceholderHookMVdW;
-import com.SirBlobman.enderpearl.cooldown.listener.ListenerEnderpearlCooldown;
+import java.util.List;
+import java.util.logging.Logger;
+
+import com.SirBlobman.enderpearl.cooldown.hook.HookMVdWPlaceholderAPI;
+import com.SirBlobman.enderpearl.cooldown.hook.HookPlaceholderAPI;
+import com.SirBlobman.enderpearl.cooldown.listener.ListenerEnderPearlCooldown;
 import com.SirBlobman.enderpearl.cooldown.task.EnderpearlCooldownTask;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -18,32 +23,70 @@ public class EnderpearlCooldown extends JavaPlugin {
         saveDefaultConfig();
 
         PluginManager manager = Bukkit.getPluginManager();
-        manager.registerEvents(new ListenerEnderpearlCooldown(this), this);
+        Logger logger = getLogger();
 
-        EnderpearlCooldownTask task = new EnderpearlCooldownTask(this);
-        task.runTaskTimerAsynchronously(this, 0L, 1L);
+        EnderpearlCooldownTask cooldownTask = new EnderpearlCooldownTask(this);
+        cooldownTask.runTaskTimerAsynchronously(this, 0L, 1L);
 
-        if(manager.isPluginEnabled("MVdWPlaceholderAPI")) {
-            Plugin plugin = manager.getPlugin("MVdWPlaceholderAPI");
-            String version = plugin.getDescription().getVersion();
+        Listener listener = new ListenerEnderPearlCooldown(this);
+        manager.registerEvents(listener, this);
 
-            new PlaceholderHookMVdW(this).register();
-            getLogger().info("Hooked into MVdWPlaceholderAPI v" + version);
-        }
+        hookIntoMVdWPlaceholderAPI(logger);
+        hookIntoPlaceholderAPI(logger);
+    }
 
-        if(manager.isPluginEnabled("PlaceholderAPI")) {
-            Plugin plugin = manager.getPlugin("PlaceholderAPI");
-            String version = plugin.getDescription().getVersion();
+    @Override
+    public void onDisable() {
 
-            new PlaceholderHookClip(this).register();
-            getLogger().info("Hooked into PlaceholderAPI v" + version);
-        }
     }
 
     public String getConfigMessage(String path) {
-        FileConfiguration config = getConfig();
+        if(path == null || path.isEmpty()) return "";
 
-        String message = config.getString("messages." + path);
-        return (message == null ? "" : Util.color(message));
+        FileConfiguration config = getConfig();
+        if(config == null) return path;
+
+        if(config.isList(path)) {
+            List<String> stringList = config.getStringList(path);
+            String string = String.join("\n", stringList);
+            return ChatColor.translateAlternateColorCodes('&', string);
+        }
+
+        if(config.isString(path)) {
+            String string = config.getString(path);
+            return ChatColor.translateAlternateColorCodes('&', string == null ? path : string);
+        }
+
+        return path;
+    }
+
+    private void hookIntoMVdWPlaceholderAPI(Logger logger) {
+        PluginManager manager = Bukkit.getPluginManager();
+        if(!manager.isPluginEnabled("MVdWPlaceholderAPI")) return;
+
+        Plugin plugin = manager.getPlugin("MVdWPlaceholderAPI");
+        if(plugin == null) return;
+
+        HookMVdWPlaceholderAPI hook = new HookMVdWPlaceholderAPI(this);
+        hook.register();
+
+        PluginDescriptionFile description = plugin.getDescription();
+        String version = description.getVersion();
+        logger.info("Successfully hooked into MVdWPlaceholderAPI v" + version);
+    }
+
+    private void hookIntoPlaceholderAPI(Logger logger) {
+        PluginManager manager = Bukkit.getPluginManager();
+        if(!manager.isPluginEnabled("PlaceholderAPI")) return;
+
+        Plugin plugin = manager.getPlugin("PlaceholderAPI");
+        if(plugin == null) return;
+
+        HookPlaceholderAPI hook = new HookPlaceholderAPI(this);
+        hook.register();
+
+        PluginDescriptionFile description = plugin.getDescription();
+        String version = description.getVersion();
+        logger.info("Successfully hooked into PlaceholderAPI v" + version);
     }
 }
