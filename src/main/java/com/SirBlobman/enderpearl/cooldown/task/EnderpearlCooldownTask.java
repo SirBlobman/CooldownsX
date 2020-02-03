@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import com.SirBlobman.api.nms.NMS_Handler;
+import com.SirBlobman.api.nms.PlayerHandler;
 import com.SirBlobman.api.utility.Util;
 import com.SirBlobman.enderpearl.cooldown.EnderpearlCooldown;
 import com.SirBlobman.enderpearl.cooldown.utility.EnderpearlCooldownManager;
@@ -60,7 +61,8 @@ public class EnderpearlCooldownTask extends BukkitRunnable {
         if(message == null || message.isEmpty()) return true;
 
         NMS_Handler nmsHandler = NMS_Handler.getHandler();
-        nmsHandler.sendActionBar(player, message);
+        PlayerHandler playerHandler = nmsHandler.getPlayerHandler();
+        playerHandler.sendActionBar(player, message);
         return true;
     }
 
@@ -76,6 +78,7 @@ public class EnderpearlCooldownTask extends BukkitRunnable {
         String actionBarMessage = message.replace("{time_left}", timeLeft).replace("{time_left_decimal}", timeLeftDecimal);
 
         NMS_Handler nmsHandler = NMS_Handler.getHandler();
-        nmsHandler.sendActionBar(player, actionBarMessage);
+        PlayerHandler playerHandler = nmsHandler.getPlayerHandler();
+        playerHandler.sendActionBar(player, actionBarMessage);
     }
 }

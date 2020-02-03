@@ -20,7 +20,7 @@
         <bukkit.plugin.description>${project.description}</bukkit.plugin.description>
         
         <bukkit.plugin.main>com.SirBlobman.enderpearl.cooldown.EnderpearlCooldown</bukkit.plugin.main>
-        <bukkit.plugin.version>4.0.0</bukkit.plugin.version>
+        <bukkit.plugin.version>4.0.1</bukkit.plugin.version>
     </properties>
     
     <repositories>
@@ -62,7 +62,7 @@
         <dependency>
             <groupId>com.SirBlobman.api</groupId>
             <artifactId>SirBlobmanAPI</artifactId>
-            <version>1.10-SNAPSHOT</version>
+            <version>1.11-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         

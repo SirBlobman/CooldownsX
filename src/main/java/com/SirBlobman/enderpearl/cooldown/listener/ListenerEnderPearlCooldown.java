@@ -4,7 +4,7 @@ import java.text.DecimalFormat;
 import java.util.List;
 import java.util.UUID;
 
-import com.SirBlobman.api.utility.ItemUtil;
+import com.SirBlobman.api.item.ItemUtil;
 import com.SirBlobman.enderpearl.cooldown.EnderpearlCooldown;
 import com.SirBlobman.enderpearl.cooldown.utility.EnderpearlCooldownManager;
 
