@@ -61,6 +61,28 @@ public final class CooldownPlugin extends SirBlobmanPlugin<CooldownPlugin> {
         logger.info("Successfully disabled CooldownsX");
     }
     
+    @Override
+    public void reloadConfig() {
+        ConfigManager<?> configManager = getConfigManager();
+        configManager.reloadConfig("config.yml");
+        configManager.reloadConfig("language.yml");
+        configManager.reloadConfig("ender_pearl.yml");
+        configManager.reloadConfig("golden_apple.yml");
+    }
+    
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        String commandName = command.getName().toLowerCase();
+        if(!commandName.equals("cooldownsx")) return false;
+        
+        String sub = args[0].toLowerCase();
+        if(!sub.equals("reload")) return false;
+        
+        reloadConfig();
+        sender.sendMessage("Successfully reloaded the CooldownsX configuration files.");
+        return true;
+    }
+    
     public CooldownManager getCooldownManager() {
         return this.cooldownManager;
     }
