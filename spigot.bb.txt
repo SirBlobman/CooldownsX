@@ -1,0 +1,25 @@
+[SIZE=5][B]Supported Spigot Versions:[/B][/SIZE]
+1.8.8, 1.9.4, 1.10.2, 1.11.2, 1.12.2, 1.13.2, 1.14.4, 1.15.2
+
+[SIZE=5][B][COLOR=#FF0000]Features:[/COLOR][/B][/SIZE]
+[LIST=-]
+[*] Cooldown for throwing ender pearls.
+[*] Cooldown for eating golden apples.
+[*] 1.9+ item cooldown display support.
+[*] Configurable timer, messages, and bypass permissions.
+[*] Support for PlaceholderAPI and MVdWPlaceholderAPI.
+[*] Command to reload the configs in-game.
+[/LIST]
+
+[SIZE=5][B][COLOR=#FF0000]Placeholders:[/COLOR][/B][/SIZE]
+Surround the placeholders with %% for PlaceholderAPI and {} for MVdWPlaceholderAPI.
+Example: %example% and {example}
+[B]cooldownsx_ender_pearl[/B]: Display the ender pearl cooldown
+[B]cooldownsx_golden_apple[/B]: Display the golden apple cooldown
+
+[SIZE=5][B][COLOR=#FF0000]Help and Support:[/COLOR][/B][/SIZE]
+Click the image to join my discord for support. You can also join if you have feature requests or if you just want to chat with other users.
+[URL="https://discord.gg/XMg2agT"][IMG]https://discordapp.com/assets/fc0b01fe10a0b8c602fb0106d8189d9b.png[/IMG][/URL]
+
+[SIZE=5][B][COLOR=#FF0000]Extra Information:[/COLOR][/B][/SIZE]
+Please do not use a review to leave bug reports or errors. I am not able to help you through a review. 
