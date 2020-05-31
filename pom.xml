@@ -35,17 +35,17 @@
             <id>codemc-repo</id>
             <url>https://repo.codemc.io/repository/maven-public/</url>
         </repository>
+
+        <!-- MVdW Repository -->
+        <repository>
+            <id>mvdw-software</id>
+            <url>http://repo.mvdw-software.com/content/groups/public/</url>
+        </repository>
         
         <!-- PlaceholderAPI Repository -->
         <repository>
             <id>placeholderapi</id>
             <url>http://repo.extendedclip.com/content/repositories/placeholderapi/</url>
-        </repository>
-        
-        <!-- MVdW Repository -->
-        <repository>
-            <id>mvdw-software</id>
-            <url>http://repo.mvdw-software.com/content/groups/public/</url>
         </repository>
     </repositories>
     
