@@ -1,0 +1,16 @@
+# How long should the cooldown be (in milliseconds)
+# Default: 10000 (10 seconds)
+cooldown: 10000
+
+# What permission is required to bypass the cooldown?
+# Set it to an empty string to disable the bypass
+# Example: bypass-permission: ""
+bypass-permission: "cooldownsx.bypass.ender_pearl"
+
+# What blocks are ignored in the PlayerInteractEvent?
+ignored-block-list:
+  - WORKBENCH
+  - CRAFTING_TABLE
+  - ENDER_CHEST
+  - CHEST
+  - TRAPPED_CHEST

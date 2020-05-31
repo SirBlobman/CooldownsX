@@ -1,0 +1,13 @@
+# Set any message to "" or '' to prevent it from being sent
+# DO NOT leave messages blank
+# DO NOT set any messages to null
+
+action-bar:
+  cooldown-end: "&cThe cooldown has ended."
+  both-timer: "&6E: &c{time_left_e} &7| &6G: &c{time_left_g}"
+  ender-pearl-timer: "&6Ender Pearl Cooldown: &c{time_left} seconds"
+  golden-apple-timer: "&6Golden Apple Cooldown: &c{time_left} seconds."
+  
+prevent-usage:
+  ender-pearl: "&cPlease wait &e{time_left}&c more seconds to use an ender pearl."
+  golden-apple: "&cPlease wait &e{time_left}&c more seconds to eat a golden apple."

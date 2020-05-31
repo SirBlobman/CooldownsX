@@ -1,0 +1,8 @@
+# How long should the cooldown be (in milliseconds)
+# Default: 10000 (10 seconds)
+cooldown: 10000
+
+# What permission is required to bypass the cooldown?
+# Set it to an empty string to disable the bypass
+# Example: bypass-permission: ""
+bypass-permission: "cooldownsx.bypass.golden_apple"

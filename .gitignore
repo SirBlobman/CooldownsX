@@ -1,10 +1,11 @@
-# Mac OSX
-*.DS_Store
+# Java
+*.class
 
 # Eclipse IDE
 .settings/
-*.project
-*.classpath
+bin/
+.classpath
+.project
 
 # IntelliJ IDEA
 .idea/
@@ -12,4 +13,7 @@
 
 # Maven
 target/
-*dependency-reduced-pom.xml
+dependency-reduced-pom.xml
+
+# Other Files
+information.txt
