@@ -114,7 +114,7 @@
                     <relocations>
                         <relocation>
                             <pattern>com.SirBlobman.api</pattern>
-                            <shadedPattern>com.SirBlobman.cooldown.api.shaded</shadedPattern>
+                            <shadedPattern>com.SirBlobman.cooldowns.api.shaded</shadedPattern>
                         </relocation>
                     </relocations>
                     
