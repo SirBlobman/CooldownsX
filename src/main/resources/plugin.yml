@@ -9,6 +9,9 @@ api-version: "1.13"
 authors:
   - "SirBlobman"
 
+depend:
+  - "SirBlobmanCore"
+
 softdepend:
   - "MVdWPlaceholderAPI"
   - "PlaceholderAPI"
@@ -17,9 +20,14 @@ command:
   cooldownsx:
     description: "Reload the configuration files."
     permission: "cooldownsx.command.cooldownsx"
-    usage: "/<command> reload"
+    usage: "/<command>"
     aliases:
       - "cdx"
       - "cooldownx"
       - "cooldowns"
       - "cooldown"
+
+permissions:
+  cooldownsx.command.cooldownsx:
+    description: "Gives access to the '/cooldownsx' command."
+    default: op

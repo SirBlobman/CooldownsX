@@ -1,0 +1,21 @@
+# These are the cooldowns that will be triggered by CooldownsX
+# You can add your own at any time.
+
+# The format is MATERIAL:SECONDS
+# You can find an updated list in the link below:
+# https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
+ENDER_PEARL:
+  cooldown: 10
+  bypass-permission: "cooldownsx.bypass.ENDER_PEARL"
+
+CHORUS_FRUIT:
+  cooldown: 15
+  bypass-permission: "cooldownsx.bypass.CHORUS_FRUIT"
+
+GOLDEN_APPLE:
+  cooldown: 5
+  bypass-permission: "cooldownsx.bypass.GOLDEN_APPLE"
+
+ENCHANTED_GOLDEN_APPLE:
+  cooldown: 30
+  bypass-permission: "cooldownsx.bypass.ENCHANTED_GOLDEN_APPLE"

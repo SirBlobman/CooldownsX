@@ -1,0 +1,51 @@
+# Information
+# isCancelled: was the PlayerInteractEvent cancelled or not before CooldownsX got to it?
+# Item: DEFAULT, ALLOW, or DENY. (tells bukkit whether or not to use it)
+# Block: DEFAULT, ALLOW, or DENY. (tells bukkit whether or not to use it)
+# Thrown: was the ender pearl shot out by the player or not?
+# Wasted Pearl: true if the pearl was not returned to the player, false otherwise
+
+Ender Pearl Right-Click Testing:
+    Paper 1.8.8:
+        Air: 
+          isCancelled: true
+          Item: DEFAULT
+          Block: DENY
+          Thrown: true
+        
+        Ground:
+          isCancelled: false
+          Item: DEFAULT
+          Block: ALLOW
+          Thrown: true
+        
+        Workbench:
+          isCancelled: false
+          Item: DEFAULT
+          Block: ALLOW
+          Thrown: false
+          
+        Cancel ProjectileLaunchEvent:
+          Wasted Pearl: true
+
+    Paper 1.15.2:
+        Air:
+          isCancelled: true
+          Item: DEFAULT
+          Block: DENY
+          Thrown: true
+          
+        Ground:
+          isCancelled: false
+          Item: DEFAULT
+          Block: ALLOW
+          Thrown: true
+        
+        Workbench:
+          isCancelled: false
+          Item: DEFAULT
+          Block: ALLOW
+          Thrown: false
+        
+        Cancel ProjectileLaunchEvent:
+          Wasted Pearl: false

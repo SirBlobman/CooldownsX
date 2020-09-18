@@ -1,0 +1,29 @@
+[SIZE=5][B]Supported Spigot Versions:[/B][/SIZE]
+1.13.2, 1.14.4, 1.15.2, 1.16.3
+
+[SIZE=5][B][COLOR=#FF0000]Description:[/COLOR][/B][/SIZE]
+CooldownsX is a plugin that adds configurable cooldowns to items.
+
+[SIZE=5][B][COLOR=#FF0000]Dependencies:[/COLOR][/B][/SIZE]
+[LIST]
+[*][URL='https://www.spigotmc.org/resources/83189/']SirBlobmanCore[/URL]
+[/LIST]
+
+[SIZE=5][B][COLOR=#FF0000]Features:[/COLOR][/B][/SIZE]
+[LIST]
+[*] Cooldown for using or eating any item.
+[*] Inventory cooldown display support.
+[*] Configurable cooldown and bypass permission for each material.
+[*] Command to reload the configs in-game.
+[/LIST]
+
+[SIZE=5][B][COLOR=#FF0000]Help and Support:[/COLOR][/B][/SIZE]
+If you need help with CooldownsX, there are multiple ways to contact me.
+If you wish to stay on SpigotMC, you can post a message on the discussion page or send me a direct message.
+You can also post an issue on the GitHub page for this project.
+However, The fastest way to get support is through my Discord server. You can join by clicking the image below:
+[URL='https://discord.gg/XMq2agT'][IMG]https://discordapp.com/assets/fc0b01fe10a0b8c602fb0106d8189d9b.png[/IMG][/URL]
+
+[SIZE=5][B][COLOR=#FF0000]Extra Information:[/COLOR][/B][/SIZE]
+Please do not use a review to leave bug reports or errors. I am not able to help you through a review.
+If you need help please use the contact methods provided above.

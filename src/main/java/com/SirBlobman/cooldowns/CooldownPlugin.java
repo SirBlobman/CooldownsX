@@ -1,116 +1,119 @@
 package com.SirBlobman.cooldowns;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Collections;
+import java.util.List;
 import java.util.logging.Logger;
 
-import com.SirBlobman.api.configuration.ConfigManager;
-import com.SirBlobman.api.plugin.SirBlobmanPlugin;
-import com.SirBlobman.cooldowns.hook.HookMVdWPlaceholderAPI;
-import com.SirBlobman.cooldowns.hook.HookPlaceholderAPI;
-import com.SirBlobman.cooldowns.listener.ListenerEnderPearlCooldown;
-import com.SirBlobman.cooldowns.listener.ListenerGoldenAppleCooldown;
-import com.SirBlobman.cooldowns.manager.CooldownManager;
-import com.SirBlobman.cooldowns.task.CooldownTimerTask;
-
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginDescriptionFile;
-import org.bukkit.plugin.PluginManager;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitScheduler;
 
-public final class CooldownPlugin extends SirBlobmanPlugin<CooldownPlugin> {
+import com.SirBlobman.api.configuration.ConfigurationManager;
+import com.SirBlobman.api.nms.MultiVersionHandler;
+import com.SirBlobman.api.update.UpdateChecker;
+import com.SirBlobman.api.utility.VersionUtility;
+import com.SirBlobman.cooldowns.listener.ListenerConsume;
+import com.SirBlobman.cooldowns.listener.ListenerInteract;
+import com.SirBlobman.cooldowns.manager.CooldownManager;
+import com.SirBlobman.cooldowns.task.ActionBarTask;
+import com.SirBlobman.core.CorePlugin;
+
+public final class CooldownPlugin extends JavaPlugin {
+    private final ConfigurationManager configurationManager;
     private final CooldownManager cooldownManager;
-    
     public CooldownPlugin() {
+        this.configurationManager = new ConfigurationManager(this);
         this.cooldownManager = new CooldownManager(this);
     }
-    
+
     @Override
     public void onLoad() {
-        Logger logger = getLogger();
-        logger.info("Loading CooldownsX...");
-    
-        ConfigManager<?> configManager = getConfigManager();
-        configManager.saveDefaultConfig("config.yml");
-        configManager.saveDefaultConfig("language.yml");
-        configManager.saveDefaultConfig("ender_pearl.yml");
-        configManager.saveDefaultConfig("golden_apple.yml");
-    
-        logger.info("Successfully loaded CooldownsX");
+        ConfigurationManager configurationManager = getConfigurationManager();
+        configurationManager.saveDefault("config.yml");
+        configurationManager.saveDefault("cooldowns.yml");
     }
-    
+
     @Override
     public void onEnable() {
-        Logger logger = getLogger();
-        logger.info("Enabling CooldownsX...");
-    
-        CooldownTimerTask timerTask = new CooldownTimerTask(this);
-        timerTask.runTaskTimerAsynchronously(this, 1L, 1L);
-        
-        registerListener(new ListenerEnderPearlCooldown(this));
-        registerListener(new ListenerGoldenAppleCooldown(this));
-        registerHooks();
-        
-        logger.info("Successfully enabled CooldownsX");
+        int minorVersion = VersionUtility.getMinorVersion();
+        if(minorVersion < 13) {
+            Logger logger = getLogger();
+            logger.warning("This plugin requires version 1.13.2 or above!");
+            setEnabled(false);
+            return;
+        }
+
+        reloadConfig();
+        new ListenerConsume(this).register();
+        new ListenerInteract(this).register();
+
+        UpdateChecker updateChecker = new UpdateChecker(this, 41981L);
+        updateChecker.runCheck();
     }
-    
+
     @Override
     public void onDisable() {
-        Logger logger = getLogger();
-        logger.info("Disabling CooldownsX...");
-        logger.info("Successfully disabled CooldownsX");
+        // Do Nothing
     }
-    
+
+    @Override
+    @NotNull
+    public YamlConfiguration getConfig() {
+        ConfigurationManager configurationManager = getConfigurationManager();
+        return configurationManager.get("config.yml");
+    }
+
     @Override
     public void reloadConfig() {
-        ConfigManager<?> configManager = getConfigManager();
-        configManager.reloadConfig("config.yml");
-        configManager.reloadConfig("language.yml");
-        configManager.reloadConfig("ender_pearl.yml");
-        configManager.reloadConfig("golden_apple.yml");
+        ConfigurationManager configurationManager = getConfigurationManager();
+        configurationManager.reload("config.yml");
+        configurationManager.reload("cooldowns.yml");
+
+        CooldownManager cooldownManager = getCooldownManager();
+        cooldownManager.loadDefaultCooldowns();
+
+        BukkitScheduler scheduler = Bukkit.getScheduler();
+        scheduler.cancelTasks(this);
+
+        YamlConfiguration configuration = configurationManager.get("config.yml");
+        if(configuration.getBoolean("use-action-bar")) {
+            ActionBarTask actionBarTask = new ActionBarTask(this);
+            actionBarTask.start();
+        }
     }
-    
+
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, Command command, @NotNull String label, String[] args) {
         String commandName = command.getName().toLowerCase();
-        if(!commandName.equals("cooldownsx")) return false;
-        
-        String sub = args[0].toLowerCase();
-        if(!sub.equals("reload")) return false;
-        
+        return (commandName.equals("cooldownsx") ? Collections.emptyList() : super.onTabComplete(sender, command, label, args));
+    }
+
+    @Override
+    public boolean onCommand(@NotNull CommandSender sender, Command command, @NotNull String label, String[] args) {
+        String commandName = command.getName().toLowerCase();
+        if(!commandName.equals("cooldownsx")) return super.onCommand(sender, command, label, args);
+
         reloadConfig();
-        sender.sendMessage("Successfully reloaded the CooldownsX configuration files.");
+        sender.sendMessage(ChatColor.GREEN + "Successfully reloaded the configuration files for CooldownsX.");
         return true;
     }
-    
+
+    public MultiVersionHandler getMultiVersionHandler() {
+        CorePlugin plugin = JavaPlugin.getPlugin(CorePlugin.class);
+        return plugin.getMultiVersionHandler();
+    }
+
+    public ConfigurationManager getConfigurationManager() {
+        return this.configurationManager;
+    }
+
     public CooldownManager getCooldownManager() {
         return this.cooldownManager;
-    }
-    
-    private void registerHooks() {
-        if(hookInto("MVdWPlaceholderAPI")) {
-            HookMVdWPlaceholderAPI hook = new HookMVdWPlaceholderAPI(this);
-            hook.register();
-        }
-        
-        if(hookInto("PlaceholderAPI")) {
-            HookPlaceholderAPI hook = new HookPlaceholderAPI(this);
-            hook.register();
-        }
-    }
-    
-    private boolean hookInto(String pluginName) {
-        PluginManager manager = Bukkit.getPluginManager();
-        if(!manager.isPluginEnabled(pluginName)) return false;
-        
-        Plugin plugin = manager.getPlugin(pluginName);
-        if(plugin == null) return false;
-    
-        PluginDescriptionFile description = plugin.getDescription();
-        String fullName = description.getFullName();
-        
-        Logger logger = getLogger();
-        logger.info("Successfully hooked into plugin '" + fullName + "'.");
-        return true;
     }
 }
