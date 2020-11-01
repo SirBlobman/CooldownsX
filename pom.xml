@@ -22,7 +22,7 @@
         <bukkit.plugin.description>${project.description}</bukkit.plugin.description>
         
         <bukkit.plugin.main>com.SirBlobman.cooldowns.CooldownPlugin</bukkit.plugin.main>
-        <bukkit.plugin.version>3.0.0</bukkit.plugin.version>
+        <bukkit.plugin.version>3.0.1</bukkit.plugin.version>
     </properties>
     
     <distributionManagement>
@@ -53,10 +53,12 @@
         </repository>
 
         <!-- MVdW Repository -->
+        <!-- Temporarily disabled due to repository error
         <repository>
             <id>mvdw-software</id>
             <url>http://repo.mvdw-software.com/content/groups/public/</url>
         </repository>
+        -->
         
         <!-- PlaceholderAPI Repository -->
         <repository>
@@ -97,8 +99,8 @@
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
-                    <groupId>org.spigotmc</groupId>
-                    <artifactId>spigot</artifactId>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
