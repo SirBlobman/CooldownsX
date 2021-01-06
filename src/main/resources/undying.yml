@@ -1,0 +1,7 @@
+# How long is the cooldown between uses of undying totems?
+# Set this to -1 to disable the cooldown.
+# Default: 30 seconds
+totem-cooldown: 30000
+
+# What message will be sent if a player can't use a totem due to cooldown?
+totem-message: "&cYou must wait &7{time_left} seconds&c before using another totem."

@@ -1,4 +1,4 @@
-package com.SirBlobman.cooldowns.listener;
+package com.github.sirblobman.cooldowns.listener;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -9,8 +9,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import com.SirBlobman.cooldowns.CooldownPlugin;
-import com.SirBlobman.cooldowns.manager.CooldownManager;
+import com.github.sirblobman.cooldowns.CooldownPlugin;
+import com.github.sirblobman.cooldowns.manager.CooldownManager;
 
 public final class ListenerInteract extends CooldownListener {
     public ListenerInteract(CooldownPlugin plugin) {

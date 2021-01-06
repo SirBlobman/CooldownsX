@@ -1,7 +1,4 @@
-package com.SirBlobman.cooldowns.listener;
-
-import com.SirBlobman.cooldowns.CooldownPlugin;
-import com.SirBlobman.cooldowns.manager.CooldownManager;
+package com.github.sirblobman.cooldowns.listener;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -9,6 +6,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
+
+import com.github.sirblobman.cooldowns.CooldownPlugin;
+import com.github.sirblobman.cooldowns.manager.CooldownManager;
 
 public final class ListenerConsume extends CooldownListener {
     public ListenerConsume(CooldownPlugin plugin) {

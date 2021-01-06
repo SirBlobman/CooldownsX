@@ -1,4 +1,4 @@
-package com.SirBlobman.cooldowns.task;
+package com.github.sirblobman.cooldowns.task;
 
 import java.util.Collection;
 import java.util.Set;
@@ -14,9 +14,9 @@ import com.SirBlobman.api.nms.MultiVersionHandler;
 import com.SirBlobman.api.nms.PlayerHandler;
 import com.SirBlobman.api.utility.MessageUtility;
 import com.SirBlobman.api.utility.Validate;
-import com.SirBlobman.cooldowns.CooldownPlugin;
-import com.SirBlobman.cooldowns.manager.CooldownManager;
-import com.SirBlobman.cooldowns.object.CooldownData;
+import com.github.sirblobman.cooldowns.CooldownPlugin;
+import com.github.sirblobman.cooldowns.manager.CooldownManager;
+import com.github.sirblobman.cooldowns.object.CooldownData;
 
 public final class ActionBarTask extends BukkitRunnable {
     private final CooldownPlugin plugin;

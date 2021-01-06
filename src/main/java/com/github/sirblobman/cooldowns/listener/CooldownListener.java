@@ -1,4 +1,4 @@
-package com.SirBlobman.cooldowns.listener;
+package com.github.sirblobman.cooldowns.listener;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -10,9 +10,10 @@ import org.bukkit.plugin.PluginManager;
 import com.SirBlobman.api.configuration.ConfigurationManager;
 import com.SirBlobman.api.utility.MessageUtility;
 import com.SirBlobman.api.utility.Validate;
-import com.SirBlobman.cooldowns.CooldownPlugin;
-import com.SirBlobman.cooldowns.manager.CooldownManager;
-import com.SirBlobman.cooldowns.object.CooldownData;
+import com.github.sirblobman.cooldowns.CooldownPlugin;
+import com.github.sirblobman.cooldowns.manager.CooldownManager;
+import com.github.sirblobman.cooldowns.manager.UndyingManager;
+import com.github.sirblobman.cooldowns.object.CooldownData;
 
 public abstract class CooldownListener implements Listener {
     private final CooldownPlugin plugin;
@@ -29,6 +30,11 @@ public abstract class CooldownListener implements Listener {
     protected final CooldownManager getCooldownManager() {
         CooldownPlugin plugin = getPlugin();
         return plugin.getCooldownManager();
+    }
+
+    protected final UndyingManager getUndyingManager() {
+        CooldownPlugin plugin = getPlugin();
+        return plugin.getUndyingManager();
     }
 
     protected final boolean checkCooldown(Player player, Material material) {

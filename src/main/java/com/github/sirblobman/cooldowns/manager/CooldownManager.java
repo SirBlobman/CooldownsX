@@ -1,4 +1,4 @@
-package com.SirBlobman.cooldowns.manager;
+package com.github.sirblobman.cooldowns.manager;
 
 import java.util.*;
 import java.util.logging.Logger;
@@ -12,8 +12,8 @@ import org.bukkit.permissions.PermissionDefault;
 
 import com.SirBlobman.api.configuration.ConfigurationManager;
 import com.SirBlobman.api.utility.Validate;
-import com.SirBlobman.cooldowns.CooldownPlugin;
-import com.SirBlobman.cooldowns.object.CooldownData;
+import com.github.sirblobman.cooldowns.CooldownPlugin;
+import com.github.sirblobman.cooldowns.object.CooldownData;
 
 public final class CooldownManager {
     private final CooldownPlugin plugin;

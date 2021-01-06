@@ -1,6 +1,4 @@
-package com.SirBlobman.cooldowns;
-
-import org.jetbrains.annotations.NotNull;
+package com.github.sirblobman.cooldowns;
 
 import java.util.Collections;
 import java.util.List;
@@ -18,18 +16,24 @@ import com.SirBlobman.api.configuration.ConfigurationManager;
 import com.SirBlobman.api.nms.MultiVersionHandler;
 import com.SirBlobman.api.update.UpdateChecker;
 import com.SirBlobman.api.utility.VersionUtility;
-import com.SirBlobman.cooldowns.listener.ListenerConsume;
-import com.SirBlobman.cooldowns.listener.ListenerInteract;
-import com.SirBlobman.cooldowns.manager.CooldownManager;
-import com.SirBlobman.cooldowns.task.ActionBarTask;
 import com.SirBlobman.core.CorePlugin;
+import com.github.sirblobman.cooldowns.listener.ListenerConsume;
+import com.github.sirblobman.cooldowns.listener.ListenerInteract;
+import com.github.sirblobman.cooldowns.listener.ListenerUndying;
+import com.github.sirblobman.cooldowns.manager.CooldownManager;
+import com.github.sirblobman.cooldowns.manager.UndyingManager;
+import com.github.sirblobman.cooldowns.task.ActionBarTask;
+
+import org.jetbrains.annotations.NotNull;
 
 public final class CooldownPlugin extends JavaPlugin {
     private final ConfigurationManager configurationManager;
     private final CooldownManager cooldownManager;
+    private final UndyingManager undyingManager;
     public CooldownPlugin() {
         this.configurationManager = new ConfigurationManager(this);
         this.cooldownManager = new CooldownManager(this);
+        this.undyingManager = new UndyingManager(this);
     }
 
     @Override
@@ -37,6 +41,7 @@ public final class CooldownPlugin extends JavaPlugin {
         ConfigurationManager configurationManager = getConfigurationManager();
         configurationManager.saveDefault("config.yml");
         configurationManager.saveDefault("cooldowns.yml");
+        configurationManager.saveDefault("undying.yml");
     }
 
     @Override
@@ -52,6 +57,7 @@ public final class CooldownPlugin extends JavaPlugin {
         reloadConfig();
         new ListenerConsume(this).register();
         new ListenerInteract(this).register();
+        new ListenerUndying(this).register();
 
         UpdateChecker updateChecker = new UpdateChecker(this, 41981L);
         updateChecker.runCheck();
@@ -74,6 +80,7 @@ public final class CooldownPlugin extends JavaPlugin {
         ConfigurationManager configurationManager = getConfigurationManager();
         configurationManager.reload("config.yml");
         configurationManager.reload("cooldowns.yml");
+        configurationManager.reload("undying.yml");
 
         CooldownManager cooldownManager = getCooldownManager();
         cooldownManager.loadDefaultCooldowns();
@@ -115,5 +122,9 @@ public final class CooldownPlugin extends JavaPlugin {
 
     public CooldownManager getCooldownManager() {
         return this.cooldownManager;
+    }
+
+    public UndyingManager getUndyingManager() {
+        return this.undyingManager;
     }
 }

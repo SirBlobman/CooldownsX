@@ -1,4 +1,4 @@
-package com.SirBlobman.cooldowns.object;
+package com.github.sirblobman.cooldowns.object;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -16,7 +16,7 @@ import com.SirBlobman.api.configuration.ConfigurationManager;
 import com.SirBlobman.api.nms.MultiVersionHandler;
 import com.SirBlobman.api.nms.PlayerHandler;
 import com.SirBlobman.api.utility.Validate;
-import com.SirBlobman.cooldowns.CooldownPlugin;
+import com.github.sirblobman.cooldowns.CooldownPlugin;
 
 public final class CooldownData {
     private final UUID playerId;
