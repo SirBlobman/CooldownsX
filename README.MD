@@ -14,8 +14,8 @@ CooldownsX has a useful API that is hosted on CodeMC
 
 <dependencies>
     <dependency>
-        <groupId>com.SirBlobman.plugin</groupId>
-        <artifactId>CooldownsX</artifactId>
+        <groupId>com.github.sirblobman.plugin</groupId>
+        <artifactId>cooldowns</artifactId>
         <version>3.0.0-SNAPSHOT</version>
         <scope>provided</scope>
     </dependency>
