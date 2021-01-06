@@ -12,8 +12,7 @@ CooldownsX is a plugin that adds configurable cooldowns to items.
 [SIZE=5][B][COLOR=#FF0000]Features:[/COLOR][/B][/SIZE]
 [LIST]
 [*]Cooldown for using or eating any item.
-[*]Cooldown for using totems of undying
-
+[*]Cooldown for using totems of undying.
 [*]Inventory cooldown display support.
 [*]Configurable cooldown and bypass permission for each material.
 [*]Command to reload the configs in-game.
