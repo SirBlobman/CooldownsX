@@ -8,8 +8,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityResurrectEvent;
 
-import com.SirBlobman.api.configuration.ConfigurationManager;
-import com.SirBlobman.api.utility.MessageUtility;
+import com.github.sirblobman.api.configuration.ConfigurationManager;
+import com.github.sirblobman.api.utility.MessageUtility;
 import com.github.sirblobman.cooldowns.CooldownPlugin;
 import com.github.sirblobman.cooldowns.manager.CooldownManager;
 import com.github.sirblobman.cooldowns.manager.UndyingManager;

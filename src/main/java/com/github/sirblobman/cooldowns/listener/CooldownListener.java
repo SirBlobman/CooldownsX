@@ -7,9 +7,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 
-import com.SirBlobman.api.configuration.ConfigurationManager;
-import com.SirBlobman.api.utility.MessageUtility;
-import com.SirBlobman.api.utility.Validate;
+import com.github.sirblobman.api.configuration.ConfigurationManager;
+import com.github.sirblobman.api.utility.MessageUtility;
+import com.github.sirblobman.api.utility.Validate;
 import com.github.sirblobman.cooldowns.CooldownPlugin;
 import com.github.sirblobman.cooldowns.manager.CooldownManager;
 import com.github.sirblobman.cooldowns.manager.UndyingManager;

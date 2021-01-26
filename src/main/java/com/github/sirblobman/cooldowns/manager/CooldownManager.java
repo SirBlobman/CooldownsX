@@ -1,6 +1,10 @@
 package com.github.sirblobman.cooldowns.manager;
 
-import java.util.*;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 import org.bukkit.Material;
@@ -10,8 +14,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
-import com.SirBlobman.api.configuration.ConfigurationManager;
-import com.SirBlobman.api.utility.Validate;
+import com.github.sirblobman.api.configuration.ConfigurationManager;
+import com.github.sirblobman.api.utility.Validate;
 import com.github.sirblobman.cooldowns.CooldownPlugin;
 import com.github.sirblobman.cooldowns.object.CooldownData;
 

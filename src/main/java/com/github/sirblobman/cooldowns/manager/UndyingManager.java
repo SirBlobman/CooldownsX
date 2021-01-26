@@ -7,8 +7,8 @@ import java.util.UUID;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
-import com.SirBlobman.api.configuration.ConfigurationManager;
-import com.SirBlobman.api.utility.Validate;
+import com.github.sirblobman.api.configuration.ConfigurationManager;
+import com.github.sirblobman.api.utility.Validate;
 import com.github.sirblobman.cooldowns.CooldownPlugin;
 
 public final class UndyingManager {

@@ -9,11 +9,11 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.SirBlobman.api.configuration.ConfigurationManager;
-import com.SirBlobman.api.nms.MultiVersionHandler;
-import com.SirBlobman.api.nms.PlayerHandler;
-import com.SirBlobman.api.utility.MessageUtility;
-import com.SirBlobman.api.utility.Validate;
+import com.github.sirblobman.api.configuration.ConfigurationManager;
+import com.github.sirblobman.api.nms.MultiVersionHandler;
+import com.github.sirblobman.api.nms.PlayerHandler;
+import com.github.sirblobman.api.utility.MessageUtility;
+import com.github.sirblobman.api.utility.Validate;
 import com.github.sirblobman.cooldowns.CooldownPlugin;
 import com.github.sirblobman.cooldowns.manager.CooldownManager;
 import com.github.sirblobman.cooldowns.object.CooldownData;

@@ -1,9 +1,10 @@
 package com.github.sirblobman.cooldowns.object;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.*;
+import java.util.EnumMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -12,11 +13,14 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitScheduler;
 
-import com.SirBlobman.api.configuration.ConfigurationManager;
-import com.SirBlobman.api.nms.MultiVersionHandler;
-import com.SirBlobman.api.nms.PlayerHandler;
-import com.SirBlobman.api.utility.Validate;
+import com.github.sirblobman.api.configuration.ConfigurationManager;
+import com.github.sirblobman.api.nms.MultiVersionHandler;
+import com.github.sirblobman.api.nms.PlayerHandler;
+import com.github.sirblobman.api.utility.Validate;
 import com.github.sirblobman.cooldowns.CooldownPlugin;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public final class CooldownData {
     private final UUID playerId;
