@@ -1,20 +1,13 @@
 package com.github.sirblobman.cooldowns;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import com.github.sirblobman.api.configuration.ConfigurationManager;
-import com.github.sirblobman.api.core.CorePlugin;
-import com.github.sirblobman.api.nms.MultiVersionHandler;
+import com.github.sirblobman.api.core.plugin.ConfigurablePlugin;
 import com.github.sirblobman.api.update.UpdateChecker;
 import com.github.sirblobman.api.utility.VersionUtility;
 import com.github.sirblobman.cooldowns.listener.ListenerConsume;
@@ -24,14 +17,10 @@ import com.github.sirblobman.cooldowns.manager.CooldownManager;
 import com.github.sirblobman.cooldowns.manager.UndyingManager;
 import com.github.sirblobman.cooldowns.task.ActionBarTask;
 
-import org.jetbrains.annotations.NotNull;
-
-public final class CooldownPlugin extends JavaPlugin {
-    private final ConfigurationManager configurationManager;
+public final class CooldownPlugin extends ConfigurablePlugin {
     private final CooldownManager cooldownManager;
     private final UndyingManager undyingManager;
     public CooldownPlugin() {
-        this.configurationManager = new ConfigurationManager(this);
         this.cooldownManager = new CooldownManager(this);
         this.undyingManager = new UndyingManager(this);
     }
@@ -54,36 +43,31 @@ public final class CooldownPlugin extends JavaPlugin {
             return;
         }
 
-        reloadConfig();
+        onReload();
+        new CommandCooldownsX(this).register();
+
         new ListenerConsume(this).register();
         new ListenerInteract(this).register();
         new ListenerUndying(this).register();
 
-        UpdateChecker updateChecker = new UpdateChecker(this, 41981L);
+        UpdateChecker updateChecker = new UpdateChecker(this, 41_981L);
         updateChecker.runCheck();
     }
 
     @Override
     public void onDisable() {
-        // Do Nothing
+        BukkitScheduler scheduler = Bukkit.getScheduler();
+        scheduler.cancelTasks(this);
     }
 
-    @Override
-    @NotNull
-    public YamlConfiguration getConfig() {
-        ConfigurationManager configurationManager = getConfigurationManager();
-        return configurationManager.get("config.yml");
-    }
-
-    @Override
-    public void reloadConfig() {
+    public void onReload() {
         ConfigurationManager configurationManager = getConfigurationManager();
         configurationManager.reload("config.yml");
         configurationManager.reload("cooldowns.yml");
         configurationManager.reload("undying.yml");
 
         CooldownManager cooldownManager = getCooldownManager();
-        cooldownManager.loadDefaultCooldowns();
+        cooldownManager.loadCooldowns();
 
         BukkitScheduler scheduler = Bukkit.getScheduler();
         scheduler.cancelTasks(this);
@@ -94,32 +78,6 @@ public final class CooldownPlugin extends JavaPlugin {
             actionBarTask.start();
         }
     }
-
-    @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender, Command command, @NotNull String label, String[] args) {
-        String commandName = command.getName().toLowerCase();
-        return (commandName.equals("cooldownsx") ? Collections.emptyList() : super.onTabComplete(sender, command, label, args));
-    }
-
-    @Override
-    public boolean onCommand(@NotNull CommandSender sender, Command command, @NotNull String label, String[] args) {
-        String commandName = command.getName().toLowerCase();
-        if(!commandName.equals("cooldownsx")) return super.onCommand(sender, command, label, args);
-
-        reloadConfig();
-        sender.sendMessage(ChatColor.GREEN + "Successfully reloaded the configuration files for CooldownsX.");
-        return true;
-    }
-
-    public MultiVersionHandler getMultiVersionHandler() {
-        CorePlugin plugin = JavaPlugin.getPlugin(CorePlugin.class);
-        return plugin.getMultiVersionHandler();
-    }
-
-    public ConfigurationManager getConfigurationManager() {
-        return this.configurationManager;
-    }
-
     public CooldownManager getCooldownManager() {
         return this.cooldownManager;
     }

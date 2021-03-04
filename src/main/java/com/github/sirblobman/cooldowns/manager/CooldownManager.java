@@ -35,7 +35,7 @@ public final class CooldownManager {
         return this.plugin;
     }
 
-    public void loadDefaultCooldowns() {
+    public void loadCooldowns() {
         CooldownPlugin plugin = getPlugin();
         ConfigurationManager configurationManager = plugin.getConfigurationManager();
         YamlConfiguration configuration = configurationManager.get("cooldowns.yml");

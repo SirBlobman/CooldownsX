@@ -22,7 +22,7 @@
         <bukkit.plugin.description>${project.description}</bukkit.plugin.description>
         
         <bukkit.plugin.main>com.github.sirblobman.cooldowns.CooldownPlugin</bukkit.plugin.main>
-        <bukkit.plugin.version>3.2.0</bukkit.plugin.version>
+        <bukkit.plugin.version>3.2.1</bukkit.plugin.version>
     </properties>
     
     <distributionManagement>
@@ -52,7 +52,7 @@
             <url>https://repo.codemc.io/repository/maven-public/</url>
         </repository>
 
-        <!-- MVdW Repository -->
+        <!-- MVdW Software Repository -->
         <repository>
             <id>mvdw-software</id>
             <url>http://repo.mvdw-software.com/content/groups/public/</url>
