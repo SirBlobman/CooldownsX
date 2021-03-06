@@ -16,7 +16,7 @@ softdepend:
   - "MVdWPlaceholderAPI"
   - "PlaceholderAPI"
 
-command:
+commands:
   cooldownsx:
     description: "Reload the configuration files."
     permission: "cooldownsx.command.cooldownsx"
