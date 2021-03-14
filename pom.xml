@@ -26,16 +26,16 @@
     </properties>
     
     <distributionManagement>
-        <!-- CodeMC Releases Repository -->
+        <!-- SirBlobman Releases -->
         <repository>
-            <id>codemc-releases</id>
-            <url>https://repo.codemc.io/repository/maven-releases/</url>
+            <id>sb-public-releases</id>
+            <url>https://nexus.sirblobman.xyz/repository/public-releases/</url>
         </repository>
         
-        <!-- CodeMC Snapshots Repository -->
+        <!-- SirBlobman Snapshots -->
         <snapshotRepository>
-            <id>codemc-snapshots</id>
-            <url>https://repo.codemc.io/repository/maven-snapshots/</url>
+            <id>sb-public-snapshots</id>
+            <url>https://nexus.sirblobman.xyz/repository/public-snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
     
@@ -46,10 +46,10 @@
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
         
-        <!-- CodeMC Public Repository -->
+        <!-- SirBlobman Public Repository -->
         <repository>
-            <id>codemc-public</id>
-            <url>https://repo.codemc.io/repository/maven-public/</url>
+            <id>sirblobman-public</id>
+            <url>https://nexus.sirblobman.xyz/repository/public/</url>
         </repository>
 
         <!-- MVdW Software Repository -->

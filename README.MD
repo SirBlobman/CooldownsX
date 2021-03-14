@@ -2,17 +2,18 @@
 A plugin that adds configurable cooldowns to items.
 
 # Maven Information
-CooldownsX has a useful API that is hosted on CodeMC
+CooldownsX has a useful API that is hosted on my own repository. To use the api, add the following values to your pom.xml file.
 ```xml
 <repositories>
-    <!-- CodeMC Public Repository -->
+    <!-- SirBlobman Public Repository -->
     <repository>
-        <id>codemc-public</id>
-        <url>https://repo.codemc.io/repository/maven-public/</url>
+        <id>sirblobman-public</id>
+        <url>https://nexus.sirblobman.xyz/repository/public/</url>
     </repository>
 </repositories>
 
 <dependencies>
+    <!-- CooldownsX -->
     <dependency>
         <groupId>com.github.sirblobman.plugin</groupId>
         <artifactId>cooldowns</artifactId>
