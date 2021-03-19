@@ -8,7 +8,10 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.CrossbowMeta;
+import org.bukkit.inventory.meta.ItemMeta;
 
+import com.github.sirblobman.api.utility.VersionUtility;
 import com.github.sirblobman.cooldowns.CooldownPlugin;
 import com.github.sirblobman.cooldowns.manager.CooldownManager;
 
@@ -28,11 +31,25 @@ public final class ListenerInteract extends CooldownListener {
         Player player = e.getPlayer();
         Material material = item.getType();
         if(material.isEdible()) return;
+        if(isCrossbowReloading(item)) return;
 
         CooldownManager cooldownManager = getCooldownManager();
         if(cooldownManager.canBypass(player, material)) return;
         if(checkCooldown(player, material)) {
             e.setUseItemInHand(Result.DENY);
         }
+    }
+
+    private boolean isCrossbowReloading(ItemStack item) {
+        int minorVersion = VersionUtility.getMinorVersion();
+        if(minorVersion >= 14) {
+            ItemMeta meta = item.getItemMeta();
+            if(meta instanceof CrossbowMeta) {
+                CrossbowMeta crossbow = (CrossbowMeta) meta;
+                return !crossbow.hasChargedProjectiles();
+            }
+        }
+
+        return false;
     }
 }

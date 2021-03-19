@@ -11,7 +11,7 @@
     
     <properties>
         <java.version>1.8</java.version>
-        <spigot.version>1.13.2-R0.1-SNAPSHOT</spigot.version>
+        <spigot.version>1.14.4-R0.1-SNAPSHOT</spigot.version>
         
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
@@ -22,22 +22,8 @@
         <bukkit.plugin.description>${project.description}</bukkit.plugin.description>
         
         <bukkit.plugin.main>com.github.sirblobman.cooldowns.CooldownPlugin</bukkit.plugin.main>
-        <bukkit.plugin.version>3.2.2</bukkit.plugin.version>
+        <bukkit.plugin.version>3.2.3</bukkit.plugin.version>
     </properties>
-    
-    <distributionManagement>
-        <!-- SirBlobman Releases -->
-        <repository>
-            <id>sb-public-releases</id>
-            <url>https://nexus.sirblobman.xyz/repository/public-releases/</url>
-        </repository>
-        
-        <!-- SirBlobman Snapshots -->
-        <snapshotRepository>
-            <id>sb-public-snapshots</id>
-            <url>https://nexus.sirblobman.xyz/repository/public-snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
     
     <repositories>
         <!-- SpigotMC Repository -->
@@ -112,6 +98,20 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
+
+    <distributionManagement>
+        <!-- SirBlobman Releases -->
+        <repository>
+            <id>sb-public-releases</id>
+            <url>https://nexus.sirblobman.xyz/repository/public-releases/</url>
+        </repository>
+
+        <!-- SirBlobman Snapshots -->
+        <snapshotRepository>
+            <id>sb-public-snapshots</id>
+            <url>https://nexus.sirblobman.xyz/repository/public-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
     
     <build>
         <defaultGoal>clean install</defaultGoal>
