@@ -2,21 +2,20 @@ package com.github.sirblobman.cooldowns.task;
 
 import java.util.Collection;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.github.sirblobman.api.configuration.ConfigurationManager;
-import com.github.sirblobman.api.nms.MultiVersionHandler;
-import com.github.sirblobman.api.nms.PlayerHandler;
 import com.github.sirblobman.api.utility.MessageUtility;
 import com.github.sirblobman.api.utility.Validate;
+import com.github.sirblobman.api.xseries.XMaterial;
 import com.github.sirblobman.cooldowns.CooldownPlugin;
 import com.github.sirblobman.cooldowns.manager.CooldownManager;
+import com.github.sirblobman.cooldowns.object.ActionBarSettings;
 import com.github.sirblobman.cooldowns.object.CooldownData;
+import com.github.sirblobman.cooldowns.object.CooldownSettings;
 
 public final class ActionBarTask extends BukkitRunnable {
     private final CooldownPlugin plugin;
@@ -25,75 +24,53 @@ public final class ActionBarTask extends BukkitRunnable {
     }
 
     public void start() {
-        runTaskTimerAsynchronously(this.plugin, 0L, 1L);
+        runTaskTimerAsynchronously(this.plugin, 1L, 1L);
     }
 
     @Override
     public void run() {
         Collection<? extends Player> onlinePlayerCollection = Bukkit.getOnlinePlayers();
-        onlinePlayerCollection.stream().filter(this::shouldShow).forEach(this::sendActionBar);
+        for(Player player : onlinePlayerCollection) checkActionBar(player);
     }
 
-    private YamlConfiguration getConfiguration() {
-        ConfigurationManager configurationManager = this.plugin.getConfigurationManager();
-        return configurationManager.get("config.yml");
-    }
-
-    private String getFormat() {
-        YamlConfiguration configuration = getConfiguration();
-        return configuration.getString("action-bar-format");
-    }
-
-    private boolean shouldShow(Player player) {
-        String format = getFormat();
-        if(format == null) return false;
-
+    private void checkActionBar(Player player) {
         CooldownManager cooldownManager = this.plugin.getCooldownManager();
         CooldownData cooldownData = cooldownManager.getData(player);
-        Set<Material> materialSet = cooldownData.getActiveCooldowns(plugin);
+        Set<XMaterial> activeCooldownSet = cooldownData.getActiveCooldowns(this.plugin);
 
-        boolean shouldShow = false;
-        for(Material material : materialSet) {
-            String materialName = material.name();
-            String placeholder = ("{" + materialName + "}");
-            if(format.contains(placeholder)) {
-                shouldShow = true;
-                break;
+        int highestPriority = Integer.MIN_VALUE;
+        CooldownSettings highestSettings = null;
+        for(XMaterial material : activeCooldownSet) {
+            CooldownSettings cooldownSettings = cooldownManager.getCooldownSettings(material);
+            if(cooldownSettings == null) continue;
+
+            ActionBarSettings actionBarSettings = cooldownSettings.getActionBarSettings();
+            if(actionBarSettings.isEnabled()) {
+                int priority = actionBarSettings.getPriority();
+                if(priority > highestPriority) {
+                    highestPriority = priority;
+                    highestSettings = cooldownSettings;
+                }
             }
         }
 
-        return shouldShow;
+        if(highestSettings != null) sendActionBar(player, highestSettings);
     }
 
-    private String getTimeLeft(Player player, Material material) {
+    private void sendActionBar(Player player, CooldownSettings settings) {
         CooldownManager cooldownManager = this.plugin.getCooldownManager();
         CooldownData cooldownData = cooldownManager.getData(player);
-        double expireMillis = cooldownData.getCooldownExpireTime(material);
-        double systemMillis = System.currentTimeMillis();
-        double millisLeft = (expireMillis - systemMillis);
+        ActionBarSettings actionBarSettings = settings.getActionBarSettings();
+        XMaterial material = settings.getMaterial();
 
-        long timeLeftSeconds = (long) Math.ceil(millisLeft / 1_000.0D);
-        return Long.toString(timeLeftSeconds);
-    }
+        long expireMillis = cooldownData.getCooldownExpireTime(material);
+        long systemMillis = System.currentTimeMillis();
+        long subtractMillis = (expireMillis - systemMillis);
+        long secondsLeft = TimeUnit.MILLISECONDS.toSeconds(subtractMillis);
+        String secondsLeftString = Long.toString(secondsLeft);
 
-    private void sendActionBar(Player player) {
-        String format = getFormat();
-        if(format == null) return;
-
-        CooldownManager cooldownManager = this.plugin.getCooldownManager();
-        CooldownData cooldownData = cooldownManager.getData(player);
-        Set<Material> materialSet = cooldownData.getActiveCooldowns(plugin);
-
-        String finalMessage = MessageUtility.color(format);
-        for(Material material : materialSet) {
-            String materialName = material.name();
-            String placeholder = ("{" + materialName + "}");
-            String replacement = getTimeLeft(player, material);
-            finalMessage = finalMessage.replace(placeholder, replacement);
-        }
-
-        MultiVersionHandler multiVersionHandler = this.plugin.getMultiVersionHandler();
-        PlayerHandler playerHandler = multiVersionHandler.getPlayerHandler();
-        playerHandler.sendActionBar(player, finalMessage);
+        String messageFormat = actionBarSettings.getMessageFormat();
+        String message = MessageUtility.color(messageFormat).replace("{time_left}", secondsLeftString);
+        this.plugin.getMultiVersionHandler().getPlayerHandler().sendActionBar(player, message);
     }
 }

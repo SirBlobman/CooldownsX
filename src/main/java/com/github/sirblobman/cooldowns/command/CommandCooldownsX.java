@@ -1,4 +1,4 @@
-package com.github.sirblobman.cooldowns;
+package com.github.sirblobman.cooldowns.command;
 
 import java.util.Collections;
 import java.util.List;
@@ -7,6 +7,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import com.github.sirblobman.api.command.Command;
+import com.github.sirblobman.cooldowns.CooldownPlugin;
 
 public final class CommandCooldownsX extends Command {
     private final CooldownPlugin plugin;

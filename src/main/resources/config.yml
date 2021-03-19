@@ -1,16 +1,12 @@
 # Should the plugin be allowed to check for updates?
 update-checker: true
 
-# Should this plugin use the item cooldown packet in minecraft?
-# (This will show a cooldown on the item itself)
-packet-cooldown: true
+# Should debug messages be sent to the console?
+debug-mode: false
 
 # What message should be sent if a player tries to use/eat an item during cooldown?
+# Set this message to "" to disable it.
 cooldown-message: "&cYou must wait &7{time_left}&c seconds before using &7{material}&c again."
 
 # Should the plugin send an action bar to players with active cooldowns?
 use-action-bar: true
-
-# The action bar can contain any material cooldown placeholder and will only activate
-# if a player has those materials in cooldown.
-action-bar-format: "&6&lCooldownsX &7\u00BB &c{ENDER_PEARL} seconds."

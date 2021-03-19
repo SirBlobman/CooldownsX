@@ -1,6 +1,5 @@
 package com.github.sirblobman.cooldowns.listener;
 
-import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -10,6 +9,7 @@ import org.bukkit.event.entity.EntityResurrectEvent;
 
 import com.github.sirblobman.api.configuration.ConfigurationManager;
 import com.github.sirblobman.api.utility.MessageUtility;
+import com.github.sirblobman.api.xseries.XMaterial;
 import com.github.sirblobman.cooldowns.CooldownPlugin;
 import com.github.sirblobman.cooldowns.manager.CooldownManager;
 import com.github.sirblobman.cooldowns.manager.UndyingManager;
@@ -26,7 +26,7 @@ public final class ListenerUndying extends CooldownListener {
         Player player = (Player) entity;
 
         CooldownManager cooldownManager = getCooldownManager();
-        if(cooldownManager.canBypass(player, Material.TOTEM_OF_UNDYING)) return;
+        if(cooldownManager.canBypass(player, XMaterial.TOTEM_OF_UNDYING)) return;
 
         UndyingManager undyingManager = getUndyingManager();
         if(!undyingManager.hasCooldown(player)) {

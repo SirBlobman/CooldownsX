@@ -17,7 +17,7 @@ CooldownsX has a useful API that is hosted on my own repository. To use the api,
     <dependency>
         <groupId>com.github.sirblobman.plugin</groupId>
         <artifactId>cooldowns</artifactId>
-        <version>3.0.0-SNAPSHOT</version>
+        <version>4.0.0-SNAPSHOT</version>
         <scope>provided</scope>
     </dependency>
 </dependencies>
@@ -40,16 +40,16 @@ public CooldownData getData(Player player) {
 
 You can check the expiration time of a specific item for a player:
 ```java
-public long getCooldownExpireMillis(Player player, Material material) {
+public long getCooldownExpireMillis(Player player, XMaterial material) {
     CooldownData cooldownData = getData(player);
     return cooldownData.getCooldownExpireTime(material);
 }
 ```
 You can also set a custom cooldown using your own plugin:
 ```java
-public void setCooldown(Player player, Material material, long expireMillis) {
+public void setCooldown(Player player, XMaterial material, CooldownSettings cooldownSettings) {
     CooldownPlugin plugin = getCooldownsX();
     CooldownData cooldownData = getData(player);
-    return cooldownData.setCooldown(plugin, material, expireMillis);
+    return cooldownData.setCooldown(plugin, material, cooldownSettings);
 }
 ```

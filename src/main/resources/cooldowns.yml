@@ -5,17 +5,52 @@
 # You can find an updated list in the link below:
 # https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
 ENDER_PEARL:
+  # How long (in seconds) must players wait before using this item?
   cooldown: 10
+
+  # What usage types will trigger this cooldown?
+  # Valid Types: INTERACT, CONSUME
+  # Default: INTERACT
+  cooldown-type: INTERACT
+
+  # The bypass permission is optional.
+  # When the permission is not set or empty, bypass will not be possible for that item.
   bypass-permission: "cooldownsx.bypass.ENDER_PEARL"
+
+  # The packet cooldown setting is optional and only works in Spigot 1.9 or higher.
+  # Should this item trigger the item cooldown packet in vanilla minecraft?
+  # This will show a cooldown bar on the item itself, but may prevent some item features, such as crossbow reloading.
+  packet-cooldown: true
+
+  # The action bar section is optional.
+  action-bar:
+    # Should the action bar be enabled for this item?
+    # Default: false
+    enabled: false
+
+    # What priority does this action bar have?
+    # Higher priority means it will display on top of other cooldown action bars with lower priority.
+    # If more than one item has the same priority, a random one may be chosen.
+    # Default: 0
+    priority: 0
+
+    # What message will be displayed?
+    # Placeholders:
+    # {time_left}: The amount of time left in seconds.
+    message-format: "&aEnder Pearl Cooldown: &c{time_left} seconds"
 
 CHORUS_FRUIT:
   cooldown: 15
-  bypass-permission: "cooldownsx.bypass.CHORUS_FRUIT"
+  cooldown-type: CONSUME
 
 GOLDEN_APPLE:
   cooldown: 5
-  bypass-permission: "cooldownsx.bypass.GOLDEN_APPLE"
+  cooldown-type: CONSUME
 
 ENCHANTED_GOLDEN_APPLE:
   cooldown: 30
-  bypass-permission: "cooldownsx.bypass.ENCHANTED_GOLDEN_APPLE"
+  cooldown-type: CONSUME
+  action-bar:
+    enabled: true
+    priority: 1
+    message-format: "&aEnchanted Golden Apple Cooldown: &c{time_left} seconds"

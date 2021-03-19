@@ -9,26 +9,26 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitScheduler;
 
-import com.github.sirblobman.api.configuration.ConfigurationManager;
 import com.github.sirblobman.api.nms.MultiVersionHandler;
 import com.github.sirblobman.api.nms.PlayerHandler;
 import com.github.sirblobman.api.utility.Validate;
+import com.github.sirblobman.api.xseries.XMaterial;
 import com.github.sirblobman.cooldowns.CooldownPlugin;
+import com.github.sirblobman.cooldowns.manager.CooldownManager;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public final class CooldownData {
     private final UUID playerId;
-    private final Map<Material, Long> cooldownMap;
+    private final Map<XMaterial, Long> cooldownMap;
     public CooldownData(OfflinePlayer player) {
         Validate.notNull(player, "player must not be null!");
         this.playerId = player.getUniqueId();
-        this.cooldownMap = new EnumMap<>(Material.class);
+        this.cooldownMap = new EnumMap<>(XMaterial.class);
     }
 
     @NotNull
@@ -48,17 +48,20 @@ public final class CooldownData {
         return offlinePlayer.getPlayer();
     }
 
-    public Set<Material> getActiveCooldowns(CooldownPlugin plugin) {
-        Set<Material> materialSet = this.cooldownMap.keySet();
-        Set<Material> activeSet = new HashSet<>();
-        for(Material material : materialSet) {
-            if(!hasCooldown(plugin, material)) continue;
-            activeSet.add(material);
+    public Set<XMaterial> getActiveCooldowns(CooldownPlugin plugin) {
+        Set<XMaterial> materialSet = this.cooldownMap.keySet();
+        Set<XMaterial> activeSet = new HashSet<>();
+
+        for(XMaterial material : materialSet) {
+            if(hasCooldown(plugin, material)) {
+                activeSet.add(material);
+            }
         }
+
         return activeSet;
     }
 
-    public boolean hasCooldown(CooldownPlugin plugin, Material material) {
+    public boolean hasCooldown(CooldownPlugin plugin, XMaterial material) {
         if(!this.cooldownMap.containsKey(material)) return false;
         long expireMillis = getCooldownExpireTime(material);
         if(expireMillis <= 0) return false;
@@ -70,11 +73,11 @@ public final class CooldownData {
         return false;
     }
 
-    public long getCooldownExpireTime(Material material) {
+    public long getCooldownExpireTime(XMaterial material) {
         return this.cooldownMap.getOrDefault(material, -1L);
     }
 
-    public void setCooldown(CooldownPlugin plugin, Material material, long expireMillis) {
+    public void setCooldown(CooldownPlugin plugin, XMaterial material, long expireMillis) {
         Validate.notNull(plugin, "plugin must not be null!");
         Validate.notNull(material, "material must not be null!");
         this.cooldownMap.put(material, expireMillis);
@@ -82,27 +85,34 @@ public final class CooldownData {
         long systemMillis = System.currentTimeMillis();
         long millisLeft = (expireMillis - systemMillis);
         int ticksLeft = (int) (millisLeft / 50L);
-        sendPacket(plugin, material, ticksLeft);
+
+        CooldownManager cooldownManager = plugin.getCooldownManager();
+        CooldownSettings cooldownSettings = cooldownManager.getCooldownSettings(material);
+        if(cooldownSettings.hasPacketCooldown()) sendPacket(plugin, material, ticksLeft);
     }
 
-    public void removeCooldown(CooldownPlugin plugin, Material material) {
+    public void removeCooldown(CooldownPlugin plugin, XMaterial material) {
         Validate.notNull(plugin, "plugin must not be null!");
         Validate.notNull(material, "material must not be null!");
         this.cooldownMap.remove(material);
-        sendPacket(plugin, material, 0);
+
+        CooldownManager cooldownManager = plugin.getCooldownManager();
+        CooldownSettings cooldownSettings = cooldownManager.getCooldownSettings(material);
+        if(cooldownSettings.hasPacketCooldown()) sendPacket(plugin, material, 0);
     }
 
-    private void sendPacket(CooldownPlugin plugin, Material material, int ticksLeft) {
+    private void sendPacket(CooldownPlugin plugin, XMaterial material, int ticksLeft) {
         Player player = getPlayer();
         if(player == null) return;
 
-        ConfigurationManager configurationManager = plugin.getConfigurationManager();
-        YamlConfiguration configuration = configurationManager.get("config.yml");
-        if(!configuration.getBoolean("packet-cooldown")) return;
+        Material realMaterial = material.parseMaterial();
+        if(realMaterial == null) return;
 
-        MultiVersionHandler multiVersionHandler = plugin.getMultiVersionHandler();
-        PlayerHandler playerHandler = multiVersionHandler.getPlayerHandler();
-        Runnable task = () -> playerHandler.sendCooldownPacket(player, material, ticksLeft);
+        Runnable task = () -> {
+            MultiVersionHandler multiVersionHandler = plugin.getMultiVersionHandler();
+            PlayerHandler playerHandler = multiVersionHandler.getPlayerHandler();
+            playerHandler.sendCooldownPacket(player, realMaterial, ticksLeft);
+        };
 
         BukkitScheduler scheduler = Bukkit.getScheduler();
         scheduler.scheduleSyncDelayedTask(plugin, task, 1L);

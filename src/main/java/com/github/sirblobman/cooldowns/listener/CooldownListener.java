@@ -1,7 +1,6 @@
 package com.github.sirblobman.cooldowns.listener;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -10,6 +9,7 @@ import org.bukkit.plugin.PluginManager;
 import com.github.sirblobman.api.configuration.ConfigurationManager;
 import com.github.sirblobman.api.utility.MessageUtility;
 import com.github.sirblobman.api.utility.Validate;
+import com.github.sirblobman.api.xseries.XMaterial;
 import com.github.sirblobman.cooldowns.CooldownPlugin;
 import com.github.sirblobman.cooldowns.manager.CooldownManager;
 import com.github.sirblobman.cooldowns.manager.UndyingManager;
@@ -37,7 +37,7 @@ public abstract class CooldownListener implements Listener {
         return plugin.getUndyingManager();
     }
 
-    protected final boolean checkCooldown(Player player, Material material) {
+    protected final boolean checkCooldown(Player player, XMaterial material) {
         CooldownManager cooldownManager = getCooldownManager();
         CooldownData cooldownData = cooldownManager.getData(player);
         CooldownPlugin plugin = getPlugin();
@@ -64,7 +64,7 @@ public abstract class CooldownListener implements Listener {
         this.isRegistered = true;
     }
 
-    private String getTimeLeft(Player player, Material material) {
+    private String getTimeLeft(Player player, XMaterial material) {
         CooldownManager cooldownManager = getCooldownManager();
         CooldownData cooldownData = cooldownManager.getData(player);
         double expireMillis = cooldownData.getCooldownExpireTime(material);
@@ -75,14 +75,14 @@ public abstract class CooldownListener implements Listener {
         return Long.toString(timeLeftSeconds);
     }
 
-    private void sendCooldownMessage(Player player, Material material) {
+    private void sendCooldownMessage(Player player, XMaterial material) {
         ConfigurationManager configurationManager = this.plugin.getConfigurationManager();
         YamlConfiguration configuration = configurationManager.get("config.yml");
         String messageFormat = configuration.getString("cooldown-message");
         if(messageFormat == null) return;
 
         String timeLeft = getTimeLeft(player, material);
-        String materialName = material.name();
+        String materialName = this.plugin.getMaterialName(material);
         String message = MessageUtility.color(messageFormat).replace("{time_left}", timeLeft).replace("{material}", materialName);
         player.sendMessage(message);
     }

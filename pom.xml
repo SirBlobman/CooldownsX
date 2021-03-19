@@ -4,7 +4,7 @@
     
     <groupId>com.github.sirblobman.plugin</groupId>
     <artifactId>cooldowns</artifactId>
-    <version>3.0.0-SNAPSHOT</version>
+    <version>4.0.0-SNAPSHOT</version>
     
     <name>CooldownsX</name>
     <description>A plugin that adds configurable cooldowns to items.</description>
@@ -22,7 +22,7 @@
         <bukkit.plugin.description>${project.description}</bukkit.plugin.description>
         
         <bukkit.plugin.main>com.github.sirblobman.cooldowns.CooldownPlugin</bukkit.plugin.main>
-        <bukkit.plugin.version>3.2.3</bukkit.plugin.version>
+        <bukkit.plugin.version>4.0.0</bukkit.plugin.version>
     </properties>
     
     <repositories>

@@ -1,6 +1,5 @@
 package com.github.sirblobman.cooldowns.manager;
 
-import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -9,6 +8,7 @@ import java.util.logging.Logger;
 
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
@@ -16,19 +16,21 @@ import org.bukkit.permissions.PermissionDefault;
 
 import com.github.sirblobman.api.configuration.ConfigurationManager;
 import com.github.sirblobman.api.utility.Validate;
+import com.github.sirblobman.api.xseries.XMaterial;
 import com.github.sirblobman.cooldowns.CooldownPlugin;
+import com.github.sirblobman.cooldowns.object.ActionBarSettings;
 import com.github.sirblobman.cooldowns.object.CooldownData;
+import com.github.sirblobman.cooldowns.object.CooldownSettings;
+import com.github.sirblobman.cooldowns.object.CooldownType;
 
 public final class CooldownManager {
     private final CooldownPlugin plugin;
     private final Map<UUID, CooldownData> cooldownDataMap;
-    private final Map<Material, Long> defaultCooldownMap;
-    private final Map<Material, String> defaultBypassPermissionMap;
+    private final Map<XMaterial, CooldownSettings> cooldownSettingsMap;
     public CooldownManager(CooldownPlugin plugin) {
         this.plugin = Validate.notNull(plugin, "plugin must not be null!");
         this.cooldownDataMap = new HashMap<>();
-        this.defaultCooldownMap = new EnumMap<>(Material.class);
-        this.defaultBypassPermissionMap = new EnumMap<>(Material.class);
+        this.cooldownSettingsMap = new HashMap<>();
     }
 
     public CooldownPlugin getPlugin() {
@@ -39,22 +41,86 @@ public final class CooldownManager {
         CooldownPlugin plugin = getPlugin();
         ConfigurationManager configurationManager = plugin.getConfigurationManager();
         YamlConfiguration configuration = configurationManager.get("cooldowns.yml");
-        this.defaultCooldownMap.clear();
+        this.cooldownSettingsMap.clear();
 
         Set<String> materialNameSet = configuration.getKeys(false);
         for(String materialName : materialNameSet) {
-            Material material = Material.matchMaterial(materialName, false);
-            long cooldown = configuration.getLong(materialName + ".cooldown", 0L);
-            if(material == null || cooldown <= 0L) continue;
-            setCooldown(material, cooldown * 1_000L);
+            debug("Checking section '" + materialName + "' in cooldowns.yml...");
+            XMaterial material = XMaterial.matchXMaterial(materialName).orElse(XMaterial.AIR);
 
-            String permission = configuration.getString(materialName + ".permission");
-            if(permission != null) this.defaultBypassPermissionMap.put(material, permission);
+            if(material == XMaterial.AIR) {
+                debug("'" + materialName + "' is not a valid material name.");
+                continue;
+            }
+
+            Material realMaterial = material.parseMaterial();
+            if(realMaterial == null) {
+                this.plugin.getLogger().warning("The XMaterial named '" + materialName + "' is not valid for your Spigot version.");
+                continue;
+            }
+
+            if(this.cooldownSettingsMap.containsKey(material)) {
+                debug("Skipped '" + materialName + "' because it is a duplicate of another material that is already configured.");
+                continue;
+            }
+
+            ConfigurationSection section = configuration.getConfigurationSection(materialName);
+            if(section == null) {
+                debug("'" + materialName + "' is not a valid section.");
+                continue;
+            }
+
+            String cooldownTypeName = section.getString("cooldown-type", "INTERACT");
+            CooldownType cooldownType;
+            try {
+                cooldownType = CooldownType.valueOf(cooldownTypeName);
+            } catch(Exception ex) {
+                debug("Unknown cooldown-type '" + cooldownTypeName + "'.");
+                continue;
+            }
+
+            int cooldownSeconds = section.getInt("cooldown");
+            if(cooldownSeconds < 1) {
+                debug("cooldown must be at least 1 second.");
+                continue;
+            }
+
+            String bypassPermission = section.getString("bypass-permission", null);
+            boolean packetCooldown = section.getBoolean("packet-cooldown", false);
+
+            debug("Loading action bar settings...");
+            ActionBarSettings actionBarSettings = parseActionBarSettings(section);
+
+            CooldownSettings cooldownSettings = new CooldownSettings(material, cooldownType, cooldownSeconds, bypassPermission, packetCooldown, actionBarSettings);
+            this.cooldownSettingsMap.put(material, cooldownSettings);
+            debug("Successfully loaded section '" + materialName + "'.");
         }
 
-        long defaultCooldownMapSize = this.defaultCooldownMap.size();
-        Logger logger = plugin.getLogger();
-        logger.info("Successfully loaded " + defaultCooldownMapSize + " item cooldown(s).");
+        long cooldownMapSize = this.cooldownSettingsMap.size();
+        debug("Successfully loaded " + cooldownMapSize + " item cooldown(s).");
+    }
+
+    private ActionBarSettings parseActionBarSettings(ConfigurationSection config) {
+        ConfigurationSection section = config.getConfigurationSection("action-bar");
+        if(section == null) {
+            debug("Section is missing action-bar section, using default.");
+            return ActionBarSettings.getDefaultActionBarSettings();
+        }
+
+        boolean enabled = section.getBoolean("enabled", false);
+        debug("Enabled: " + enabled);
+
+        int priority = section.getInt("priority", 0);
+        debug("Priority: " + priority);
+
+        String messageFormat = section.getString("message-format", null);
+        debug("Message Format: " + messageFormat);
+
+        return new ActionBarSettings(enabled, priority, messageFormat);
+    }
+
+    public CooldownSettings getCooldownSettings(XMaterial material) {
+        return this.cooldownSettingsMap.getOrDefault(material, null);
     }
 
     public CooldownData getData(OfflinePlayer player) {
@@ -67,27 +133,40 @@ public final class CooldownManager {
         return newData;
     }
 
-    public boolean hasCooldown(Material material) {
-        return this.defaultCooldownMap.containsKey(material);
+    public boolean hasCooldown(XMaterial material) {
+        long cooldownMillis = getCooldown(material);
+        return (cooldownMillis > 0L);
     }
 
-    public long getCooldown(Material material) {
-        return this.defaultCooldownMap.getOrDefault(material, -1L);
+    public long getCooldown(XMaterial material) {
+        CooldownSettings cooldownSettings = getCooldownSettings(material);
+        return cooldownSettings.getCooldownMillis();
     }
 
-    public void setCooldown(Material material, long millis) {
-        this.defaultCooldownMap.put(material, millis);
+    public void setCooldown(XMaterial material, CooldownSettings cooldownSettings) {
+        this.cooldownSettingsMap.put(material, cooldownSettings);
     }
 
-    public boolean canBypass(Player player, Material material) {
+    public boolean canBypass(Player player, XMaterial material) {
         if(hasCooldown(material)) {
-            String permissionName = this.defaultBypassPermissionMap.getOrDefault(material, null);
-            if(permissionName == null) return false;
+            CooldownSettings cooldownSettings = getCooldownSettings(material);
+            String permissionName = cooldownSettings.getBypassPermission();
+            if(permissionName == null || permissionName.isEmpty()) return false;
 
             Permission permission = new Permission(permissionName, "CooldownsX Bypass Permission", PermissionDefault.FALSE);
             return player.hasPermission(permission);
         }
 
         return true;
+    }
+
+    private void debug(String message) {
+        ConfigurationManager configurationManager = this.plugin.getConfigurationManager();
+        YamlConfiguration configuration = configurationManager.get("config.yml");
+        if(!configuration.getBoolean("debug-mode")) return;
+
+        String finalMessage = String.format("[Debug] %s", message);
+        Logger logger = this.plugin.getLogger();
+        logger.info(finalMessage);
     }
 }
