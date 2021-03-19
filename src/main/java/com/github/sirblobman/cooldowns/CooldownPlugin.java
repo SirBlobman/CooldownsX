@@ -56,7 +56,7 @@ public final class CooldownPlugin extends ConfigurablePlugin {
 
         new ListenerConsume(this).register();
         new ListenerInteract(this).register();
-        new ListenerUndying(this).register();
+        if(minorVersion >= 11) new ListenerUndying(this).register();
 
         UpdateChecker updateChecker = new UpdateChecker(this, 41_981L);
         updateChecker.runCheck();
