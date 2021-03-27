@@ -140,6 +140,7 @@ public final class CooldownManager {
 
     public long getCooldown(XMaterial material) {
         CooldownSettings cooldownSettings = getCooldownSettings(material);
+        if(cooldownSettings == null) return 0L;
         return cooldownSettings.getCooldownMillis();
     }
 
