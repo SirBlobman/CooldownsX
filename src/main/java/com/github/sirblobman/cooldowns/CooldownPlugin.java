@@ -6,11 +6,14 @@ import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import com.github.sirblobman.api.configuration.ConfigurationManager;
+import com.github.sirblobman.api.core.CorePlugin;
 import com.github.sirblobman.api.core.plugin.ConfigurablePlugin;
-import com.github.sirblobman.api.update.UpdateChecker;
+import com.github.sirblobman.api.update.UpdateManager;
 import com.github.sirblobman.api.utility.VersionUtility;
 import com.github.sirblobman.api.xseries.XMaterial;
 import com.github.sirblobman.cooldowns.command.CommandCooldownsX;
@@ -19,6 +22,8 @@ import com.github.sirblobman.cooldowns.listener.ListenerInteract;
 import com.github.sirblobman.cooldowns.listener.ListenerUndying;
 import com.github.sirblobman.cooldowns.manager.CooldownManager;
 import com.github.sirblobman.cooldowns.manager.UndyingManager;
+import com.github.sirblobman.cooldowns.placeholder.HookMVdWPlaceholderAPI;
+import com.github.sirblobman.cooldowns.placeholder.HookPlaceholderAPI;
 import com.github.sirblobman.cooldowns.task.ActionBarTask;
 
 public final class CooldownPlugin extends ConfigurablePlugin {
@@ -51,6 +56,10 @@ public final class CooldownPlugin extends ConfigurablePlugin {
             return;
         }
 
+        CorePlugin corePlugin = JavaPlugin.getPlugin(CorePlugin.class);
+        UpdateManager updateManager = corePlugin.getUpdateManager();
+        updateManager.addResource(this, 41981L);
+
         onReload();
         new CommandCooldownsX(this).register();
 
@@ -58,8 +67,14 @@ public final class CooldownPlugin extends ConfigurablePlugin {
         new ListenerInteract(this).register();
         if(minorVersion >= 11) new ListenerUndying(this).register();
 
-        UpdateChecker updateChecker = new UpdateChecker(this, 41_981L);
-        updateChecker.runCheck();
+        PluginManager pluginManager = Bukkit.getPluginManager();
+        if(pluginManager.isPluginEnabled("MVdWPlaceholderAPI")) {
+            new HookMVdWPlaceholderAPI(this).register();
+        }
+
+        if(pluginManager.isPluginEnabled("PlaceholderAPI")) {
+            new HookPlaceholderAPI(this).register();
+        }
     }
 
     @Override
