@@ -1,6 +1,16 @@
 # CooldownsX
 A plugin that adds configurable cooldowns to items.
 
+# Placeholders
+CooldownsX supports PlaceholderAPI and MVdWPlaceholderAPI
+Surround the placeholders with %% or {} respectively.
+| Placeholder | Description | Example |
+| --- | --- | --- |
+| cooldownsx_time_left_material | The amount of seconds left as an integer. | cooldownsx_time_left_GOLDEN_APPLE |
+| cooldownsx_time_left_decimal_material | The amount of seconds left as a decimal with 2 places. | cooldownsx_time_left_decimal_ENDER_PEARL |
+| cooldownsx_undying_time_left | The amount of seconds left before using another totem of undying as an integer. | cooldownsx_undying_time_left |
+| cooldownsx_undying_time_left_decimal | The amount of seconds left before using another totem of undying as a decimal with 2 places. | cooldownsx_undying_time_left |
+
 # Maven Information
 CooldownsX has a useful API that is hosted on my own repository. To use the api, add the following values to your pom.xml file.
 ```xml
