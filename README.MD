@@ -2,14 +2,14 @@
 A plugin that adds configurable cooldowns to items.
 
 # Placeholders
-CooldownsX supports PlaceholderAPI and MVdWPlaceholderAPI. Review the table below for placeholder information:  
+CooldownsX supports two placeholder plugins.
+Surround the placeholder with `%%` for PlaceholderAPI and `{}` for MVdWPlaceholderAPI.
+Review the table below for placeholder information:  
 <table>
     <thead>
         <tr>
             <th>Placeholder</th>
             <th>Description</th>
-            <th>MVdWPlaceholderAPI Example</th>
-            <th>PlaceholderAPI Example</th>
             <th>Example Output</th>
         </tr>
     </thead>
@@ -17,29 +17,21 @@ CooldownsX supports PlaceholderAPI and MVdWPlaceholderAPI. Review the table belo
         <tr>
             <td>cooldownsx_time_left_&lt;material&gt;</td>
             <td>The amount of seconds left as an integer.</td>
-            <td>{cooldownsx_time_left_GOLDEN_APPLE}</td>
-            <td>%cooldownsx_time_left_GOLDEN_APPLE%</td>
             <td>5</td>
         </tr>
         <tr>
             <td>cooldownsx_time_left_decimal_&lt;material&gt;</td>
             <td>The amount of seconds left as a decimal with two places.</td>
-            <td>{cooldownsx_time_left_decimal_GOLDEN_APPLE}</td>
-            <td>%cooldownsx_time_left_decimal_GOLDEN_APPLE%</td>
             <td>5.24</td>
         </tr>
         <tr>
             <td>cooldownsx_undying_time_left</td>
             <td>The amount of seconds left before using a totem of undying as an integer.</td>
-            <td>{cooldownsx_undying_time_left}</td>
-            <td>%cooldownsx_undying_time_left%</td>
             <td>7</td>
         </tr>
         <tr>
             <td>cooldownsx_undying_time_left_decimal</td>
-            <td>The amount of seconds left before using a totem of undying as an decimal with two places.</td>
-            <td>{cooldownsx_undying_time_left_decimal}</td>
-            <td>%cooldownsx_undying_time_left_decimal%</td>
+            <td>The amount of seconds left before using a totem of undying as a decimal with two places.</td>
             <td>7.62</td>
         </tr>
     </tbody>
