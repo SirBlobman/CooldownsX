@@ -3,5 +3,9 @@
 # Default: 30 seconds
 totem-cooldown: 30000
 
+# Which permission can be used to bypass the totem cooldown?
+# Default: "cooldownsx.bypass.undying"
+totem-bypass-permission: "cooldownsx.bypass.undying"
+
 # What message will be sent if a player can't use a totem due to cooldown?
 totem-message: "&cYou must wait &7{time_left} seconds&c before using another totem."

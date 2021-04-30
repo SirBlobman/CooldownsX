@@ -6,12 +6,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityResurrectEvent;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 
 import com.github.sirblobman.api.configuration.ConfigurationManager;
 import com.github.sirblobman.api.utility.MessageUtility;
-import com.github.sirblobman.api.xseries.XMaterial;
 import com.github.sirblobman.cooldowns.CooldownPlugin;
-import com.github.sirblobman.cooldowns.manager.CooldownManager;
 import com.github.sirblobman.cooldowns.manager.UndyingManager;
 
 public final class ListenerUndying extends CooldownListener {
@@ -19,14 +19,13 @@ public final class ListenerUndying extends CooldownListener {
         super(plugin);
     }
 
-    @EventHandler(priority= EventPriority.NORMAL, ignoreCancelled=true)
+    @EventHandler(priority=EventPriority.NORMAL, ignoreCancelled=true)
     public void onResurrect(EntityResurrectEvent e) {
         LivingEntity entity = e.getEntity();
         if(!(entity instanceof Player)) return;
-        Player player = (Player) entity;
 
-        CooldownManager cooldownManager = getCooldownManager();
-        if(cooldownManager.canBypass(player, XMaterial.TOTEM_OF_UNDYING)) return;
+        Player player = (Player) entity;
+        if(hasBypass(player)) return;
 
         UndyingManager undyingManager = getUndyingManager();
         if(!undyingManager.hasCooldown(player)) {
@@ -56,5 +55,17 @@ public final class ListenerUndying extends CooldownListener {
         double millisLeft = undyingManager.getCooldownMillisLeft(player);
         long timeLeftSeconds = (long) Math.ceil(millisLeft / 1_000.0D);
         return Long.toString(timeLeftSeconds);
+    }
+
+    private boolean hasBypass(Player player) {
+        CooldownPlugin plugin = getPlugin();
+        ConfigurationManager configurationManager = plugin.getConfigurationManager();
+        YamlConfiguration configuration = configurationManager.get("undying.yml");
+
+        String bypassPermissionName = configuration.getString("totem-bypass-permission");
+        if(bypassPermissionName == null || bypassPermissionName.isEmpty()) return false;
+
+        Permission bypassPermission = new Permission(bypassPermissionName, "CooldownsX Bypass Permission", PermissionDefault.FALSE);
+        return player.hasPermission(bypassPermission);
     }
 }
