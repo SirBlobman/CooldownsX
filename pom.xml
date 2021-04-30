@@ -22,7 +22,7 @@
         <bukkit.plugin.description>${project.description}</bukkit.plugin.description>
         
         <bukkit.plugin.main>com.github.sirblobman.cooldowns.CooldownPlugin</bukkit.plugin.main>
-        <bukkit.plugin.version>4.0.3</bukkit.plugin.version>
+        <bukkit.plugin.version>4.0.4-Dev</bukkit.plugin.version>
     </properties>
     
     <repositories>

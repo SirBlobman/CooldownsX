@@ -1,7 +1,6 @@
 # These are the cooldowns that will be triggered by CooldownsX
 # You can add your own at any time.
 
-# The format is MATERIAL:SECONDS
 # You can find an updated list in the link below:
 # https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
 ENDER_PEARL:
