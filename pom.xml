@@ -8,6 +8,7 @@
     
     <name>CooldownsX</name>
     <description>A plugin that adds configurable cooldowns to items.</description>
+    <url>https://www.spigotmc.org/resources/41981/</url>
     
     <properties>
         <java.version>1.8</java.version>
@@ -22,7 +23,7 @@
         <bukkit.plugin.description>${project.description}</bukkit.plugin.description>
         
         <bukkit.plugin.main>com.github.sirblobman.cooldowns.CooldownPlugin</bukkit.plugin.main>
-        <bukkit.plugin.version>4.0.4-Dev</bukkit.plugin.version>
+        <bukkit.plugin.version>4.1.0</bukkit.plugin.version>
     </properties>
     
     <repositories>
@@ -56,7 +57,7 @@
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
-            <version>20.1.0</version>
+            <version>21.0.1</version>
             <scope>provided</scope>
         </dependency>
 
@@ -72,7 +73,7 @@
         <dependency>
             <groupId>com.github.sirblobman.api</groupId>
             <artifactId>core</artifactId>
-            <version>2.1-SNAPSHOT</version>
+            <version>2.2-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
 
@@ -84,8 +85,8 @@
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
-                    <groupId>org.spigotmc</groupId>
-                    <artifactId>spigot</artifactId>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -96,6 +97,12 @@
             <artifactId>placeholderapi</artifactId>
             <version>2.10.9</version>
             <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 

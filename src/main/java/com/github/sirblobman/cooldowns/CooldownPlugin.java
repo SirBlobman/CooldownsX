@@ -12,7 +12,7 @@ import org.bukkit.scheduler.BukkitScheduler;
 
 import com.github.sirblobman.api.configuration.ConfigurationManager;
 import com.github.sirblobman.api.core.CorePlugin;
-import com.github.sirblobman.api.core.plugin.ConfigurablePlugin;
+import com.github.sirblobman.api.plugin.ConfigurablePlugin;
 import com.github.sirblobman.api.update.UpdateManager;
 import com.github.sirblobman.api.utility.VersionUtility;
 import com.github.sirblobman.api.xseries.XMaterial;
