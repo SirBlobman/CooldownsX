@@ -29,7 +29,9 @@ public final class ListenerInteract extends CooldownListener {
 
         ItemStack item = e.getItem();
         if(item == null || isCrossbowReloading(item)) return;
-        XMaterial material = XMaterial.matchXMaterial(item);
+
+        XMaterial material = getXMaterial(item);
+        if(material == null) return;
 
         Player player = e.getPlayer();
         CooldownManager cooldownManager = getCooldownManager();

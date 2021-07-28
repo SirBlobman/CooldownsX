@@ -19,6 +19,7 @@ import com.github.sirblobman.cooldowns.object.CooldownSettings;
 
 public final class ActionBarTask extends BukkitRunnable {
     private final CooldownPlugin plugin;
+
     public ActionBarTask(CooldownPlugin plugin) {
         this.plugin = Validate.notNull(plugin, "plugin must not be null!");
     }
@@ -54,7 +55,9 @@ public final class ActionBarTask extends BukkitRunnable {
             }
         }
 
-        if(highestSettings != null) sendActionBar(player, highestSettings);
+        if(highestSettings != null) {
+            sendActionBar(player, highestSettings);
+        }
     }
 
     private void sendActionBar(Player player, CooldownSettings settings) {

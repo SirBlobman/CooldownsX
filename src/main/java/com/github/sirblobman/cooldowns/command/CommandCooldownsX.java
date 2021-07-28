@@ -11,6 +11,7 @@ import com.github.sirblobman.cooldowns.CooldownPlugin;
 
 public final class CommandCooldownsX extends Command {
     private final CooldownPlugin plugin;
+
     public CommandCooldownsX(CooldownPlugin plugin) {
         super(plugin, "cooldownsx");
         this.plugin = plugin;

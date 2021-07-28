@@ -27,6 +27,7 @@ public final class CooldownManager {
     private final CooldownPlugin plugin;
     private final Map<UUID, CooldownData> cooldownDataMap;
     private final Map<XMaterial, CooldownSettings> cooldownSettingsMap;
+
     public CooldownManager(CooldownPlugin plugin) {
         this.plugin = Validate.notNull(plugin, "plugin must not be null!");
         this.cooldownDataMap = new HashMap<>();

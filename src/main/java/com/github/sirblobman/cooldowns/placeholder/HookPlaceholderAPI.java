@@ -17,6 +17,7 @@ import org.jetbrains.annotations.Nullable;
 
 public final class HookPlaceholderAPI extends PlaceholderExpansion {
     private final CooldownPlugin plugin;
+
     public HookPlaceholderAPI(CooldownPlugin plugin) {
         this.plugin = Validate.notNull(plugin, "plugin must not be null!");
     }

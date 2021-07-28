@@ -23,7 +23,7 @@
         <bukkit.plugin.description>${project.description}</bukkit.plugin.description>
         
         <bukkit.plugin.main>com.github.sirblobman.cooldowns.CooldownPlugin</bukkit.plugin.main>
-        <bukkit.plugin.version>4.1.1</bukkit.plugin.version>
+        <bukkit.plugin.version>4.1.2-Dev</bukkit.plugin.version>
     </properties>
     
     <repositories>
@@ -73,7 +73,7 @@
         <dependency>
             <groupId>com.github.sirblobman.api</groupId>
             <artifactId>core</artifactId>
-            <version>2.2-SNAPSHOT</version>
+            <version>2.3-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
 

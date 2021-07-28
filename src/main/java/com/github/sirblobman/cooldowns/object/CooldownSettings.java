@@ -11,16 +11,13 @@ import com.github.sirblobman.api.xseries.XMaterial;
 import org.jetbrains.annotations.NotNull;
 
 public final class CooldownSettings {
-    public static CooldownSettings getDefaultCooldownSettings(XMaterial material) {
-        return new CooldownSettings(material, CooldownType.INTERACT, 0, null, false, null);
-    }
-
     private final XMaterial material;
     private final CooldownType cooldownType;
     private final int cooldownSeconds;
     private final String bypassPermission;
     private final boolean packetCooldown;
     private final ActionBarSettings actionBarSettings;
+
     public CooldownSettings(XMaterial material, CooldownType cooldownType, int cooldownSeconds, String bypassPermission, boolean packetCooldown, ActionBarSettings actionBarSettings) {
         this.material = Validate.notNull(material, "material must not be null!");
         if(this.material == XMaterial.AIR) throw new IllegalArgumentException("material must not be AIR!");
@@ -30,6 +27,11 @@ public final class CooldownSettings {
         this.bypassPermission = bypassPermission;
         this.packetCooldown = packetCooldown;
         this.actionBarSettings = actionBarSettings;
+    }
+
+    public static CooldownSettings getDefaultCooldownSettings(XMaterial material) {
+        return new CooldownSettings(material, CooldownType.INTERACT, 0, null,
+                false, null);
     }
 
     @NotNull

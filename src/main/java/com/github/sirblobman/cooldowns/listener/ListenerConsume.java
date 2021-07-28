@@ -21,7 +21,9 @@ public final class ListenerConsume extends CooldownListener {
     public void onConsume(PlayerItemConsumeEvent e) {
         ItemStack item = e.getItem();
         Player player = e.getPlayer();
-        XMaterial material = XMaterial.matchXMaterial(item);
+
+        XMaterial material = getXMaterial(item);
+        if(material == null) return;
 
         CooldownManager cooldownManager = getCooldownManager();
         if(cooldownManager.canBypass(player, material)) return;

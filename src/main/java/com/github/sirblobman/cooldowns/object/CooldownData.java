@@ -25,6 +25,7 @@ import org.jetbrains.annotations.Nullable;
 public final class CooldownData {
     private final UUID playerId;
     private final Map<XMaterial, Long> cooldownMap;
+
     public CooldownData(OfflinePlayer player) {
         Validate.notNull(player, "player must not be null!");
         this.playerId = player.getUniqueId();
@@ -88,7 +89,9 @@ public final class CooldownData {
 
         CooldownManager cooldownManager = plugin.getCooldownManager();
         CooldownSettings cooldownSettings = cooldownManager.getCooldownSettings(material);
-        if(cooldownSettings.hasPacketCooldown()) sendPacket(plugin, material, ticksLeft);
+        if(cooldownSettings.hasPacketCooldown()) {
+            sendPacket(plugin, material, ticksLeft);
+        }
     }
 
     public void removeCooldown(CooldownPlugin plugin, XMaterial material) {
@@ -105,13 +108,13 @@ public final class CooldownData {
         Player player = getPlayer();
         if(player == null) return;
 
-        Material realMaterial = material.parseMaterial();
-        if(realMaterial == null) return;
+        Material bukkitMaterial = material.parseMaterial();
+        if(bukkitMaterial == null) return;
 
         Runnable task = () -> {
             MultiVersionHandler multiVersionHandler = plugin.getMultiVersionHandler();
             PlayerHandler playerHandler = multiVersionHandler.getPlayerHandler();
-            playerHandler.sendCooldownPacket(player, realMaterial, ticksLeft);
+            playerHandler.sendCooldownPacket(player, bukkitMaterial, ticksLeft);
         };
 
         BukkitScheduler scheduler = Bukkit.getScheduler();

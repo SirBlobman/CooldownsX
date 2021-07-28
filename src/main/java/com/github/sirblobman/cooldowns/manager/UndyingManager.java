@@ -14,6 +14,7 @@ import com.github.sirblobman.cooldowns.CooldownPlugin;
 public final class UndyingManager {
     private final CooldownPlugin plugin;
     private final Map<UUID, Long> cooldownExpireMap;
+
     public UndyingManager(CooldownPlugin plugin) {
         this.plugin = Validate.notNull(plugin, "plugin must not be null!");
         this.cooldownExpireMap = new HashMap<>();

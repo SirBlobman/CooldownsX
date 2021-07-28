@@ -1,7 +1,9 @@
 package com.github.sirblobman.cooldowns.listener;
 
+import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import com.github.sirblobman.api.configuration.ConfigurationManager;
 import com.github.sirblobman.api.core.listener.PluginListener;
@@ -11,6 +13,8 @@ import com.github.sirblobman.cooldowns.CooldownPlugin;
 import com.github.sirblobman.cooldowns.manager.CooldownManager;
 import com.github.sirblobman.cooldowns.manager.UndyingManager;
 import com.github.sirblobman.cooldowns.object.CooldownData;
+
+import org.jetbrains.annotations.Nullable;
 
 public abstract class CooldownListener extends PluginListener<CooldownPlugin> {
     public CooldownListener(CooldownPlugin plugin) {
@@ -49,6 +53,22 @@ public abstract class CooldownListener extends PluginListener<CooldownPlugin> {
         }
 
         return false;
+    }
+
+    @Nullable
+    protected final XMaterial getXMaterial(ItemStack itemStack) {
+        if(itemStack == null) return null;
+
+        try {
+            return XMaterial.matchXMaterial(itemStack);
+        } catch(IllegalArgumentException ex) {
+            try {
+                Material bukkitMaterial = itemStack.getType();
+                return XMaterial.matchXMaterial(bukkitMaterial);
+            } catch(Exception ex2) {
+                return null;
+            }
+        }
     }
 
     private String getTimeLeft(Player player, XMaterial material) {
