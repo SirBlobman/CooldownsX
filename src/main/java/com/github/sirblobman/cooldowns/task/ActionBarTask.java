@@ -19,32 +19,32 @@ import com.github.sirblobman.cooldowns.object.CooldownSettings;
 
 public final class ActionBarTask extends BukkitRunnable {
     private final CooldownPlugin plugin;
-
+    
     public ActionBarTask(CooldownPlugin plugin) {
         this.plugin = Validate.notNull(plugin, "plugin must not be null!");
     }
-
+    
     public void start() {
         runTaskTimerAsynchronously(this.plugin, 1L, 1L);
     }
-
+    
     @Override
     public void run() {
         Collection<? extends Player> onlinePlayerCollection = Bukkit.getOnlinePlayers();
         for(Player player : onlinePlayerCollection) checkActionBar(player);
     }
-
+    
     private void checkActionBar(Player player) {
         CooldownManager cooldownManager = this.plugin.getCooldownManager();
         CooldownData cooldownData = cooldownManager.getData(player);
         Set<XMaterial> activeCooldownSet = cooldownData.getActiveCooldowns(this.plugin);
-
+        
         int highestPriority = Integer.MIN_VALUE;
         CooldownSettings highestSettings = null;
         for(XMaterial material : activeCooldownSet) {
             CooldownSettings cooldownSettings = cooldownManager.getCooldownSettings(material);
             if(cooldownSettings == null) continue;
-
+            
             ActionBarSettings actionBarSettings = cooldownSettings.getActionBarSettings();
             if(actionBarSettings.isEnabled()) {
                 int priority = actionBarSettings.getPriority();
@@ -54,24 +54,24 @@ public final class ActionBarTask extends BukkitRunnable {
                 }
             }
         }
-
+        
         if(highestSettings != null) {
             sendActionBar(player, highestSettings);
         }
     }
-
+    
     private void sendActionBar(Player player, CooldownSettings settings) {
         CooldownManager cooldownManager = this.plugin.getCooldownManager();
         CooldownData cooldownData = cooldownManager.getData(player);
         ActionBarSettings actionBarSettings = settings.getActionBarSettings();
         XMaterial material = settings.getMaterial();
-
+        
         long expireMillis = cooldownData.getCooldownExpireTime(material);
         long systemMillis = System.currentTimeMillis();
         long subtractMillis = (expireMillis - systemMillis);
         long secondsLeft = TimeUnit.MILLISECONDS.toSeconds(subtractMillis);
         String secondsLeftString = Long.toString(secondsLeft);
-
+        
         String messageFormat = actionBarSettings.getMessageFormat();
         String message = MessageUtility.color(messageFormat).replace("{time_left}", secondsLeftString);
         this.plugin.getMultiVersionHandler().getPlayerHandler().sendActionBar(player, message);

@@ -1,38 +1,38 @@
 <project>
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
-    
+
     <groupId>com.github.sirblobman.plugin</groupId>
     <artifactId>cooldowns</artifactId>
     <version>4.0.0-SNAPSHOT</version>
-    
+
     <name>CooldownsX</name>
     <description>A plugin that adds configurable cooldowns to items.</description>
     <url>https://www.spigotmc.org/resources/41981/</url>
-    
+
     <properties>
         <java.version>1.8</java.version>
-        <spigot.version>1.14.4-R0.1-SNAPSHOT</spigot.version>
-        
+        <spigot.version>1.16.5-R0.1-SNAPSHOT</spigot.version>
+
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        
+
         <bukkit.plugin.name>${project.name}</bukkit.plugin.name>
         <bukkit.plugin.prefix>${project.name}</bukkit.plugin.prefix>
         <bukkit.plugin.description>${project.description}</bukkit.plugin.description>
-        
+
         <bukkit.plugin.main>com.github.sirblobman.cooldowns.CooldownPlugin</bukkit.plugin.main>
-        <bukkit.plugin.version>4.1.2-Dev</bukkit.plugin.version>
+        <bukkit.plugin.version>4.1.2</bukkit.plugin.version>
     </properties>
-    
+
     <repositories>
         <!-- SpigotMC Repository -->
         <repository>
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
-        
+
         <!-- SirBlobman Public Repository -->
         <repository>
             <id>sirblobman-public</id>
@@ -42,22 +42,22 @@
         <!-- MVdW Software Repository -->
         <repository>
             <id>mvdw-software</id>
-            <url>http://repo.mvdw-software.com/content/groups/public/</url>
+            <url>https://repo.mvdw-software.com/content/groups/public/</url>
         </repository>
-        
+
         <!-- PlaceholderAPI Repository -->
         <repository>
             <id>placeholderapi</id>
-            <url>http://repo.extendedclip.com/content/repositories/placeholderapi/</url>
+            <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
         </repository>
     </repositories>
-    
+
     <dependencies>
         <!-- JetBrains Annotations -->
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
-            <version>21.0.1</version>
+            <version>22.0.0</version>
             <scope>provided</scope>
         </dependency>
 
@@ -68,7 +68,7 @@
             <version>${spigot.version}</version>
             <scope>provided</scope>
         </dependency>
-        
+
         <!-- SirBlobmanCore -->
         <dependency>
             <groupId>com.github.sirblobman.api</groupId>
@@ -90,12 +90,12 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        
+
         <!-- PlaceholderAPI -->
         <dependency>
             <groupId>me.clip</groupId>
             <artifactId>placeholderapi</artifactId>
-            <version>2.10.9</version>
+            <version>2.10.10</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
@@ -119,9 +119,9 @@
             <url>https://nexus.sirblobman.xyz/repository/public-snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
-    
+
     <build>
-        <defaultGoal>clean install</defaultGoal>
+        <defaultGoal>clean package</defaultGoal>
         <finalName>${bukkit.plugin.name}-${bukkit.plugin.version}</finalName>
         <resources>
             <resource>

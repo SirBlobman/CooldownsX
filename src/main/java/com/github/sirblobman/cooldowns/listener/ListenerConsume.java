@@ -16,22 +16,22 @@ public final class ListenerConsume extends CooldownListener {
     public ListenerConsume(CooldownPlugin plugin) {
         super(plugin);
     }
-
-    @EventHandler(priority=EventPriority.NORMAL, ignoreCancelled=true)
+    
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onConsume(PlayerItemConsumeEvent e) {
         ItemStack item = e.getItem();
         Player player = e.getPlayer();
-
+        
         XMaterial material = getXMaterial(item);
         if(material == null) return;
-
+        
         CooldownManager cooldownManager = getCooldownManager();
         if(cooldownManager.canBypass(player, material)) return;
-
+        
         CooldownSettings cooldownSettings = cooldownManager.getCooldownSettings(material);
         CooldownType cooldownType = cooldownSettings.getCooldownType();
         if(cooldownType != CooldownType.CONSUME) return;
-
+        
         if(checkCooldown(player, material)) {
             e.setCancelled(true);
         }

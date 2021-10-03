@@ -21,31 +21,31 @@ public final class ListenerInteract extends CooldownListener {
     public ListenerInteract(CooldownPlugin plugin) {
         super(plugin);
     }
-
-    @EventHandler(priority=EventPriority.NORMAL)
+    
+    @EventHandler(priority = EventPriority.NORMAL)
     public void onInteract(PlayerInteractEvent e) {
         Action action = e.getAction();
         if(action != Action.RIGHT_CLICK_AIR && action != Action.RIGHT_CLICK_BLOCK) return;
-
+        
         ItemStack item = e.getItem();
         if(item == null || isCrossbowReloading(item)) return;
-
+        
         XMaterial material = getXMaterial(item);
         if(material == null) return;
-
+        
         Player player = e.getPlayer();
         CooldownManager cooldownManager = getCooldownManager();
         if(cooldownManager.canBypass(player, material)) return;
-
+        
         CooldownSettings cooldownSettings = cooldownManager.getCooldownSettings(material);
         CooldownType cooldownType = cooldownSettings.getCooldownType();
         if(cooldownType != CooldownType.INTERACT) return;
-
+        
         if(checkCooldown(player, material)) {
             e.setUseItemInHand(Result.DENY);
         }
     }
-
+    
     private boolean isCrossbowReloading(ItemStack item) {
         int minorVersion = VersionUtility.getMinorVersion();
         if(minorVersion >= 14) {
@@ -55,7 +55,7 @@ public final class ListenerInteract extends CooldownListener {
                 return !crossbow.hasChargedProjectiles();
             }
         }
-
+        
         return false;
     }
 }

@@ -20,50 +20,50 @@ public final class PlaceholderHelper {
         long timeLeftSeconds = TimeUnit.MILLISECONDS.toSeconds(timeLeftMillis);
         return Long.toString(timeLeftSeconds);
     }
-
+    
     public static String getTimeLeftDecimal(Player player, XMaterial material) {
         double timeLeftMillis = getTimeLeftMillis(player, material);
         double timeLeftSeconds = (timeLeftMillis / 1_000.0D);
-
+        
         DecimalFormatSymbols decimalFormatSymbols = DecimalFormatSymbols.getInstance(Locale.US);
         DecimalFormat decimalFormat = new DecimalFormat("0.00", decimalFormatSymbols);
         return decimalFormat.format(timeLeftSeconds);
     }
-
+    
     public static String getUndyingTimeLeftInteger(Player player) {
         long timeLeftMillis = getUndyingTimeLeftMillis(player);
         long timeLeftSeconds = TimeUnit.MILLISECONDS.toSeconds(timeLeftMillis);
         return Long.toString(timeLeftSeconds);
     }
-
+    
     public static String getUndyingTimeLeftDecimal(Player player) {
         double timeLeftMillis = getUndyingTimeLeftMillis(player);
         double timeLeftSeconds = (timeLeftMillis / 1_000.0D);
-
+        
         DecimalFormatSymbols decimalFormatSymbols = DecimalFormatSymbols.getInstance(Locale.US);
         DecimalFormat decimalFormat = new DecimalFormat("0.00", decimalFormatSymbols);
         return decimalFormat.format(timeLeftSeconds);
     }
-
+    
     private static CooldownPlugin getPlugin() {
         return JavaPlugin.getPlugin(CooldownPlugin.class);
     }
-
+    
     private static long getTimeLeftMillis(Player player, XMaterial material) {
         CooldownPlugin plugin = getPlugin();
         CooldownManager cooldownManager = plugin.getCooldownManager();
         CooldownData cooldownData = cooldownManager.getData(player);
-
+        
         long cooldownExpireMillis = cooldownData.getCooldownExpireTime(material);
         long systemMillis = System.currentTimeMillis();
         long subtractMillis = (cooldownExpireMillis - systemMillis);
         return Math.max(subtractMillis, 0L);
     }
-
+    
     private static long getUndyingTimeLeftMillis(Player player) {
         CooldownPlugin plugin = getPlugin();
         UndyingManager undyingManager = plugin.getUndyingManager();
-
+        
         long millisLeft = undyingManager.getCooldownMillisLeft(player);
         return Math.max(millisLeft, 0L);
     }
