@@ -17,18 +17,18 @@ import org.jetbrains.annotations.Nullable;
 
 public final class HookPlaceholderAPI extends PlaceholderExpansion {
     private final CooldownPlugin plugin;
-    
+
     public HookPlaceholderAPI(CooldownPlugin plugin) {
         this.plugin = Validate.notNull(plugin, "plugin must not be null!");
     }
-    
+
     @NotNull
     @Override
     public String getIdentifier() {
         String pluginName = this.plugin.getName();
         return pluginName.toLowerCase(Locale.US);
     }
-    
+
     @NotNull
     @Override
     public String getAuthor() {
@@ -36,44 +36,44 @@ public final class HookPlaceholderAPI extends PlaceholderExpansion {
         List<String> authorList = description.getAuthors();
         return String.join(", ", authorList);
     }
-    
+
     @NotNull
     @Override
     public String getVersion() {
         PluginDescriptionFile description = this.plugin.getDescription();
         return description.getVersion();
     }
-    
+
     @Nullable
     @Override
     public String onPlaceholderRequest(Player player, @NotNull String placeholder) {
-        if(player == null) {
+        if (player == null) {
             return null;
         }
-        
-        if(placeholder.startsWith("time_left_decimal_")) {
+
+        if (placeholder.startsWith("time_left_decimal_")) {
             String materialName = placeholder.substring("time_left_decimal_".length());
             Optional<XMaterial> optionalMaterial = XMaterial.matchXMaterial(materialName);
-            if(optionalMaterial.isPresent()) {
+            if (optionalMaterial.isPresent()) {
                 XMaterial material = optionalMaterial.get();
                 return PlaceholderHelper.getTimeLeftDecimal(player, material);
             }
-            
+
             return null;
         }
-        
-        if(placeholder.startsWith("time_left_")) {
+
+        if (placeholder.startsWith("time_left_")) {
             String materialName = placeholder.substring("time_left_".length());
             Optional<XMaterial> optionalMaterial = XMaterial.matchXMaterial(materialName);
-            if(optionalMaterial.isPresent()) {
+            if (optionalMaterial.isPresent()) {
                 XMaterial material = optionalMaterial.get();
                 return PlaceholderHelper.getTimeLeftInteger(player, material);
             }
-            
+
             return null;
         }
-        
-        switch(placeholder) {
+
+        switch (placeholder) {
             case "undying_time_left_decimal":
                 return PlaceholderHelper.getUndyingTimeLeftDecimal(player);
             case "undying_time_left":
@@ -81,7 +81,7 @@ public final class HookPlaceholderAPI extends PlaceholderExpansion {
             default:
                 break;
         }
-        
+
         return null;
     }
 }

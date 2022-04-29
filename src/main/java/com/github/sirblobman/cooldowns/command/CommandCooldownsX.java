@@ -11,17 +11,17 @@ import com.github.sirblobman.cooldowns.CooldownPlugin;
 
 public final class CommandCooldownsX extends Command {
     private final CooldownPlugin plugin;
-    
+
     public CommandCooldownsX(CooldownPlugin plugin) {
         super(plugin, "cooldownsx");
         this.plugin = plugin;
     }
-    
+
     @Override
     protected List<String> onTabComplete(CommandSender sender, String[] args) {
         return Collections.emptyList();
     }
-    
+
     @Override
     protected boolean execute(CommandSender sender, String[] args) {
         this.plugin.onReload();

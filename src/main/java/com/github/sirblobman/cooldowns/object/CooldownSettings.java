@@ -23,13 +23,13 @@ public final class CooldownSettings {
     private int cooldownSeconds;
     private String bypassPermission;
     private boolean packetCooldown;
-    private List<String> disabledWorldNameList;
+    private final List<String> disabledWorldNameList;
     private boolean disabledWorldNameListInverted;
     private ActionBarSettings actionBarSettings;
 
     public CooldownSettings(XMaterial material) {
         this.material = Validate.notNull(material, "material must not be null!");
-        if(this.material == XMaterial.AIR) {
+        if (this.material == XMaterial.AIR) {
             throw new IllegalArgumentException("material must not be AIR!");
         }
 
@@ -43,12 +43,17 @@ public final class CooldownSettings {
         this.actionBarSettings = new ActionBarSettings();
     }
 
+    @Deprecated
+    public static CooldownSettings getDefaultCooldownSettings(XMaterial material) {
+        return new CooldownSettings(material);
+    }
+
     public void load(ConfigurationSection config) {
         String cooldownTypeName = config.getString("cooldown-type");
         try {
             CooldownType cooldownType = CooldownType.valueOf(cooldownTypeName);
             setCooldownType(cooldownType);
-        } catch(IllegalArgumentException ignored) {
+        } catch (IllegalArgumentException ignored) {
         }
 
         int cooldownSeconds = config.getInt("cooldown", 0);
@@ -67,7 +72,7 @@ public final class CooldownSettings {
         setDisabledWorldListInverted(disabledWorldNameListInverted);
 
         ConfigurationSection sectionActionBar = config.getConfigurationSection("action-bar");
-        if(sectionActionBar != null) {
+        if (sectionActionBar != null) {
             boolean enabled = sectionActionBar.getBoolean("enabled", false);
             int priority = sectionActionBar.getInt("priority", 0);
             String message = sectionActionBar.getString("message");
@@ -77,16 +82,11 @@ public final class CooldownSettings {
         }
     }
 
-    @Deprecated
-    public static CooldownSettings getDefaultCooldownSettings(XMaterial material) {
-        return new CooldownSettings(material);
-    }
-    
     @NotNull
     public XMaterial getMaterial() {
         return this.material;
     }
-    
+
     @NotNull
     public CooldownType getCooldownType() {
         return this.cooldownType;
@@ -96,18 +96,18 @@ public final class CooldownSettings {
         Validate.notNull(cooldownType, "cooldownType must not be null!");
         this.cooldownType = cooldownType;
     }
-    
+
     public int getCooldownSeconds() {
         return this.cooldownSeconds;
+    }
+
+    public void setCooldownSeconds(int cooldownSeconds) {
+        this.cooldownSeconds = cooldownSeconds;
     }
 
     public long getCooldownMillis() {
         int seconds = getCooldownSeconds();
         return TimeUnit.SECONDS.toMillis(seconds);
-    }
-
-    public void setCooldownSeconds(int cooldownSeconds) {
-        this.cooldownSeconds = cooldownSeconds;
     }
 
     @Nullable
@@ -118,7 +118,7 @@ public final class CooldownSettings {
     public void setBypassPermission(@Nullable String bypassPermission) {
         this.bypassPermission = bypassPermission;
     }
-    
+
     public boolean hasPacketCooldown() {
         return this.packetCooldown;
     }
@@ -155,22 +155,22 @@ public final class CooldownSettings {
         boolean inverted = isDisabledWorldNameListInverted();
         return (contains != inverted);
     }
-    
+
     @NotNull
     public ActionBarSettings getActionBarSettings() {
         return this.actionBarSettings;
     }
 
     public void setActionBarSettings(@Nullable ActionBarSettings settings) {
-        if(settings != null) {
+        if (settings != null) {
             this.actionBarSettings = settings;
         } else {
             this.actionBarSettings = new ActionBarSettings();
         }
     }
-    
+
     public boolean matches(ItemStack item) {
-        if(ItemUtility.isAir(item)) {
+        if (ItemUtility.isAir(item)) {
             return false;
         }
 
