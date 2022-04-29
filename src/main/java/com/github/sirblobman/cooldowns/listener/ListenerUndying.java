@@ -22,10 +22,14 @@ public final class ListenerUndying extends CooldownListener {
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onResurrect(EntityResurrectEvent e) {
         LivingEntity entity = e.getEntity();
-        if(!(entity instanceof Player)) return;
+        if(!(entity instanceof Player)) {
+            return;
+        }
         
         Player player = (Player) entity;
-        if(hasBypass(player)) return;
+        if(hasBypass(player)) {
+            return;
+        }
         
         UndyingManager undyingManager = getUndyingManager();
         if(!undyingManager.hasCooldown(player)) {
@@ -43,7 +47,9 @@ public final class ListenerUndying extends CooldownListener {
         YamlConfiguration configuration = configurationManager.get("undying.yml");
         
         String message = configuration.getString("totem-message");
-        if(message == null || message.isEmpty()) return;
+        if(message == null || message.isEmpty()) {
+            return;
+        }
         
         String timeLeft = getTimeLeft(player);
         String realMessage = MessageUtility.color(message).replace("{time_left}", timeLeft);
@@ -63,7 +69,9 @@ public final class ListenerUndying extends CooldownListener {
         YamlConfiguration configuration = configurationManager.get("undying.yml");
         
         String bypassPermissionName = configuration.getString("totem-bypass-permission");
-        if(bypassPermissionName == null || bypassPermissionName.isEmpty()) return false;
+        if(bypassPermissionName == null || bypassPermissionName.isEmpty()) {
+            return false;
+        }
         
         Permission bypassPermission = new Permission(bypassPermissionName, "CooldownsX Bypass Permission", PermissionDefault.FALSE);
         return player.hasPermission(bypassPermission);

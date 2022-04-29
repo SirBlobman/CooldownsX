@@ -1,5 +1,6 @@
 package com.github.sirblobman.cooldowns.listener;
 
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -23,14 +24,25 @@ public final class ListenerConsume extends CooldownListener {
         Player player = e.getPlayer();
         
         XMaterial material = getXMaterial(item);
-        if(material == null) return;
+        if(material == null) {
+            return;
+        }
         
         CooldownManager cooldownManager = getCooldownManager();
-        if(cooldownManager.canBypass(player, material)) return;
+        if(cooldownManager.canBypass(player, material)) {
+            return;
+        }
         
         CooldownSettings cooldownSettings = cooldownManager.getCooldownSettings(material);
         CooldownType cooldownType = cooldownSettings.getCooldownType();
-        if(cooldownType != CooldownType.CONSUME) return;
+        if(cooldownType != CooldownType.CONSUME) {
+            return;
+        }
+
+        World world = player.getWorld();
+        if(cooldownSettings.isDisabledWorld(world)) {
+            return;
+        }
         
         if(checkCooldown(player, material)) {
             e.setCancelled(true);

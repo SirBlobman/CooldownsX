@@ -47,7 +47,9 @@ public final class HookPlaceholderAPI extends PlaceholderExpansion {
     @Nullable
     @Override
     public String onPlaceholderRequest(Player player, @NotNull String placeholder) {
-        if(player == null) return null;
+        if(player == null) {
+            return null;
+        }
         
         if(placeholder.startsWith("time_left_decimal_")) {
             String materialName = placeholder.substring("time_left_decimal_".length());

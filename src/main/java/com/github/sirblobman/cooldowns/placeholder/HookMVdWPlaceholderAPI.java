@@ -31,10 +31,14 @@ public final class HookMVdWPlaceholderAPI implements PlaceholderReplacer {
     @Override
     public String onPlaceholderReplace(PlaceholderReplaceEvent e) {
         Player player = e.getPlayer();
-        if(player == null) return null;
+        if(player == null) {
+            return null;
+        }
         
         String id = e.getPlaceholder();
-        if(!id.startsWith("cooldownsx_")) return null;
+        if(!id.startsWith("cooldownsx_")) {
+            return null;
+        }
         
         String placeholder = id.substring("cooldownsx_".length());
         if(placeholder.startsWith("time_left_decimal_")) {

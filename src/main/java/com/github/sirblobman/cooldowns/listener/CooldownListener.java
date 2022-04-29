@@ -86,7 +86,9 @@ public abstract class CooldownListener extends PluginListener<CooldownPlugin> {
         ConfigurationManager configurationManager = getConfigurationManager();
         YamlConfiguration configuration = configurationManager.get("config.yml");
         String messageFormat = configuration.getString("cooldown-message");
-        if(messageFormat == null || messageFormat.isEmpty()) return;
+        if(messageFormat == null || messageFormat.isEmpty()) {
+            return;
+        }
         
         CooldownPlugin plugin = getPlugin();
         String timeLeft = getTimeLeft(player, material);

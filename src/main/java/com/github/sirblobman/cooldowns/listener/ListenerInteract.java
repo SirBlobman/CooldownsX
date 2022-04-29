@@ -1,5 +1,6 @@
 package com.github.sirblobman.cooldowns.listener;
 
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Result;
 import org.bukkit.event.EventHandler;
@@ -25,21 +26,36 @@ public final class ListenerInteract extends CooldownListener {
     @EventHandler(priority = EventPriority.NORMAL)
     public void onInteract(PlayerInteractEvent e) {
         Action action = e.getAction();
-        if(action != Action.RIGHT_CLICK_AIR && action != Action.RIGHT_CLICK_BLOCK) return;
+        if(action != Action.RIGHT_CLICK_AIR && action != Action.RIGHT_CLICK_BLOCK) {
+            return;
+        }
         
         ItemStack item = e.getItem();
-        if(item == null || isCrossbowReloading(item)) return;
+        if(item == null || isCrossbowReloading(item)) {
+            return;
+        }
         
         XMaterial material = getXMaterial(item);
-        if(material == null) return;
+        if(material == null) {
+            return;
+        }
         
         Player player = e.getPlayer();
         CooldownManager cooldownManager = getCooldownManager();
-        if(cooldownManager.canBypass(player, material)) return;
+        if(cooldownManager.canBypass(player, material)) {
+            return;
+        }
         
         CooldownSettings cooldownSettings = cooldownManager.getCooldownSettings(material);
         CooldownType cooldownType = cooldownSettings.getCooldownType();
-        if(cooldownType != CooldownType.INTERACT) return;
+        if(cooldownType != CooldownType.INTERACT) {
+            return;
+        }
+
+        World world = player.getWorld();
+        if(cooldownSettings.isDisabledWorld(world)) {
+            return;
+        }
         
         if(checkCooldown(player, material)) {
             e.setUseItemInHand(Result.DENY);

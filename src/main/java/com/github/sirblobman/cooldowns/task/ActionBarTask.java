@@ -43,7 +43,9 @@ public final class ActionBarTask extends BukkitRunnable {
         CooldownSettings highestSettings = null;
         for(XMaterial material : activeCooldownSet) {
             CooldownSettings cooldownSettings = cooldownManager.getCooldownSettings(material);
-            if(cooldownSettings == null) continue;
+            if(cooldownSettings == null) {
+                continue;
+            }
             
             ActionBarSettings actionBarSettings = cooldownSettings.getActionBarSettings();
             if(actionBarSettings.isEnabled()) {

@@ -4,15 +4,20 @@ public final class ActionBarSettings {
     private final boolean isEnabled;
     private final int priority;
     private final String messageFormat;
+
+    public ActionBarSettings() {
+        this(false, 0, null);
+    }
     
     public ActionBarSettings(boolean enabled, int priority, String messageFormat) {
         this.isEnabled = enabled;
         this.priority = priority;
         this.messageFormat = messageFormat;
     }
-    
+
+    @Deprecated
     public static ActionBarSettings getDefaultActionBarSettings() {
-        return new ActionBarSettings(false, 0, null);
+        return new ActionBarSettings();
     }
     
     public boolean isEnabled() {

@@ -18,10 +18,8 @@ import com.github.sirblobman.api.configuration.ConfigurationManager;
 import com.github.sirblobman.api.utility.Validate;
 import com.github.sirblobman.api.xseries.XMaterial;
 import com.github.sirblobman.cooldowns.CooldownPlugin;
-import com.github.sirblobman.cooldowns.object.ActionBarSettings;
 import com.github.sirblobman.cooldowns.object.CooldownData;
 import com.github.sirblobman.cooldowns.object.CooldownSettings;
-import com.github.sirblobman.cooldowns.object.CooldownType;
 
 public final class CooldownManager {
     private final CooldownPlugin plugin;
@@ -56,12 +54,14 @@ public final class CooldownManager {
             
             Material realMaterial = material.parseMaterial();
             if(realMaterial == null) {
-                this.plugin.getLogger().warning("The XMaterial named '" + materialName + "' is not valid for your Spigot version.");
+                this.plugin.getLogger().warning("The XMaterial named '" + materialName
+                        + "' is not valid for your Spigot version.");
                 continue;
             }
             
             if(this.cooldownSettingsMap.containsKey(material)) {
-                debug("Skipped '" + materialName + "' because it is a duplicate of another material that is already configured.");
+                debug("Skipped '" + materialName
+                        + "' because it is a duplicate of another material that is already configured.");
                 continue;
             }
             
@@ -70,54 +70,16 @@ public final class CooldownManager {
                 debug("'" + materialName + "' is not a valid section.");
                 continue;
             }
-            
-            String cooldownTypeName = section.getString("cooldown-type", "INTERACT");
-            CooldownType cooldownType;
-            try {
-                cooldownType = CooldownType.valueOf(cooldownTypeName);
-            } catch(Exception ex) {
-                debug("Unknown cooldown-type '" + cooldownTypeName + "'.");
-                continue;
-            }
-            
-            int cooldownSeconds = section.getInt("cooldown");
-            if(cooldownSeconds < 1) {
-                debug("cooldown must be at least 1 second.");
-                continue;
-            }
-            
-            String bypassPermission = section.getString("bypass-permission", null);
-            boolean packetCooldown = section.getBoolean("packet-cooldown", false);
-            
-            debug("Loading action bar settings...");
-            ActionBarSettings actionBarSettings = parseActionBarSettings(section);
-            
-            CooldownSettings cooldownSettings = new CooldownSettings(material, cooldownType, cooldownSeconds, bypassPermission, packetCooldown, actionBarSettings);
+
+            CooldownSettings cooldownSettings = new CooldownSettings(material);
+            cooldownSettings.load(section);
+
             this.cooldownSettingsMap.put(material, cooldownSettings);
             debug("Successfully loaded section '" + materialName + "'.");
         }
         
         long cooldownMapSize = this.cooldownSettingsMap.size();
         debug("Successfully loaded " + cooldownMapSize + " item cooldown(s).");
-    }
-    
-    private ActionBarSettings parseActionBarSettings(ConfigurationSection config) {
-        ConfigurationSection section = config.getConfigurationSection("action-bar");
-        if(section == null) {
-            debug("Section is missing action-bar section, using default.");
-            return ActionBarSettings.getDefaultActionBarSettings();
-        }
-        
-        boolean enabled = section.getBoolean("enabled", false);
-        debug("Enabled: " + enabled);
-        
-        int priority = section.getInt("priority", 0);
-        debug("Priority: " + priority);
-        
-        String messageFormat = section.getString("message-format", null);
-        debug("Message Format: " + messageFormat);
-        
-        return new ActionBarSettings(enabled, priority, messageFormat);
     }
     
     public CooldownSettings getCooldownSettings(XMaterial material) {
@@ -127,7 +89,9 @@ public final class CooldownManager {
     public CooldownData getData(OfflinePlayer player) {
         UUID uuid = player.getUniqueId();
         CooldownData cooldownData = this.cooldownDataMap.getOrDefault(uuid, null);
-        if(cooldownData != null) return cooldownData;
+        if(cooldownData != null) {
+            return cooldownData;
+        }
         
         CooldownData newData = new CooldownData(player);
         this.cooldownDataMap.put(uuid, newData);
@@ -141,7 +105,10 @@ public final class CooldownManager {
     
     public long getCooldown(XMaterial material) {
         CooldownSettings cooldownSettings = getCooldownSettings(material);
-        if(cooldownSettings == null) return 0L;
+        if(cooldownSettings == null) {
+            return 0L;
+        }
+
         return cooldownSettings.getCooldownMillis();
     }
     
@@ -153,7 +120,9 @@ public final class CooldownManager {
         if(hasCooldown(material)) {
             CooldownSettings cooldownSettings = getCooldownSettings(material);
             String permissionName = cooldownSettings.getBypassPermission();
-            if(permissionName == null || permissionName.isEmpty()) return false;
+            if(permissionName == null || permissionName.isEmpty()) {
+                return false;
+            }
             
             Permission permission = new Permission(permissionName, "CooldownsX Bypass Permission", PermissionDefault.FALSE);
             return player.hasPermission(permission);
@@ -165,7 +134,9 @@ public final class CooldownManager {
     private void debug(String message) {
         ConfigurationManager configurationManager = this.plugin.getConfigurationManager();
         YamlConfiguration configuration = configurationManager.get("config.yml");
-        if(!configuration.getBoolean("debug-mode")) return;
+        if(!configuration.getBoolean("debug-mode")) {
+            return;
+        }
         
         String finalMessage = String.format("[Debug] %s", message);
         Logger logger = this.plugin.getLogger();

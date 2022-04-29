@@ -5,6 +5,7 @@
 # https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
 ENDER_PEARL:
   # How long (in seconds) must players wait before using this item?
+  # Default: 0 (no cooldown)
   cooldown: 10
 
   # What usage types will trigger this cooldown?
@@ -14,12 +15,25 @@ ENDER_PEARL:
 
   # The bypass permission is optional.
   # When the permission is not set or empty, bypass will not be possible for that item.
+  # Default: No bypass
   bypass-permission: "cooldownsx.bypass.ENDER_PEARL"
 
   # The packet cooldown setting is optional and only works in Spigot 1.9 or higher.
   # Should this item trigger the item cooldown packet in vanilla minecraft?
   # This will show a cooldown bar on the item itself, but may prevent some item features, such as crossbow reloading.
+  # Default: false
   packet-cooldown: true
+
+  # A list of worlds in which this cooldown should be disabled.
+  # If this option is not set, the cooldown will work in all worlds.
+  # World names are case sensitive
+  disabled-world-list:
+    - "World2"
+    - "wOrLd3"
+
+  # Set this to true if the 'disabled-world-list' should be the list of enabled worlds instead.
+  # Default: false
+  disabled-world-list-inverted: false
 
   # The action bar section is optional.
   action-bar:
@@ -36,6 +50,7 @@ ENDER_PEARL:
     # What message will be displayed?
     # Placeholders:
     # {time_left}: The amount of time left in seconds.
+    # Default: disabled (no message)
     message-format: "&aEnder Pearl Cooldown: &c{time_left} seconds"
 
 CHORUS_FRUIT:

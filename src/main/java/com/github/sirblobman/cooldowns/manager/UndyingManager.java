@@ -31,7 +31,9 @@ public final class UndyingManager {
         ConfigurationManager configurationManager = this.plugin.getConfigurationManager();
         YamlConfiguration configuration = configurationManager.get("undying.yml");
         long cooldownMillis = configuration.getLong("totem-cooldown");
-        if(cooldownMillis < 1L) return;
+        if(cooldownMillis < 1L) {
+            return;
+        }
         
         UUID uuid = player.getUniqueId();
         long systemMillis = System.currentTimeMillis();
@@ -40,7 +42,10 @@ public final class UndyingManager {
     }
     
     public long getCooldownMillisLeft(Player player) {
-        if(!hasCooldown(player)) return -1L;
+        if(!hasCooldown(player)) {
+            return -1L;
+        }
+
         UUID uuid = player.getUniqueId();
         long expireMillis = this.cooldownExpireMap.getOrDefault(uuid, -1L);
         

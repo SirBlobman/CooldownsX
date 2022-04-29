@@ -63,12 +63,19 @@ public final class CooldownData {
     }
     
     public boolean hasCooldown(CooldownPlugin plugin, XMaterial material) {
-        if(!this.cooldownMap.containsKey(material)) return false;
+        if(!this.cooldownMap.containsKey(material)) {
+            return false;
+        }
+
         long expireMillis = getCooldownExpireTime(material);
-        if(expireMillis <= 0) return false;
+        if(expireMillis <= 0) {
+            return false;
+        }
         
         long systemMillis = System.currentTimeMillis();
-        if(systemMillis <= expireMillis) return true;
+        if(systemMillis <= expireMillis) {
+            return true;
+        }
         
         removeCooldown(plugin, material);
         return false;
@@ -101,15 +108,21 @@ public final class CooldownData {
         
         CooldownManager cooldownManager = plugin.getCooldownManager();
         CooldownSettings cooldownSettings = cooldownManager.getCooldownSettings(material);
-        if(cooldownSettings.hasPacketCooldown()) sendPacket(plugin, material, 0);
+        if(cooldownSettings.hasPacketCooldown()) {
+            sendPacket(plugin, material, 0);
+        }
     }
     
     private void sendPacket(CooldownPlugin plugin, XMaterial material, int ticksLeft) {
         Player player = getPlayer();
-        if(player == null) return;
+        if(player == null) {
+            return;
+        }
         
         Material bukkitMaterial = material.parseMaterial();
-        if(bukkitMaterial == null) return;
+        if(bukkitMaterial == null) {
+            return;
+        }
         
         Runnable task = () -> {
             MultiVersionHandler multiVersionHandler = plugin.getMultiVersionHandler();
