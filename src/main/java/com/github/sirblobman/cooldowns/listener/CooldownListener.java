@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.github.sirblobman.api.configuration.ConfigurationManager;
-import com.github.sirblobman.api.core.listener.PluginListener;
+import com.github.sirblobman.api.plugin.listener.PluginListener;
 import com.github.sirblobman.api.utility.MessageUtility;
 import com.github.sirblobman.api.xseries.XMaterial;
 import com.github.sirblobman.cooldowns.CooldownPlugin;

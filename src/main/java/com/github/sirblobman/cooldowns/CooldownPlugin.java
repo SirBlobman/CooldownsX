@@ -22,7 +22,6 @@ import com.github.sirblobman.cooldowns.listener.ListenerInteract;
 import com.github.sirblobman.cooldowns.listener.ListenerUndying;
 import com.github.sirblobman.cooldowns.manager.CooldownManager;
 import com.github.sirblobman.cooldowns.manager.UndyingManager;
-import com.github.sirblobman.cooldowns.placeholder.HookMVdWPlaceholderAPI;
 import com.github.sirblobman.cooldowns.placeholder.HookPlaceholderAPI;
 import com.github.sirblobman.cooldowns.task.ActionBarTask;
 
@@ -68,10 +67,6 @@ public final class CooldownPlugin extends ConfigurablePlugin {
         if (minorVersion >= 11) new ListenerUndying(this).register();
 
         PluginManager pluginManager = Bukkit.getPluginManager();
-        if (pluginManager.isPluginEnabled("MVdWPlaceholderAPI")) {
-            new HookMVdWPlaceholderAPI(this).register();
-        }
-
         if (pluginManager.isPluginEnabled("PlaceholderAPI")) {
             new HookPlaceholderAPI(this).register();
         }
