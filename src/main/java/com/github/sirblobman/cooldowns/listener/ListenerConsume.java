@@ -24,7 +24,7 @@ public final class ListenerConsume extends CooldownListener {
         Player player = e.getPlayer();
 
         XMaterial material = getXMaterial(item);
-        if (material == null) {
+        if (material == XMaterial.AIR) {
             return;
         }
 

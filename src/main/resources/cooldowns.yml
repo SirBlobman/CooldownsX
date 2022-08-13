@@ -51,7 +51,7 @@ ENDER_PEARL:
     # Placeholders:
     # {time_left}: The amount of time left in seconds.
     # Default: disabled (no message)
-    message-format: "&aEnder Pearl Cooldown: &c{time_left} seconds"
+    message-format: "<green>Ender Pearl Cooldown:</green> <red>{time_left} seconds</red>"
 
 CHORUS_FRUIT:
   cooldown: 15
@@ -67,4 +67,8 @@ ENCHANTED_GOLDEN_APPLE:
   action-bar:
     enabled: true
     priority: 1
-    message-format: "&aEnchanted Golden Apple Cooldown: &c{time_left} seconds"
+    message-format: "<green>Enchanted Golden Apple Cooldown:</green> <red>{time_left} seconds</red>"
+
+TOTEM_OF_UNDYING:
+  cooldown: 30
+  cooldown-type: UNDYING

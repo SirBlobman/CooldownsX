@@ -25,7 +25,7 @@
         <bukkit.plugin.description>${project.description}</bukkit.plugin.description>
 
         <bukkit.plugin.main>com.github.sirblobman.cooldowns.CooldownPlugin</bukkit.plugin.main>
-        <bukkit.plugin.version>4.3.0</bukkit.plugin.version>
+        <bukkit.plugin.version>4.4.0</bukkit.plugin.version>
     </properties>
 
     <repositories>
@@ -69,8 +69,14 @@
         <dependency>
             <groupId>com.github.sirblobman.api</groupId>
             <artifactId>core</artifactId>
-            <version>2.4-SNAPSHOT</version>
+            <version>2.5-SNAPSHOT</version>
             <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.github.cryptomorin</groupId>
+                    <artifactId>XSeries</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- PlaceholderAPI -->
@@ -78,6 +84,14 @@
             <groupId>me.clip</groupId>
             <artifactId>placeholderapi</artifactId>
             <version>2.11.2</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- CombatLogX API -->
+        <dependency>
+            <groupId>com.github.sirblobman.combatlogx</groupId>
+            <artifactId>api</artifactId>
+            <version>11.0.0.0-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
@@ -99,6 +113,7 @@
     <build>
         <defaultGoal>clean package</defaultGoal>
         <finalName>${bukkit.plugin.name}-${bukkit.plugin.version}</finalName>
+
         <resources>
             <resource>
                 <directory>src/main/resources</directory>

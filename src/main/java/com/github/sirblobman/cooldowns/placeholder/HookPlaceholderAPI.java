@@ -22,6 +22,16 @@ public final class HookPlaceholderAPI extends PlaceholderExpansion {
         this.plugin = Validate.notNull(plugin, "plugin must not be null!");
     }
 
+    @Override
+    public boolean canRegister() {
+        return true;
+    }
+
+    @Override
+    public boolean persist() {
+        return true;
+    }
+
     @NotNull
     @Override
     public String getIdentifier() {
@@ -56,30 +66,15 @@ public final class HookPlaceholderAPI extends PlaceholderExpansion {
             Optional<XMaterial> optionalMaterial = XMaterial.matchXMaterial(materialName);
             if (optionalMaterial.isPresent()) {
                 XMaterial material = optionalMaterial.get();
-                return PlaceholderHelper.getTimeLeftDecimal(player, material);
+                return PlaceholderHelper.getTimeLeftSecondsDecimal(player, material);
             }
-
-            return null;
-        }
-
-        if (placeholder.startsWith("time_left_")) {
+        } else if (placeholder.startsWith("time_left_")) {
             String materialName = placeholder.substring("time_left_".length());
             Optional<XMaterial> optionalMaterial = XMaterial.matchXMaterial(materialName);
             if (optionalMaterial.isPresent()) {
                 XMaterial material = optionalMaterial.get();
-                return PlaceholderHelper.getTimeLeftInteger(player, material);
+                return PlaceholderHelper.getTimeLeftSeconds(player, material);
             }
-
-            return null;
-        }
-
-        switch (placeholder) {
-            case "undying_time_left_decimal":
-                return PlaceholderHelper.getUndyingTimeLeftDecimal(player);
-            case "undying_time_left":
-                return PlaceholderHelper.getUndyingTimeLeftInteger(player);
-            default:
-                break;
         }
 
         return null;

@@ -1,0 +1,36 @@
+## Extra Information:
+## This is the default language file for CooldownsX
+## The default language is "en_us", also known as English (United States).
+## Context will be added as YAML comments above the string.
+
+## The color scheme for messages is gold, dark gray, and sometimes red.
+## Command feedback that is successful should always be green.
+## Error messages should always be red.
+## Variables in messages can be gray or white.
+
+## Messages use the MiniMessage format in non-strict mode.
+## More information about MiniMessage can be found here:
+## https://docs.adventure.kyori.net/minimessage/format.html
+
+---
+# The language code for this file.
+language-name: "en_us"
+
+# The format for decimal numbers.
+# The United States uses the number and two decimal places
+decimal-format: "0.00"
+
+# The prefix for CooldownsX.
+# This is shown in front of all messages and should not be changed unless necessary.
+prefix: "<dark_gray><bold>[<gold>CooldownsX</gold>]</bold></dark_gray>"
+
+error:
+  no-permission: "<red>Missing Permission: <gray>{permission}</gray></red>"
+
+command:
+  reload-success: "<green>Successfully reloaded the configuration files for CooldownsX.</green>"
+  reload-failure:
+    - "<red>An error occurred while reloading the configuration files.</red>"
+    - "<red>Please check the server console and fix the problem.</red>"
+
+cooldown: "<red>You must wait <gray>{time_left}</gray> seconds before using <gray>{material}</gray> again.</red>"

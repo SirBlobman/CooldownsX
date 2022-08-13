@@ -1,18 +1,17 @@
 package com.github.sirblobman.cooldowns.listener;
 
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.LivingEntity;
+import org.bukkit.World;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityResurrectEvent;
-import org.bukkit.permissions.Permission;
-import org.bukkit.permissions.PermissionDefault;
 
-import com.github.sirblobman.api.configuration.ConfigurationManager;
-import com.github.sirblobman.api.utility.MessageUtility;
+import com.github.sirblobman.api.xseries.XMaterial;
 import com.github.sirblobman.cooldowns.CooldownPlugin;
-import com.github.sirblobman.cooldowns.manager.UndyingManager;
+import com.github.sirblobman.cooldowns.manager.CooldownManager;
+import com.github.sirblobman.cooldowns.object.CooldownSettings;
+import com.github.sirblobman.cooldowns.object.CooldownType;
 
 public final class ListenerUndying extends CooldownListener {
     public ListenerUndying(CooldownPlugin plugin) {
@@ -21,59 +20,31 @@ public final class ListenerUndying extends CooldownListener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onResurrect(EntityResurrectEvent e) {
-        LivingEntity entity = e.getEntity();
+        Entity entity = e.getEntity();
         if (!(entity instanceof Player)) {
             return;
         }
 
         Player player = (Player) entity;
-        if (hasBypass(player)) {
+        XMaterial material = XMaterial.TOTEM_OF_UNDYING;
+        CooldownManager cooldownManager = getCooldownManager();
+        if (cooldownManager.canBypass(player, material)) {
             return;
         }
 
-        UndyingManager undyingManager = getUndyingManager();
-        if (!undyingManager.hasCooldown(player)) {
-            undyingManager.addCooldown(player);
+        CooldownSettings cooldownSettings = cooldownManager.getCooldownSettings(material);
+        CooldownType cooldownType = cooldownSettings.getCooldownType();
+        if (cooldownType != CooldownType.UNDYING) {
             return;
         }
 
-        e.setCancelled(true);
-        sendMessage(player);
-    }
-
-    private void sendMessage(Player player) {
-        CooldownPlugin plugin = getPlugin();
-        ConfigurationManager configurationManager = plugin.getConfigurationManager();
-        YamlConfiguration configuration = configurationManager.get("undying.yml");
-
-        String message = configuration.getString("totem-message");
-        if (message == null || message.isEmpty()) {
+        World world = player.getWorld();
+        if (cooldownSettings.isDisabledWorld(world)) {
             return;
         }
 
-        String timeLeft = getTimeLeft(player);
-        String realMessage = MessageUtility.color(message).replace("{time_left}", timeLeft);
-        player.sendMessage(realMessage);
-    }
-
-    private String getTimeLeft(Player player) {
-        UndyingManager undyingManager = getUndyingManager();
-        double millisLeft = undyingManager.getCooldownMillisLeft(player);
-        long timeLeftSeconds = (long) Math.ceil(millisLeft / 1_000.0D);
-        return Long.toString(timeLeftSeconds);
-    }
-
-    private boolean hasBypass(Player player) {
-        CooldownPlugin plugin = getPlugin();
-        ConfigurationManager configurationManager = plugin.getConfigurationManager();
-        YamlConfiguration configuration = configurationManager.get("undying.yml");
-
-        String bypassPermissionName = configuration.getString("totem-bypass-permission");
-        if (bypassPermissionName == null || bypassPermissionName.isEmpty()) {
-            return false;
+        if (checkCooldown(player, material)) {
+            e.setCancelled(true);
         }
-
-        Permission bypassPermission = new Permission(bypassPermissionName, "CooldownsX Bypass Permission", PermissionDefault.FALSE);
-        return player.hasPermission(bypassPermission);
     }
 }

@@ -19,11 +19,11 @@ import org.jetbrains.annotations.Nullable;
 
 public final class CooldownSettings {
     private final XMaterial material;
+    private final List<String> disabledWorldNameList;
     private CooldownType cooldownType;
     private int cooldownSeconds;
     private String bypassPermission;
     private boolean packetCooldown;
-    private final List<String> disabledWorldNameList;
     private boolean disabledWorldNameListInverted;
     private ActionBarSettings actionBarSettings;
 
@@ -43,17 +43,13 @@ public final class CooldownSettings {
         this.actionBarSettings = new ActionBarSettings();
     }
 
-    @Deprecated
-    public static CooldownSettings getDefaultCooldownSettings(XMaterial material) {
-        return new CooldownSettings(material);
-    }
-
     public void load(ConfigurationSection config) {
-        String cooldownTypeName = config.getString("cooldown-type");
         try {
+            String cooldownTypeName = config.getString("cooldown-type", "INTERACT");
             CooldownType cooldownType = CooldownType.valueOf(cooldownTypeName);
             setCooldownType(cooldownType);
         } catch (IllegalArgumentException ignored) {
+            setCooldownType(CooldownType.INTERACT);
         }
 
         int cooldownSeconds = config.getInt("cooldown", 0);
@@ -77,7 +73,10 @@ public final class CooldownSettings {
             int priority = sectionActionBar.getInt("priority", 0);
             String message = sectionActionBar.getString("message");
 
-            ActionBarSettings actionBarSettings = new ActionBarSettings(enabled, priority, message);
+            ActionBarSettings actionBarSettings = new ActionBarSettings();
+            actionBarSettings.setEnabled(enabled);
+            actionBarSettings.setPriority(priority);
+            actionBarSettings.setMessageFormat(message);
             setActionBarSettings(actionBarSettings);
         }
     }

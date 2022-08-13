@@ -36,7 +36,7 @@ public final class ListenerInteract extends CooldownListener {
         }
 
         XMaterial material = getXMaterial(item);
-        if (material == null) {
+        if (material == XMaterial.AIR) {
             return;
         }
 
@@ -64,12 +64,14 @@ public final class ListenerInteract extends CooldownListener {
 
     private boolean isCrossbowReloading(ItemStack item) {
         int minorVersion = VersionUtility.getMinorVersion();
-        if (minorVersion >= 14) {
-            ItemMeta meta = item.getItemMeta();
-            if (meta instanceof CrossbowMeta) {
-                CrossbowMeta crossbow = (CrossbowMeta) meta;
-                return !crossbow.hasChargedProjectiles();
-            }
+        if (minorVersion < 14) {
+            return false;
+        }
+
+        ItemMeta meta = item.getItemMeta();
+        if (meta instanceof CrossbowMeta) {
+            CrossbowMeta crossbow = (CrossbowMeta) meta;
+            return !crossbow.hasChargedProjectiles();
         }
 
         return false;

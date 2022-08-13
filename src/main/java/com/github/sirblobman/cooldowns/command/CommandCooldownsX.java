@@ -3,18 +3,16 @@ package com.github.sirblobman.cooldowns.command;
 import java.util.Collections;
 import java.util.List;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import com.github.sirblobman.api.command.Command;
 import com.github.sirblobman.cooldowns.CooldownPlugin;
 
 public final class CommandCooldownsX extends Command {
-    private final CooldownPlugin plugin;
-
     public CommandCooldownsX(CooldownPlugin plugin) {
         super(plugin, "cooldownsx");
-        this.plugin = plugin;
+        setPermissionName("cooldownsx.command.cooldownsx");
     }
 
     @Override
@@ -24,8 +22,15 @@ public final class CommandCooldownsX extends Command {
 
     @Override
     protected boolean execute(CommandSender sender, String[] args) {
-        this.plugin.onReload();
-        sender.sendMessage(ChatColor.GREEN + "Successfully reloaded the configuration files for CooldownsX.");
+        try {
+            JavaPlugin plugin = getPlugin();
+            plugin.reloadConfig();
+
+            sendMessage(sender, "command.reload-success", null);
+        } catch (Exception ex) {
+            sendMessage(sender, "command.reload-failure", null);
+        }
+
         return true;
     }
 }

@@ -1,29 +1,23 @@
 package com.github.sirblobman.cooldowns.listener;
 
 import org.bukkit.Material;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.github.sirblobman.api.configuration.ConfigurationManager;
+import com.github.sirblobman.api.language.LanguageManager;
+import com.github.sirblobman.api.language.Replacer;
 import com.github.sirblobman.api.plugin.listener.PluginListener;
-import com.github.sirblobman.api.utility.MessageUtility;
 import com.github.sirblobman.api.xseries.XMaterial;
 import com.github.sirblobman.cooldowns.CooldownPlugin;
 import com.github.sirblobman.cooldowns.manager.CooldownManager;
-import com.github.sirblobman.cooldowns.manager.UndyingManager;
+import com.github.sirblobman.cooldowns.manager.MaterialDictionary;
 import com.github.sirblobman.cooldowns.object.CooldownData;
 
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class CooldownListener extends PluginListener<CooldownPlugin> {
     public CooldownListener(CooldownPlugin plugin) {
         super(plugin);
-    }
-
-    protected final ConfigurationManager getConfigurationManager() {
-        CooldownPlugin plugin = getPlugin();
-        return plugin.getConfigurationManager();
     }
 
     protected final CooldownManager getCooldownManager() {
@@ -31,9 +25,9 @@ public abstract class CooldownListener extends PluginListener<CooldownPlugin> {
         return plugin.getCooldownManager();
     }
 
-    protected final UndyingManager getUndyingManager() {
+    protected final MaterialDictionary getMaterialDictionary() {
         CooldownPlugin plugin = getPlugin();
-        return plugin.getUndyingManager();
+        return plugin.getMaterialDictionary();
     }
 
     protected final boolean checkCooldown(Player player, XMaterial material) {
@@ -55,18 +49,20 @@ public abstract class CooldownListener extends PluginListener<CooldownPlugin> {
         return false;
     }
 
-    @Nullable
-    protected final XMaterial getXMaterial(ItemStack itemStack) {
-        if (itemStack == null) return null;
+    @NotNull
+    protected final XMaterial getXMaterial(ItemStack stack) {
+        if (stack == null) {
+            return XMaterial.AIR;
+        }
 
         try {
-            return XMaterial.matchXMaterial(itemStack);
+            return XMaterial.matchXMaterial(stack);
         } catch (IllegalArgumentException ex) {
             try {
-                Material bukkitMaterial = itemStack.getType();
+                Material bukkitMaterial = stack.getType();
                 return XMaterial.matchXMaterial(bukkitMaterial);
-            } catch (Exception ex2) {
-                return null;
+            } catch (IllegalArgumentException ex2) {
+                return XMaterial.AIR;
             }
         }
     }
@@ -83,19 +79,15 @@ public abstract class CooldownListener extends PluginListener<CooldownPlugin> {
     }
 
     private void sendCooldownMessage(Player player, XMaterial material) {
-        ConfigurationManager configurationManager = getConfigurationManager();
-        YamlConfiguration configuration = configurationManager.get("config.yml");
-        String messageFormat = configuration.getString("cooldown-message");
-        if (messageFormat == null || messageFormat.isEmpty()) {
-            return;
-        }
-
         CooldownPlugin plugin = getPlugin();
         String timeLeft = getTimeLeft(player, material);
-        String materialName = plugin.getMaterialName(material);
 
-        String message = MessageUtility.color(messageFormat).replace("{time_left}", timeLeft)
+        MaterialDictionary materialDictionary = getMaterialDictionary();
+        String materialName = materialDictionary.getMaterialName(material);
+
+        LanguageManager languageManager = plugin.getLanguageManager();
+        Replacer replacer = message -> message.replace("{time_left}", timeLeft)
                 .replace("{material}", materialName);
-        player.sendMessage(message);
+        languageManager.sendMessage(player, "cooldown", replacer);
     }
 }

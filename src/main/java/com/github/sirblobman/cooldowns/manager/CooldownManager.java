@@ -1,6 +1,7 @@
 package com.github.sirblobman.cooldowns.manager;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -32,10 +33,6 @@ public final class CooldownManager {
         this.cooldownSettingsMap = new HashMap<>();
     }
 
-    public CooldownPlugin getPlugin() {
-        return this.plugin;
-    }
-
     public void loadCooldowns() {
         CooldownPlugin plugin = getPlugin();
         ConfigurationManager configurationManager = plugin.getConfigurationManager();
@@ -44,11 +41,11 @@ public final class CooldownManager {
 
         Set<String> materialNameSet = configuration.getKeys(false);
         for (String materialName : materialNameSet) {
-            debug("Checking section '" + materialName + "' in cooldowns.yml...");
+            printDebug("Checking section '" + materialName + "' in cooldowns.yml...");
             XMaterial material = XMaterial.matchXMaterial(materialName).orElse(XMaterial.AIR);
 
             if (material == XMaterial.AIR) {
-                debug("'" + materialName + "' is not a valid material name.");
+                printDebug("'" + materialName + "' is not a valid material name.");
                 continue;
             }
 
@@ -60,26 +57,26 @@ public final class CooldownManager {
             }
 
             if (this.cooldownSettingsMap.containsKey(material)) {
-                debug("Skipped '" + materialName
+                printDebug("Skipped '" + materialName
                         + "' because it is a duplicate of another material that is already configured.");
                 continue;
             }
 
             ConfigurationSection section = configuration.getConfigurationSection(materialName);
             if (section == null) {
-                debug("'" + materialName + "' is not a valid section.");
+                printDebug("'" + materialName + "' is not a valid section.");
                 continue;
             }
 
             CooldownSettings cooldownSettings = new CooldownSettings(material);
             cooldownSettings.load(section);
 
-            this.cooldownSettingsMap.put(material, cooldownSettings);
-            debug("Successfully loaded section '" + materialName + "'.");
+            setCooldown(material, cooldownSettings);
+            printDebug("Successfully loaded section '" + materialName + "'.");
         }
 
         long cooldownMapSize = this.cooldownSettingsMap.size();
-        debug("Successfully loaded " + cooldownMapSize + " item cooldown(s).");
+        printDebug("Successfully loaded " + cooldownMapSize + " item cooldown(s).");
     }
 
     public CooldownSettings getCooldownSettings(XMaterial material) {
@@ -131,15 +128,33 @@ public final class CooldownManager {
         return true;
     }
 
-    private void debug(String message) {
-        ConfigurationManager configurationManager = this.plugin.getConfigurationManager();
+    private CooldownPlugin getPlugin() {
+        return this.plugin;
+    }
+
+    private ConfigurationManager getConfigurationManager() {
+        CooldownPlugin plugin = getPlugin();
+        return plugin.getConfigurationManager();
+    }
+
+    private Logger getLogger() {
+        CooldownPlugin plugin = getPlugin();
+        return plugin.getLogger();
+    }
+
+    private boolean isDebugModeDisabled() {
+        ConfigurationManager configurationManager = getConfigurationManager();
         YamlConfiguration configuration = configurationManager.get("config.yml");
-        if (!configuration.getBoolean("debug-mode")) {
+        return !configuration.getBoolean("debug-mode", false);
+    }
+
+    private void printDebug(String message) {
+        if (isDebugModeDisabled()) {
             return;
         }
 
-        String finalMessage = String.format("[Debug] %s", message);
-        Logger logger = this.plugin.getLogger();
+        String finalMessage = String.format(Locale.US, "[Debug] %s", message);
+        Logger logger = getLogger();
         logger.info(finalMessage);
     }
 }

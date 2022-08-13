@@ -1,34 +1,41 @@
 package com.github.sirblobman.cooldowns.object;
 
+import org.jetbrains.annotations.Nullable;
+
 public final class ActionBarSettings {
-    private final boolean isEnabled;
-    private final int priority;
-    private final String messageFormat;
+    private boolean enabled;
+    private int priority;
+    private String messageFormat;
 
     public ActionBarSettings() {
-        this(false, 0, null);
-    }
-
-    public ActionBarSettings(boolean enabled, int priority, String messageFormat) {
-        this.isEnabled = enabled;
-        this.priority = priority;
-        this.messageFormat = messageFormat;
-    }
-
-    @Deprecated
-    public static ActionBarSettings getDefaultActionBarSettings() {
-        return new ActionBarSettings();
+        this.enabled = false;
+        this.priority = 1;
+        this.messageFormat = "";
     }
 
     public boolean isEnabled() {
-        return (this.isEnabled && this.messageFormat != null && !this.messageFormat.isEmpty());
+        String messageFormat = getMessageFormat();
+        return (this.enabled && messageFormat != null && !messageFormat.isEmpty());
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     public int getPriority() {
         return this.priority;
     }
 
+    public void setPriority(int priority) {
+        this.priority = priority;
+    }
+
+    @Nullable
     public String getMessageFormat() {
         return this.messageFormat;
+    }
+
+    public void setMessageFormat(@Nullable String messageFormat) {
+        this.messageFormat = messageFormat;
     }
 }

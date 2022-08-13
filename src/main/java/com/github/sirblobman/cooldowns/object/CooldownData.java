@@ -39,14 +39,14 @@ public final class CooldownData {
 
     @NotNull
     public OfflinePlayer getOfflinePlayer() {
-        UUID uuid = getPlayerId();
-        return Bukkit.getOfflinePlayer(uuid);
+        UUID playerId = getPlayerId();
+        return Bukkit.getOfflinePlayer(playerId);
     }
 
     @Nullable
     public Player getPlayer() {
-        OfflinePlayer offlinePlayer = getOfflinePlayer();
-        return offlinePlayer.getPlayer();
+        UUID playerId = getPlayerId();
+        return Bukkit.getPlayer(playerId);
     }
 
     public Set<XMaterial> getActiveCooldowns(CooldownPlugin plugin) {
