@@ -26,7 +26,7 @@
         <bukkit.plugin.description>${project.description}</bukkit.plugin.description>
 
         <bukkit.plugin.main>com.github.sirblobman.cooldowns.CooldownPlugin</bukkit.plugin.main>
-        <bukkit.plugin.version>4.4.0.${build.number}</bukkit.plugin.version>
+        <bukkit.plugin.version>4.4.1.Beta-${build.number}</bukkit.plugin.version>
     </properties>
 
     <repositories>
