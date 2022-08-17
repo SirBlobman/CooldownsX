@@ -2,43 +2,17 @@
 A plugin that adds configurable cooldowns to items.
 
 # Placeholders
-CooldownsX supports two placeholder plugins.
-Surround the placeholder with `%%` for PlaceholderAPI and `{}` for MVdWPlaceholderAPI.
-Review the table below for placeholder information:  
-<table>
-    <thead>
-        <tr>
-            <th>Placeholder</th>
-            <th>Description</th>
-            <th>Example Output</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>cooldownsx_time_left_&lt;material&gt;</td>
-            <td>The amount of seconds left as an integer.</td>
-            <td>5</td>
-        </tr>
-        <tr>
-            <td>cooldownsx_time_left_decimal_&lt;material&gt;</td>
-            <td>The amount of seconds left as a decimal with two places.</td>
-            <td>5.24</td>
-        </tr>
-        <tr>
-            <td>cooldownsx_undying_time_left</td>
-            <td>The amount of seconds left before using a totem of undying as an integer.</td>
-            <td>7</td>
-        </tr>
-        <tr>
-            <td>cooldownsx_undying_time_left_decimal</td>
-            <td>The amount of seconds left before using a totem of undying as a decimal with two places.</td>
-            <td>7.62</td>
-        </tr>
-    </tbody>
-</table>
+CooldownsX adds placeholders to plugins that support PlaceholderAPI.
+Review the table below for placeholder information:
 
-# Maven Information
-CooldownsX has a useful API that is hosted on my own repository. To use the api, add the following values to your pom.xml file.
+| Placeholder                               | Description                                                   | Example Output |
+|-------------------------------------------|---------------------------------------------------------------|----------------|
+| %cooldownsx_time_left_&lt;id&gt;%         | The amount of seconds left for a specific cooldown. (integer) | 5              |
+| %cooldownsx_time_left_decimal_&lt;id&gt;% | The amount of seconds left for a specific cooldown. (decimal) | 5.2            |
+
+# API Information
+CooldownsX has a useful API that is hosted on my own repository.
+To use the api, add the following values to your `pom.xml` file:
 ```xml
 <repositories>
     <!-- SirBlobman Public Repository -->
@@ -47,7 +21,9 @@ CooldownsX has a useful API that is hosted on my own repository. To use the api,
         <url>https://nexus.sirblobman.xyz/repository/public/</url>
     </repository>
 </repositories>
+```
 
+```xml
 <dependencies>
     <!-- CooldownsX -->
     <dependency>
@@ -59,33 +35,51 @@ CooldownsX has a useful API that is hosted on my own repository. To use the api,
 </dependencies>
 ```
 
-# API Usage
+## API Usage
 To use the API you should make sure that CooldownsX is enabled on the server first.  
 The main things you need to know are how to get the plugin instance and how to get data for a player:
-```java
-public CooldownPlugin getCooldownsX() {
-    return JavaPlugin.getPlugin(CooldownPlugin.class);
-}
 
-public CooldownData getData(Player player) {
-    CooldownPlugin plugin = getCooldownsX();
-    CooldownManager cooldownManager = plugin.getCooldownManager();
-    return cooldownManager.getData(player);
-}
-```
+```java
+import org.jetbrains.annotations.Nullable;
 
-You can check the expiration time of a specific item for a player:
-```java
-public long getCooldownExpireMillis(Player player, XMaterial material) {
-    CooldownData cooldownData = getData(player);
-    return cooldownData.getCooldownExpireTime(material);
-}
-```
-You can also set a custom cooldown using your own plugin:
-```java
-public void setCooldown(Player player, XMaterial material, CooldownSettings cooldownSettings) {
-    CooldownPlugin plugin = getCooldownsX();
-    CooldownData cooldownData = getData(player);
-    return cooldownData.setCooldown(plugin, material, cooldownSettings);
+import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.entity.Player;
+
+import com.github.sirblobman.cooldowns.CooldownPlugin;
+import com.github.sirblobman.cooldowns.object.CooldownData;
+import com.github.sirblobman.cooldowns.configuration.CooldownSettings;
+import com.github.sirblobman.cooldowns.manager.CooldownManager;
+
+public final class CooldownHelper {
+    public CooldownPlugin getCooldownsX() {
+        return JavaPlugin.getPlugin(CooldownPlugin.class);
+    }
+
+    public CooldownData getData(Player player) {
+        CooldownPlugin plugin = getCooldownsX();
+        CooldownManager cooldownManager = plugin.getCooldownManager();
+        return cooldownManager.getData(player);
+    }
+
+    @Nullable
+    public CooldownSettings getCooldownSettings(String id) {
+        CooldownPlugin plugin = getCooldownsX();
+        CooldownManager cooldownManager = plugin.getCooldownManager();
+        return cooldownManager.getCooldownSettings(id);
+    }
+    
+    /*
+     *  You can check the expiration time of a specific cooldown for a player:
+     */
+    public long getCooldownExpireMillis(Player player, String id) {
+        CooldownSettings cooldownSettings = getCooldownSettings(id);
+        if(cooldownSettings == null) {
+            return 0L;
+        }
+        
+        CooldownData cooldownData = getData(player);
+        return cooldownData.getCooldownExpireTime(cooldownSettings);
+    }
 }
 ```
