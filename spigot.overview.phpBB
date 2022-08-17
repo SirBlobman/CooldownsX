@@ -1,21 +1,22 @@
 [SIZE=5][B]Supported Spigot Versions:[/B][/SIZE]
-1.8.8, 1.12.2, 1.16.5, 1.17
+1.8.8, 1.12.2, 1.16.5, 1.18.2, 1.19.2
 
 [SIZE=5][B][COLOR=#FF0000]Description:[/COLOR][/B][/SIZE]
 CooldownsX is a plugin that adds configurable cooldowns to items.
 
 [SIZE=5][B][COLOR=#FF0000]Dependencies:[/COLOR][/B][/SIZE]
 [LIST]
-[*][URL='https://www.spigotmc.org/resources/83189/']SirBlobmanCore[/URL]
+[*][URL='https://www.spigotmc.org/resources/83189/']BlueSlimeCore[/URL]
 [/LIST]
 
 [SIZE=5][B][COLOR=#FF0000]Features:[/COLOR][/B][/SIZE]
 [LIST]
-[*]Cooldown for consuming or interacting with any item.
-[*]Cooldown for using totems of undying.
-[*]Inventory cooldown display support. (1.9+)
-[*]Configurable cooldown, action bar, and bypass permission for each material.
-[*]Command to reload the configs in-game.
+[*]Cooldowns for clicking items and blocks.
+[*]Cooldowns for potion effects.
+[*]Cooldowns for totems of undying.
+[*]Packet cooldown display support. (1.9+)
+[*]Configurable cooldown, message, action bar, and bypass permissions
+[*]Command to reload the configuration files while in-game.
 [/LIST]
 
 [SIZE=5][B][COLOR=#FF0000]Help and Support:[/COLOR][/B][/SIZE]
