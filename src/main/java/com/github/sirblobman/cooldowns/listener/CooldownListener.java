@@ -148,9 +148,24 @@ public abstract class CooldownListener extends PluginListener<CooldownPlugin> {
             return Collections.emptyList();
         }
 
-        return original.parallelStream()
-                .filter(settings -> settings.hasPotion(potion))
-                .collect(Collectors.toList());
+        List<XPotion> potions = Collections.singletonList(potion);
+        return filter(original, potions);
+    }
+
+    protected final List<CooldownSettings> filter(List<CooldownSettings> original, List<XPotion> potions) {
+        if(original.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        return original.parallelStream().filter(settings -> {
+            for (XPotion potion : potions) {
+                if(settings.hasPotion(potion)) {
+                    return true;
+                }
+            }
+
+            return false;
+        }).collect(Collectors.toList());
     }
 
 

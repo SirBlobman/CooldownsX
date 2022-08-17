@@ -21,6 +21,7 @@ import com.github.sirblobman.cooldowns.command.CommandCooldownsX;
 import com.github.sirblobman.cooldowns.dictionary.PotionDictionary;
 import com.github.sirblobman.cooldowns.listener.ListenerConsume;
 import com.github.sirblobman.cooldowns.listener.ListenerInteract;
+import com.github.sirblobman.cooldowns.listener.ListenerPotion;
 import com.github.sirblobman.cooldowns.listener.ListenerUndying;
 import com.github.sirblobman.cooldowns.manager.CooldownManager;
 import com.github.sirblobman.cooldowns.dictionary.MaterialDictionary;
@@ -121,9 +122,12 @@ public final class CooldownPlugin extends ConfigurablePlugin {
         new ListenerConsume(this).register();
         new ListenerInteract(this).register();
 
-        // The Totem of Undying was added in 1.11
         if (minorVersion >= 11) {
             new ListenerUndying(this).register();
+        }
+
+        if(minorVersion >= 13) {
+            new ListenerPotion(this).register();
         }
     }
 
