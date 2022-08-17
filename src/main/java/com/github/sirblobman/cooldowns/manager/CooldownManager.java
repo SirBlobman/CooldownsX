@@ -1,131 +1,171 @@
 package com.github.sirblobman.cooldowns.manager;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
-import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
-import org.bukkit.permissions.Permission;
-import org.bukkit.permissions.PermissionDefault;
 
 import com.github.sirblobman.api.configuration.ConfigurationManager;
 import com.github.sirblobman.api.utility.Validate;
 import com.github.sirblobman.api.xseries.XMaterial;
+import com.github.sirblobman.api.xseries.XPotion;
 import com.github.sirblobman.cooldowns.CooldownPlugin;
+import com.github.sirblobman.cooldowns.configuration.ActionBarSettings;
+import com.github.sirblobman.cooldowns.configuration.CooldownSettings;
+import com.github.sirblobman.cooldowns.object.CombatMode;
 import com.github.sirblobman.cooldowns.object.CooldownData;
-import com.github.sirblobman.cooldowns.object.CooldownSettings;
+import com.github.sirblobman.cooldowns.object.CooldownType;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public final class CooldownManager {
     private final CooldownPlugin plugin;
     private final Map<UUID, CooldownData> cooldownDataMap;
-    private final Map<XMaterial, CooldownSettings> cooldownSettingsMap;
+    private final Map<String, CooldownSettings> cooldownSettingsMap;
 
     public CooldownManager(CooldownPlugin plugin) {
         this.plugin = Validate.notNull(plugin, "plugin must not be null!");
-        this.cooldownDataMap = new HashMap<>();
+        this.cooldownDataMap = new ConcurrentHashMap<>();
         this.cooldownSettingsMap = new HashMap<>();
     }
 
-    public void loadCooldowns() {
-        CooldownPlugin plugin = getPlugin();
-        ConfigurationManager configurationManager = plugin.getConfigurationManager();
-        YamlConfiguration configuration = configurationManager.get("cooldowns.yml");
-        this.cooldownSettingsMap.clear();
-
-        Set<String> materialNameSet = configuration.getKeys(false);
-        for (String materialName : materialNameSet) {
-            printDebug("Checking section '" + materialName + "' in cooldowns.yml...");
-            XMaterial material = XMaterial.matchXMaterial(materialName).orElse(XMaterial.AIR);
-
-            if (material == XMaterial.AIR) {
-                printDebug("'" + materialName + "' is not a valid material name.");
-                continue;
-            }
-
-            Material realMaterial = material.parseMaterial();
-            if (realMaterial == null) {
-                this.plugin.getLogger().warning("The XMaterial named '" + materialName
-                        + "' is not valid for your Spigot version.");
-                continue;
-            }
-
-            if (this.cooldownSettingsMap.containsKey(material)) {
-                printDebug("Skipped '" + materialName
-                        + "' because it is a duplicate of another material that is already configured.");
-                continue;
-            }
-
-            ConfigurationSection section = configuration.getConfigurationSection(materialName);
-            if (section == null) {
-                printDebug("'" + materialName + "' is not a valid section.");
-                continue;
-            }
-
-            CooldownSettings cooldownSettings = new CooldownSettings(material);
-            cooldownSettings.load(section);
-
-            setCooldown(material, cooldownSettings);
-            printDebug("Successfully loaded section '" + materialName + "'.");
-        }
-
-        long cooldownMapSize = this.cooldownSettingsMap.size();
-        printDebug("Successfully loaded " + cooldownMapSize + " item cooldown(s).");
-    }
-
-    public CooldownSettings getCooldownSettings(XMaterial material) {
-        return this.cooldownSettingsMap.getOrDefault(material, null);
-    }
-
+    @NotNull
     public CooldownData getData(OfflinePlayer player) {
-        UUID uuid = player.getUniqueId();
-        CooldownData cooldownData = this.cooldownDataMap.getOrDefault(uuid, null);
+        UUID playerId = player.getUniqueId();
+        CooldownData cooldownData = this.cooldownDataMap.getOrDefault(playerId, null);
         if (cooldownData != null) {
             return cooldownData;
         }
 
         CooldownData newData = new CooldownData(player);
-        this.cooldownDataMap.put(uuid, newData);
+        this.cooldownDataMap.put(playerId, newData);
         return newData;
     }
 
-    public boolean hasCooldown(XMaterial material) {
-        long cooldownMillis = getCooldown(material);
-        return (cooldownMillis > 0L);
+    @Nullable
+    public CooldownSettings getCooldownSettings(String id) {
+        return this.cooldownSettingsMap.get(id);
     }
 
-    public long getCooldown(XMaterial material) {
-        CooldownSettings cooldownSettings = getCooldownSettings(material);
-        if (cooldownSettings == null) {
-            return 0L;
-        }
-
-        return cooldownSettings.getCooldownMillis();
+    @NotNull
+    public List<CooldownSettings> getAllCooldownSettings() {
+        Collection<CooldownSettings> valueCollection = this.cooldownSettingsMap.values();
+        List<CooldownSettings> cooldownSettingsList = new ArrayList<>(valueCollection);
+        return Collections.unmodifiableList(cooldownSettingsList);
     }
 
-    public void setCooldown(XMaterial material, CooldownSettings cooldownSettings) {
-        this.cooldownSettingsMap.put(material, cooldownSettings);
-    }
+    public void reloadConfig() {
+        printDebug("Reload Cooldown Settings Start");
 
-    public boolean canBypass(Player player, XMaterial material) {
-        if (hasCooldown(material)) {
-            CooldownSettings cooldownSettings = getCooldownSettings(material);
-            String permissionName = cooldownSettings.getBypassPermission();
-            if (permissionName == null || permissionName.isEmpty()) {
-                return false;
+        this.cooldownSettingsMap.clear();
+        printDebug("Removed old cooldown settings.");
+
+        this.cooldownDataMap.clear();
+        printDebug("Removed all current player cooldowns.");
+
+        ConfigurationManager configurationManager = getConfigurationManager();
+        YamlConfiguration configuration = configurationManager.get("cooldowns.yml");
+        printDebug("Loaded cooldowns.yml");
+
+        Set<String> cooldownIdSet = configuration.getKeys(false);
+        for (String cooldownId : cooldownIdSet) {
+            printDebug("Loading cooldown '" + cooldownId + "'.");
+
+            ConfigurationSection section = configuration.getConfigurationSection(cooldownId);
+            if(section == null) {
+                printDebug("'" + cooldownId + "' is not a valid cooldown section.");
+                continue;
             }
 
-            Permission permission = new Permission(permissionName, "CooldownsX Bypass Permission", PermissionDefault.FALSE);
-            return player.hasPermission(permission);
+            int amount = section.getInt("amount", 1);
+            boolean resetAmount = section.getBoolean("reset-amount", false);
+            int cooldownSeconds = section.getInt("cooldown", 10);
+            String cooldownTypeName = section.getString("cooldown-type", "INTERACT_ITEM");
+            List<String> materialNameList = section.getStringList("material");
+            List<String> potionNameList = section.getStringList("potion-effect");
+            String bypassPermissionName = section.getString("bypass-permission");
+            boolean packetCooldown = section.getBoolean("packet-cooldown", false);
+            String combatModeName = section.getString("combat-mode", "IGNORE");
+            int combatCooldownSeconds = section.getInt("combat-cooldown-seconds", 5);
+            List<String> disabledWorldList = section.getStringList("disabled-world-list");
+            boolean invertDisabledWorldList = section.getBoolean("invert-disabled-world-list", false);
+            String messageFormat = section.getString("message-format");
+
+            boolean actionBarEnabled = section.getBoolean("action-bar.enabled", false);
+            int actionBarPriority = section.getInt("action-bar.priority", 0);
+            String actionBarMessageFormat = section.getString("action-bar.message-format");
+
+            printDebug("Amount: " + amount);
+            printDebug("Reset Amount: " + resetAmount);
+            printDebug("Cooldown Seconds: " + cooldownSeconds);
+            printDebug("Cooldown Type: " + cooldownTypeName);
+            printDebug("Material List: " + materialNameList);
+            printDebug("Potion List: " + potionNameList);
+            printDebug("Bypass Permission: " + bypassPermissionName);
+            printDebug("Packet Cooldown: " + packetCooldown);
+            printDebug("Combat Mode: " + combatModeName);
+            printDebug("Combat Cooldown Seconds: " + combatCooldownSeconds);
+            printDebug("Disabled World List: " + disabledWorldList);
+            printDebug("Invert Disabled World List: " + invertDisabledWorldList);
+            printDebug("Message: " + messageFormat);
+            printDebug("Action Bar Enabled: " + actionBarEnabled);
+            printDebug("Action Bar Priority: " + actionBarPriority);
+            printDebug("Action Bar Message: " + actionBarMessageFormat);
+
+            try {
+                CooldownType cooldownType = CooldownType.valueOf(cooldownTypeName);
+                List<XMaterial> materialList = materialNameList.stream().map(XMaterial::matchXMaterial)
+                        .filter(Optional::isPresent).map(Optional::get).collect(Collectors.toList());
+                List<XPotion> potionList = potionNameList.stream().map(XPotion::matchXPotion)
+                        .filter(Optional::isPresent).map(Optional::get).collect(Collectors.toList());
+                CombatMode combatMode = CombatMode.valueOf(combatModeName);
+
+                CooldownSettings cooldownSettings = new CooldownSettings(cooldownId);
+                cooldownSettings.setAmount(amount);
+                cooldownSettings.setResetAmount(resetAmount);
+                cooldownSettings.setCooldownSeconds(cooldownSeconds);
+                cooldownSettings.setCooldownType(cooldownType);
+                cooldownSettings.setMaterialList(materialList);
+                cooldownSettings.setPotionList(potionList);
+                cooldownSettings.setBypassPermissionName(bypassPermissionName);
+                cooldownSettings.setUsePacketCooldown(packetCooldown);
+                cooldownSettings.setCombatMode(combatMode);
+                cooldownSettings.setCombatCooldownSeconds(combatCooldownSeconds);
+                cooldownSettings.setDisabledWorldList(disabledWorldList);
+                cooldownSettings.setInvertWorldList(invertDisabledWorldList);
+                cooldownSettings.setMessageFormat(messageFormat);
+
+                ActionBarSettings actionBarSettings = cooldownSettings.getActionBarSettings();
+                actionBarSettings.setEnabled(actionBarEnabled);
+                actionBarSettings.setPriority(actionBarPriority);
+                actionBarSettings.setMessageFormat(actionBarMessageFormat);
+                cooldownSettings.setActionBarSettings(actionBarSettings);
+
+                this.cooldownSettingsMap.put(cooldownId, cooldownSettings);
+                printDebug("Successfully loaded cooldown settings '" + cooldownId + "'.");
+            } catch(Exception ex) {
+                printDebug("Failed to load cooldown settings '" + cooldownId + "' because an error occurred:");
+                printDebug(ex);
+            }
         }
 
-        return true;
+        printDebug("Successfully loaded " + this.cooldownSettingsMap.size() + " cooldown(s).");
+        printDebug("Reload Cooldown Settings End");
     }
 
     private CooldownPlugin getPlugin() {
@@ -156,5 +196,14 @@ public final class CooldownManager {
         String finalMessage = String.format(Locale.US, "[Debug] %s", message);
         Logger logger = getLogger();
         logger.info(finalMessage);
+    }
+
+    private void printDebug(Throwable throwable) {
+        if (isDebugModeDisabled()) {
+            return;
+        }
+
+        Logger logger = getLogger();
+        logger.log(Level.WARNING, "[Debug]:", throwable);
     }
 }

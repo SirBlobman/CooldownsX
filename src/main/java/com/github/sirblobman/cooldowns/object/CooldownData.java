@@ -1,35 +1,36 @@
 package com.github.sirblobman.cooldowns.object;
 
-import java.util.EnumMap;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitScheduler;
 
-import com.github.sirblobman.api.nms.MultiVersionHandler;
-import com.github.sirblobman.api.nms.PlayerHandler;
 import com.github.sirblobman.api.utility.Validate;
-import com.github.sirblobman.api.xseries.XMaterial;
-import com.github.sirblobman.cooldowns.CooldownPlugin;
-import com.github.sirblobman.cooldowns.manager.CooldownManager;
+import com.github.sirblobman.cooldowns.configuration.CooldownSettings;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public final class CooldownData {
     private final UUID playerId;
-    private final Map<XMaterial, Long> cooldownMap;
+    private final Map<CooldownSettings, Long> activeCooldownMap;
+    private final Map<CooldownSettings, Integer> amountCooldownMap;
 
     public CooldownData(OfflinePlayer player) {
         Validate.notNull(player, "player must not be null!");
         this.playerId = player.getUniqueId();
-        this.cooldownMap = new EnumMap<>(XMaterial.class);
+        this.activeCooldownMap = new ConcurrentHashMap<>();
+        this.amountCooldownMap = new ConcurrentHashMap<>();
     }
 
     @NotNull
@@ -49,88 +50,60 @@ public final class CooldownData {
         return Bukkit.getPlayer(playerId);
     }
 
-    public Set<XMaterial> getActiveCooldowns(CooldownPlugin plugin) {
-        Set<XMaterial> materialSet = this.cooldownMap.keySet();
-        Set<XMaterial> activeSet = new HashSet<>();
+    public Set<CooldownSettings> getActiveCooldowns() {
+        Set<CooldownSettings> activeCooldownSet = new HashSet<>();
+        Set<Entry<CooldownSettings, Long>> entrySet = new HashMap<>(this.activeCooldownMap).entrySet();
+        for (Entry<CooldownSettings, Long> entry : entrySet) {
+            CooldownSettings key = entry.getKey();
+            activeCooldownSet.add(key);
+        }
 
-        for (XMaterial material : materialSet) {
-            if (hasCooldown(plugin, material)) {
-                activeSet.add(material);
+        return Collections.unmodifiableSet(activeCooldownSet);
+    }
+
+    public List<CooldownSettings> getActiveCooldowns(CooldownType cooldownType) {
+        Set<CooldownSettings> allActiveCooldowns = getActiveCooldowns();
+        List<CooldownSettings> matchingList = new ArrayList<>();
+
+        for (CooldownSettings activeCooldown : allActiveCooldowns) {
+            CooldownType activeType = activeCooldown.getCooldownType();
+            if (cooldownType == activeType) {
+                matchingList.add(activeCooldown);
             }
         }
 
-        return activeSet;
+        return Collections.unmodifiableList(matchingList);
     }
 
-    public boolean hasCooldown(CooldownPlugin plugin, XMaterial material) {
-        if (!this.cooldownMap.containsKey(material)) {
-            return false;
-        }
+    public long getCooldownExpireTime(CooldownSettings cooldownSettings) {
+        return this.activeCooldownMap.getOrDefault(cooldownSettings, 0L);
+    }
 
-        long expireMillis = getCooldownExpireTime(material);
-        if (expireMillis <= 0) {
-            return false;
-        }
+    public void setCooldown(CooldownSettings cooldownSettings, long expireMillis) {
+        Validate.notNull(cooldownSettings, "cooldownSettings must not be null!");
 
         long systemMillis = System.currentTimeMillis();
-        if (systemMillis <= expireMillis) {
-            return true;
-        }
-
-        removeCooldown(plugin, material);
-        return false;
-    }
-
-    public long getCooldownExpireTime(XMaterial material) {
-        return this.cooldownMap.getOrDefault(material, -1L);
-    }
-
-    public void setCooldown(CooldownPlugin plugin, XMaterial material, long expireMillis) {
-        Validate.notNull(plugin, "plugin must not be null!");
-        Validate.notNull(material, "material must not be null!");
-        this.cooldownMap.put(material, expireMillis);
-
-        long systemMillis = System.currentTimeMillis();
-        long millisLeft = (expireMillis - systemMillis);
-        int ticksLeft = (int) (millisLeft / 50L);
-
-        CooldownManager cooldownManager = plugin.getCooldownManager();
-        CooldownSettings cooldownSettings = cooldownManager.getCooldownSettings(material);
-        if (cooldownSettings.hasPacketCooldown()) {
-            sendPacket(plugin, material, ticksLeft);
-        }
-    }
-
-    public void removeCooldown(CooldownPlugin plugin, XMaterial material) {
-        Validate.notNull(plugin, "plugin must not be null!");
-        Validate.notNull(material, "material must not be null!");
-        this.cooldownMap.remove(material);
-
-        CooldownManager cooldownManager = plugin.getCooldownManager();
-        CooldownSettings cooldownSettings = cooldownManager.getCooldownSettings(material);
-        if (cooldownSettings.hasPacketCooldown()) {
-            sendPacket(plugin, material, 0);
-        }
-    }
-
-    private void sendPacket(CooldownPlugin plugin, XMaterial material, int ticksLeft) {
-        Player player = getPlayer();
-        if (player == null) {
+        if(systemMillis >= expireMillis) {
             return;
         }
 
-        Material bukkitMaterial = material.parseMaterial();
-        if (bukkitMaterial == null) {
-            return;
-        }
+        this.activeCooldownMap.put(cooldownSettings, expireMillis);
+    }
 
-        Runnable task = () -> {
-            MultiVersionHandler multiVersionHandler = plugin.getMultiVersionHandler();
-            PlayerHandler playerHandler = multiVersionHandler.getPlayerHandler();
-            playerHandler.sendCooldownPacket(player, bukkitMaterial, ticksLeft);
-        };
+    public int getActionCount(CooldownSettings cooldown) {
+        return this.amountCooldownMap.getOrDefault(cooldown, 0);
+    }
+    
+    public void setActionCount(CooldownSettings cooldown, int amount) {
+        this.amountCooldownMap.put(cooldown, amount);
+        // TODO
+    }
 
-        BukkitScheduler scheduler = Bukkit.getScheduler();
-        scheduler.scheduleSyncDelayedTask(plugin, task, 1L);
+    public void loadActionCounts() {
+        // TODO
+    }
+
+    public void removeCooldown(CooldownSettings cooldown) {
+        this.activeCooldownMap.remove(cooldown);
     }
 }

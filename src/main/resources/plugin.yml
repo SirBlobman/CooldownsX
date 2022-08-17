@@ -11,7 +11,7 @@ authors:
   - "SirBlobman"
 
 depend:
-  - "SirBlobmanCore"
+  - "BlueSlimeCore"
 
 softdepend:
   - "PlaceholderAPI"

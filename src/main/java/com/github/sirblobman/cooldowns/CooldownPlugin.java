@@ -18,21 +18,25 @@ import com.github.sirblobman.api.plugin.ConfigurablePlugin;
 import com.github.sirblobman.api.update.UpdateManager;
 import com.github.sirblobman.api.utility.VersionUtility;
 import com.github.sirblobman.cooldowns.command.CommandCooldownsX;
+import com.github.sirblobman.cooldowns.dictionary.PotionDictionary;
 import com.github.sirblobman.cooldowns.listener.ListenerConsume;
 import com.github.sirblobman.cooldowns.listener.ListenerInteract;
 import com.github.sirblobman.cooldowns.listener.ListenerUndying;
 import com.github.sirblobman.cooldowns.manager.CooldownManager;
-import com.github.sirblobman.cooldowns.manager.MaterialDictionary;
+import com.github.sirblobman.cooldowns.dictionary.MaterialDictionary;
 import com.github.sirblobman.cooldowns.placeholder.HookPlaceholderAPI;
 import com.github.sirblobman.cooldowns.task.ActionBarTask;
+import com.github.sirblobman.cooldowns.task.ExpireTask;
 
 public final class CooldownPlugin extends ConfigurablePlugin {
     private final CooldownManager cooldownManager;
     private final MaterialDictionary materialDictionary;
+    private final PotionDictionary potionDictionary;
 
     public CooldownPlugin() {
         this.cooldownManager = new CooldownManager(this);
         this.materialDictionary = new MaterialDictionary(this);
+        this.potionDictionary = new PotionDictionary(this);
     }
 
     @Override
@@ -40,7 +44,8 @@ public final class CooldownPlugin extends ConfigurablePlugin {
         ConfigurationManager configurationManager = getConfigurationManager();
         configurationManager.saveDefault("config.yml");
         configurationManager.saveDefault("cooldowns.yml");
-        configurationManager.saveDefault("material.yml");
+        configurationManager.saveDefault("dictionary/material.yml");
+        configurationManager.saveDefault("dictionary/potion.yml");
 
         LanguageManager languageManager = getLanguageManager();
         languageManager.saveDefaultLanguageFiles();
@@ -76,16 +81,20 @@ public final class CooldownPlugin extends ConfigurablePlugin {
         ConfigurationManager configurationManager = getConfigurationManager();
         configurationManager.reload("config.yml");
         configurationManager.reload("cooldowns.yml");
-        configurationManager.reload("material.yml");
+        configurationManager.reload("dictionary/material.yml");
+        configurationManager.reload("dictionary/potion.yml");
 
         LanguageManager languageManager = getLanguageManager();
         languageManager.reloadLanguageFiles();
 
         MaterialDictionary materialDictionary = getMaterialDictionary();
-        materialDictionary.reloadConfig();
+        materialDictionary.reloadConfiguration();
+
+        PotionDictionary potionDictionary = getPotionDictionary();
+        potionDictionary.reloadConfiguration();
 
         CooldownManager cooldownManager = getCooldownManager();
-        cooldownManager.loadCooldowns();
+        cooldownManager.reloadConfig();
 
         BukkitScheduler scheduler = Bukkit.getScheduler();
         scheduler.cancelTasks(this);
@@ -98,6 +107,10 @@ public final class CooldownPlugin extends ConfigurablePlugin {
 
     public MaterialDictionary getMaterialDictionary() {
         return this.materialDictionary;
+    }
+
+    public PotionDictionary getPotionDictionary() {
+        return this.potionDictionary;
     }
 
     private void registerCommands() {
@@ -119,8 +132,11 @@ public final class CooldownPlugin extends ConfigurablePlugin {
         YamlConfiguration configuration = configurationManager.get("config.yml");
         if (configuration.getBoolean("use-action-bar")) {
             ActionBarTask actionBarTask = new ActionBarTask(this);
-            actionBarTask.start();
+            actionBarTask.startAsync();
         }
+
+        ExpireTask expireTask = new ExpireTask(this);
+        expireTask.startAsync();
     }
 
     private void registerHooks() {

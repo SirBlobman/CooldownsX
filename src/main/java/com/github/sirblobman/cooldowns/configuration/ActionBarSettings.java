@@ -1,8 +1,8 @@
-package com.github.sirblobman.cooldowns.object;
+package com.github.sirblobman.cooldowns.configuration;
 
 import org.jetbrains.annotations.Nullable;
 
-public final class ActionBarSettings {
+public final class ActionBarSettings implements Comparable<ActionBarSettings> {
     private boolean enabled;
     private int priority;
     private String messageFormat;
@@ -37,5 +37,12 @@ public final class ActionBarSettings {
 
     public void setMessageFormat(@Nullable String messageFormat) {
         this.messageFormat = messageFormat;
+    }
+
+    @Override
+    public int compareTo(ActionBarSettings other) {
+        int thisPriority = this.getPriority();
+        int otherPriority = other.getPriority();
+        return Integer.compare(thisPriority, otherPriority);
     }
 }

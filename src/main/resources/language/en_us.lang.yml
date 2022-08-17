@@ -32,5 +32,3 @@ command:
   reload-failure:
     - "<red>An error occurred while reloading the configuration files.</red>"
     - "<red>Please check the server console and fix the problem.</red>"
-
-cooldown: "<red>You must wait <gray>{time_left}</gray> seconds before using <gray>{material}</gray> again.</red>"
