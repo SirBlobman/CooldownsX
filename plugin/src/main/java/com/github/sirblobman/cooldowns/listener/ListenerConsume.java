@@ -47,6 +47,8 @@ public final class ListenerConsume extends CooldownListener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPotionSplash(PotionSplashEvent e) {
+        printDebug("Detected PotionSplashEvent...");
+
         ThrownPotion potionEntity = e.getPotion();
         List<XPotion> potionList = new ArrayList<>();
 
@@ -57,6 +59,7 @@ public final class ListenerConsume extends CooldownListener {
             potionList.add(xpotion);
         }
 
+        printDebug("Potion List: " + potionList);
         Collection<LivingEntity> affectedEntityCollection = e.getAffectedEntities();
         for (LivingEntity affectedEntity : affectedEntityCollection) {
             if (!(affectedEntity instanceof Player)) {
@@ -64,10 +67,13 @@ public final class ListenerConsume extends CooldownListener {
             }
 
             Player affectedPlayer = (Player) affectedEntity;
+            printDebug("Checking affect player " + affectedPlayer.getName() + "...");
+
             FakeCancellable fakeCancellable = new FakeCancellable();
             checkConsumePotion(affectedPlayer, potionList, fakeCancellable);
 
             if (fakeCancellable.isCancelled()) {
+                printDebug("Potion effect was cancelled, setting splash intensity to zero.");
                 e.setIntensity(affectedEntity, 0.0D);
             }
         }
@@ -116,8 +122,12 @@ public final class ListenerConsume extends CooldownListener {
     }
 
     private void checkConsumePotion(Player player, List<XPotion> potions, Cancellable e) {
+        printDebug("Checking consume potion for player " + player + "...");
+        printDebug("Potions to check: " + potions);
+
         Set<ICooldownSettings> cooldownSettingsList = fetchCooldowns(CooldownType.POTION);
         if (cooldownSettingsList.isEmpty()) {
+            printDebug("No cooldowns available with type POTION, ignoring.");
             return;
         }
 
@@ -127,10 +137,15 @@ public final class ListenerConsume extends CooldownListener {
 
         ICooldownSettings activeCooldown = checkActiveCooldowns(player, activeCooldowns);
         if (activeCooldown != null) {
+            printDebug("Found active cooldown '" + activeCooldown.getId() + "for potions.");
             e.setCancelled(true);
             sendCooldownMessage(player, activeCooldown, potions.get(0));
+            printDebug("Cancelled event and sent message to player.");
             updateInventoryLater(player);
+            printDebug("Triggered player inventory update for one tick later.");
             return;
+        } else {
+            printDebug("No active cooldowns found.");
         }
 
         Set<ICooldownSettings> allValidCooldowns = fetchCooldowns(CooldownType.POTION);

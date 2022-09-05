@@ -2,17 +2,14 @@ package com.github.sirblobman.cooldowns.listener;
 
 import java.util.Set;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityPotionEffectEvent;
 import org.bukkit.event.entity.EntityPotionEffectEvent.Action;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitScheduler;
 
 import com.github.sirblobman.api.xseries.XPotion;
 import com.github.sirblobman.cooldowns.api.ICooldownsX;
@@ -67,11 +64,8 @@ public final class ListenerPotion extends CooldownListener {
             printDebug("Found active cooldown '" + activeCooldown.getId() + "for potion " + potion + ".");
             e.setCancelled(true);
             sendCooldownMessage(player, activeCooldown, potion);
-            printDebug("Cancelled event and send message to player.");
-
-            JavaPlugin plugin = getPlugin();
-            BukkitScheduler scheduler = Bukkit.getScheduler();
-            scheduler.runTask(plugin, player::updateInventory);
+            printDebug("Cancelled event and sent message to player.");
+            updateInventoryLater(player);
             printDebug("Triggered player inventory update for one tick later.");
             return;
         } else {
