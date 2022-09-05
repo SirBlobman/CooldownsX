@@ -59,7 +59,7 @@ public final class ListenerConsume extends CooldownListener {
 
         Collection<LivingEntity> affectedEntityCollection = e.getAffectedEntities();
         for (LivingEntity affectedEntity : affectedEntityCollection) {
-            if(!(affectedEntity instanceof Player)) {
+            if (!(affectedEntity instanceof Player)) {
                 continue;
             }
 
@@ -67,7 +67,7 @@ public final class ListenerConsume extends CooldownListener {
             FakeCancellable fakeCancellable = new FakeCancellable();
             checkConsumePotion(affectedPlayer, potionList, fakeCancellable);
 
-            if(fakeCancellable.isCancelled()) {
+            if (fakeCancellable.isCancelled()) {
                 e.setIntensity(affectedEntity, 0.0D);
             }
         }
@@ -76,15 +76,15 @@ public final class ListenerConsume extends CooldownListener {
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onConsume(PlayerItemConsumeEvent e) {
         ItemStack item = e.getItem();
-        if(ItemUtility.isAir(item)) {
+        if (ItemUtility.isAir(item)) {
             return;
         }
-        
+
         Player player = e.getPlayer();
         XMaterial material = XMaterial.matchXMaterial(item);
-        if(POTION_MATERIAL_SET.contains(material)) {
+        if (POTION_MATERIAL_SET.contains(material)) {
             List<XPotion> potions = getPotionEffects(item);
-            if(!potions.isEmpty()) {
+            if (!potions.isEmpty()) {
                 checkConsumePotion(player, potions, e);
             }
         } else {
@@ -94,7 +94,7 @@ public final class ListenerConsume extends CooldownListener {
 
     private void checkConsumeFood(Player player, XMaterial material, PlayerItemConsumeEvent e) {
         Set<ICooldownSettings> cooldownSettingsList = fetchCooldowns(CooldownType.CONSUME_ITEM);
-        if(cooldownSettingsList.isEmpty()) {
+        if (cooldownSettingsList.isEmpty()) {
             return;
         }
 
@@ -103,7 +103,7 @@ public final class ListenerConsume extends CooldownListener {
         Set<ICooldownSettings> activeCooldowns = filter(allActiveCooldowns, material);
 
         ICooldownSettings activeCooldown = checkActiveCooldowns(player, activeCooldowns);
-        if(activeCooldown != null) {
+        if (activeCooldown != null) {
             e.setCancelled(true);
             sendCooldownMessage(player, activeCooldown, material);
             updateInventoryLater(player);
@@ -117,7 +117,7 @@ public final class ListenerConsume extends CooldownListener {
 
     private void checkConsumePotion(Player player, List<XPotion> potions, Cancellable e) {
         Set<ICooldownSettings> cooldownSettingsList = fetchCooldowns(CooldownType.POTION);
-        if(cooldownSettingsList.isEmpty()) {
+        if (cooldownSettingsList.isEmpty()) {
             return;
         }
 
@@ -126,7 +126,7 @@ public final class ListenerConsume extends CooldownListener {
         Set<ICooldownSettings> activeCooldowns = filter(allActiveCooldowns, potions);
 
         ICooldownSettings activeCooldown = checkActiveCooldowns(player, activeCooldowns);
-        if(activeCooldown != null) {
+        if (activeCooldown != null) {
             e.setCancelled(true);
             sendCooldownMessage(player, activeCooldown, potions.get(0));
             updateInventoryLater(player);
@@ -144,12 +144,12 @@ public final class ListenerConsume extends CooldownListener {
         }
 
         ItemMeta itemMeta = item.getItemMeta();
-        if(!(itemMeta instanceof PotionMeta)) {
+        if (!(itemMeta instanceof PotionMeta)) {
             return Collections.emptyList();
         }
 
         PotionMeta potionMeta = (PotionMeta) itemMeta;
-        if(!potionMeta.hasCustomEffects()) {
+        if (!potionMeta.hasCustomEffects()) {
             return Collections.emptyList();
         }
 
@@ -170,7 +170,7 @@ public final class ListenerConsume extends CooldownListener {
         }
 
         Potion basePotion = Potion.fromItemStack(item);
-        if(basePotion == null) {
+        if (basePotion == null) {
             return Collections.emptyList();
         }
 
@@ -186,13 +186,13 @@ public final class ListenerConsume extends CooldownListener {
     }
 
     private List<XPotion> getPotionEffects(ItemStack item) {
-        if(ItemUtility.isAir(item)) {
+        if (ItemUtility.isAir(item)) {
             return Collections.emptyList();
         }
 
         int minorVersion = VersionUtility.getMinorVersion();
         List<XPotion> potionList;
-        if(minorVersion < 9) {
+        if (minorVersion < 9) {
             List<XPotion> legacyPotionList = getLegacyPotionEffects(item);
             potionList = new ArrayList<>(legacyPotionList);
         } else {

@@ -51,7 +51,7 @@ public abstract class CooldownTask extends BukkitRunnable {
     }
 
     protected final void printDebug(String message) {
-        if(isDebugModeDisabled()) {
+        if (isDebugModeDisabled()) {
             return;
         }
 
@@ -69,5 +69,6 @@ public abstract class CooldownTask extends BukkitRunnable {
         runTaskTimerAsynchronously(plugin, 1L, 1L);
     }
 
-    @Override public abstract void run();
+    @Override
+    public abstract void run();
 }

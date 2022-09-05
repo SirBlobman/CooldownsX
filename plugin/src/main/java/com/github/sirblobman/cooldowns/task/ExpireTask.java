@@ -34,7 +34,7 @@ public final class ExpireTask extends CooldownTask {
     private void checkCooldown(ICooldownData data, ICooldownSettings cooldown) {
         long expireMillis = data.getCooldownExpireTime(cooldown);
         long systemMillis = System.currentTimeMillis();
-        if(systemMillis >= expireMillis) {
+        if (systemMillis >= expireMillis) {
             data.removeCooldown(cooldown);
         }
     }

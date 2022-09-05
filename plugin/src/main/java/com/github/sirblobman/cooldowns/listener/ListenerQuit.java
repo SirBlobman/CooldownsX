@@ -20,7 +20,7 @@ public final class ListenerQuit extends CooldownListener {
     public void onQuit(PlayerQuitEvent e) {
         ConfigurationManager configurationManager = getConfigurationManager();
         YamlConfiguration configuration = configurationManager.get("config.yml");
-        if(!configuration.getBoolean("save-amounts-used", true)) {
+        if (!configuration.getBoolean("save-amounts-used", true)) {
             return;
         }
 

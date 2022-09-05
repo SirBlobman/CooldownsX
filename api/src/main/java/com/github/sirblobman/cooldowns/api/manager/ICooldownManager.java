@@ -12,7 +12,10 @@ import org.jetbrains.annotations.Nullable;
 
 public interface ICooldownManager {
     @NotNull ICooldownData getData(OfflinePlayer player);
+
     @Nullable ICooldownSettings getCooldownSettings(String id);
+
     @NotNull List<ICooldownSettings> getAllCooldownSettings();
+
     void reloadConfig();
 }

@@ -34,7 +34,7 @@ public final class ActionBarTask extends CooldownTask {
     private void checkActionBar(Player player) {
         ICooldownData cooldownData = getCooldownData(player);
         Set<ICooldownSettings> activeCooldowns = cooldownData.getActiveCooldowns();
-        if(activeCooldowns.isEmpty()) {
+        if (activeCooldowns.isEmpty()) {
             printDebug("Player does not have any active cooldowns.");
             return;
         }
@@ -43,7 +43,7 @@ public final class ActionBarTask extends CooldownTask {
                 .filter(settings -> settings.getActionBarSettings().isEnabled())
                 .sorted(Comparator.comparing(ICooldownSettings::getActionBarSettings).reversed())
                 .collect(Collectors.toList());
-        if(cooldownSettingsList.isEmpty()) {
+        if (cooldownSettingsList.isEmpty()) {
             printDebug("Player active cooldowns don't have any action bars enabled.");
             return;
         }
@@ -56,7 +56,7 @@ public final class ActionBarTask extends CooldownTask {
     private void sendActionBar(Player player, ICooldownSettings settings) {
         IActionBarSettings actionBarSettings = settings.getActionBarSettings();
         String messageFormat = actionBarSettings.getMessageFormat();
-        if(messageFormat == null || messageFormat.isEmpty()) {
+        if (messageFormat == null || messageFormat.isEmpty()) {
             return;
         }
 

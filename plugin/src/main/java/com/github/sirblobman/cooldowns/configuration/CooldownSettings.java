@@ -150,12 +150,12 @@ public final class CooldownSettings implements ICooldownSettings {
     @Nullable
     @Override
     public Permission getBypassPermission() {
-        if(this.bypassPermission != null) {
+        if (this.bypassPermission != null) {
             return this.bypassPermission;
         }
 
         String bypassPermissionName = getBypassPermissionName();
-        if(bypassPermissionName == null || bypassPermissionName.isEmpty()) {
+        if (bypassPermissionName == null || bypassPermissionName.isEmpty()) {
             return null;
         }
 
@@ -167,7 +167,7 @@ public final class CooldownSettings implements ICooldownSettings {
     @Override
     public boolean canBypass(Permissible permissible) {
         Permission permission = getBypassPermission();
-        if(permission == null) {
+        if (permission == null) {
             return false;
         }
 
@@ -247,24 +247,28 @@ public final class CooldownSettings implements ICooldownSettings {
     @Override
     public int getCooldownSeconds(Player player) {
         CombatMode combatMode = getCombatMode();
-        if(combatMode == CombatMode.IGNORE || isCombatLogXMissing()) {
+        if (combatMode == CombatMode.IGNORE || isCombatLogXMissing()) {
             return getCooldownSeconds();
         }
 
         PluginManager pluginManager = Bukkit.getPluginManager();
         ICombatLogX combatLogX = (ICombatLogX) pluginManager.getPlugin("ConmbatLogX");
-        if(combatLogX == null) {
+        if (combatLogX == null) {
             throw new IllegalStateException("CombatLogX is null but the plugin is enabled?");
         }
 
         ICombatManager combatManager = combatLogX.getCombatManager();
         boolean combat = combatManager.isInCombat(player);
 
-        switch(combatMode) {
-            case TRUE: return (combat ? getCooldownSeconds() : 0);
-            case FALSE: return (combat ? 0 : getCooldownSeconds());
-            case DIFFERENT: return (combat ? getCombatCooldownSeconds() : getCooldownSeconds());
-            default: break;
+        switch (combatMode) {
+            case TRUE:
+                return (combat ? getCooldownSeconds() : 0);
+            case FALSE:
+                return (combat ? 0 : getCooldownSeconds());
+            case DIFFERENT:
+                return (combat ? getCombatCooldownSeconds() : getCooldownSeconds());
+            default:
+                break;
         }
 
         return 0;
@@ -278,18 +282,18 @@ public final class CooldownSettings implements ICooldownSettings {
     @Override
     public boolean hasMaterial(XMaterial material) {
         Optional<List<XMaterial>> optionalMaterialList = getMaterialList();
-        if(optionalMaterialList.isPresent()) {
+        if (optionalMaterialList.isPresent()) {
             List<XMaterial> materialList = optionalMaterialList.get();
             return materialList.contains(material);
         }
-        
+
         return false;
     }
 
     @Override
     public boolean hasPotion(XPotion potion) {
         Optional<List<XPotion>> optionalPotionList = getPotionList();
-        if(optionalPotionList.isPresent()) {
+        if (optionalPotionList.isPresent()) {
             List<XPotion> potionList = optionalPotionList.get();
             return potionList.contains(potion);
         }
@@ -330,11 +334,11 @@ public final class CooldownSettings implements ICooldownSettings {
 
     @Override
     public boolean equals(Object object) {
-        if(super.equals(object)) {
+        if (super.equals(object)) {
             return true;
         }
 
-        if(!(object instanceof CooldownSettings)) {
+        if (!(object instanceof CooldownSettings)) {
             return false;
         }
 

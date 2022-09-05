@@ -24,7 +24,7 @@ public final class ModernHelper {
         }
 
         int minorVersion = VersionUtility.getMinorVersion();
-        if(minorVersion < 14) {
+        if (minorVersion < 14) {
             return false;
         }
 
@@ -53,7 +53,7 @@ public final class ModernHelper {
         PotionData basePotionData = potionMeta.getBasePotionData();
         PotionType basePotionType = basePotionData.getType();
         PotionEffectType baseEffectType = basePotionType.getEffectType();
-        if(baseEffectType != null) {
+        if (baseEffectType != null) {
             XPotion xpotion = XPotion.matchXPotion(baseEffectType);
             potionList.add(xpotion);
         }

@@ -33,9 +33,9 @@ public final class ListenerInteract extends CooldownListener {
         }
 
         Player player = e.getPlayer();
-        if(action == Action.RIGHT_CLICK_BLOCK) {
+        if (action == Action.RIGHT_CLICK_BLOCK) {
             Block block = e.getClickedBlock();
-            if(block != null) {
+            if (block != null) {
                 checkBlock(player, block, e);
             }
         }
@@ -45,11 +45,11 @@ public final class ListenerInteract extends CooldownListener {
     }
 
     private void checkItem(Player player, ItemStack item, PlayerInteractEvent e) {
-        if(ItemUtility.isAir(item)) {
+        if (ItemUtility.isAir(item)) {
             return;
         }
 
-        if(ModernHelper.isCrossbowReloading(item)) {
+        if (ModernHelper.isCrossbowReloading(item)) {
             return;
         }
 
@@ -59,7 +59,7 @@ public final class ListenerInteract extends CooldownListener {
         }
 
         Set<ICooldownSettings> cooldownSettingsList = fetchCooldowns(CooldownType.INTERACT_ITEM);
-        if(cooldownSettingsList.isEmpty()) {
+        if (cooldownSettingsList.isEmpty()) {
             return;
         }
 
@@ -68,7 +68,7 @@ public final class ListenerInteract extends CooldownListener {
         Set<ICooldownSettings> activeCooldowns = filter(allActiveCooldowns, material);
 
         ICooldownSettings activeCooldown = checkActiveCooldowns(player, activeCooldowns);
-        if(activeCooldown != null) {
+        if (activeCooldown != null) {
             e.setUseItemInHand(Result.DENY);
             sendCooldownMessage(player, activeCooldown, material);
             updateInventoryLater(player);
@@ -87,7 +87,7 @@ public final class ListenerInteract extends CooldownListener {
         }
 
         Set<ICooldownSettings> cooldownSettingsList = fetchCooldowns(CooldownType.INTERACT_BLOCK);
-        if(cooldownSettingsList.isEmpty()) {
+        if (cooldownSettingsList.isEmpty()) {
             return;
         }
 
@@ -96,7 +96,7 @@ public final class ListenerInteract extends CooldownListener {
         Set<ICooldownSettings> activeCooldowns = filter(allActiveCooldowns, material);
 
         ICooldownSettings activeCooldown = checkActiveCooldowns(player, activeCooldowns);
-        if(activeCooldown != null) {
+        if (activeCooldown != null) {
             e.setUseInteractedBlock(Result.DENY);
             sendCooldownMessage(player, activeCooldown, material);
             updateInventoryLater(player);

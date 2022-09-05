@@ -92,7 +92,7 @@ public final class CooldownData implements ICooldownData {
     public void setCooldown(ICooldownSettings settings, long expireMillis) {
         Validate.notNull(settings, "settings must not be null!");
         long systemMillis = System.currentTimeMillis();
-        if(systemMillis >= expireMillis) {
+        if (systemMillis >= expireMillis) {
             return;
         }
 
@@ -125,7 +125,7 @@ public final class CooldownData implements ICooldownData {
         OfflinePlayer player = getOfflinePlayer();
         YamlConfiguration playerData = playerDataManager.get(player);
         ConfigurationSection actionCountSection = playerData.getConfigurationSection("action-count");
-        if(actionCountSection == null) {
+        if (actionCountSection == null) {
             return;
         }
 
@@ -133,7 +133,7 @@ public final class CooldownData implements ICooldownData {
         Set<String> cooldownIdSet = actionCountSection.getKeys(false);
         for (String cooldownId : cooldownIdSet) {
             ICooldownSettings settings = cooldownManager.getCooldownSettings(cooldownId);
-            if(settings == null) {
+            if (settings == null) {
                 continue;
             }
 

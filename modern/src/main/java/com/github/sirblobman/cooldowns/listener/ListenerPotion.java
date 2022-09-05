@@ -31,26 +31,26 @@ public final class ListenerPotion extends CooldownListener {
         printDebug("Detected EntityPotionEffectEvent...");
 
         Action action = e.getAction();
-        if(action != Action.ADDED) {
+        if (action != Action.ADDED) {
             printDebug("Action type is not ADDED, ignoring.");
             return;
         }
 
         Entity entity = e.getEntity();
-        if(!(entity instanceof Player)) {
+        if (!(entity instanceof Player)) {
             printDebug("Entity is not player, ignoring.");
             return;
         }
 
         Player player = (Player) entity;
         PotionEffect newEffect = e.getNewEffect();
-        if(newEffect == null) {
+        if (newEffect == null) {
             printDebug("New effect is null, ignoring.");
             return;
         }
 
         Set<ICooldownSettings> cooldownSettingsList = fetchCooldowns(CooldownType.POTION);
-        if(cooldownSettingsList.isEmpty()) {
+        if (cooldownSettingsList.isEmpty()) {
             printDebug("No POTION cooldowns available, ignoring.");
             return;
         }
@@ -63,7 +63,7 @@ public final class ListenerPotion extends CooldownListener {
         Set<ICooldownSettings> activeCooldowns = filter(allActiveCooldowns, potion);
         ICooldownSettings activeCooldown = checkActiveCooldowns(player, activeCooldowns);
 
-        if(activeCooldown != null) {
+        if (activeCooldown != null) {
             printDebug("Found active cooldown '" + activeCooldown.getId() + "for potion " + potion + ".");
             e.setCancelled(true);
             sendCooldownMessage(player, activeCooldown, potion);

@@ -14,13 +14,18 @@ public interface ICooldownsX {
     JavaPlugin getPlugin();
 
     ConfigurationManager getConfigurationManager();
+
     LanguageManager getLanguageManager();
+
     MultiVersionHandler getMultiVersionHandler();
 
     ICooldownManager getCooldownManager();
+
     IDictionary<XMaterial> getMaterialDictionary();
+
     IDictionary<XPotion> getPotionDictionary();
 
     boolean isDebugMode();
+
     void printDebug(String message);
 }

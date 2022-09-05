@@ -32,7 +32,7 @@ public final class ListenerUndying extends CooldownListener {
         Set<ICooldownSettings> activeCooldowns = cooldownData.getActiveCooldowns(CooldownType.UNDYING);
 
         ICooldownSettings activeCooldown = checkActiveCooldowns(player, activeCooldowns);
-        if(activeCooldown != null) {
+        if (activeCooldown != null) {
             e.setCancelled(true);
             sendCooldownMessage(player, activeCooldown, XMaterial.TOTEM_OF_UNDYING);
             updateInventoryLater(player);

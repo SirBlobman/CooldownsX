@@ -43,12 +43,12 @@ import org.jetbrains.annotations.Nullable;
 
 public abstract class CooldownListener extends PluginListener<JavaPlugin> {
     private final ICooldownsX plugin;
-    
+
     public CooldownListener(ICooldownsX plugin) {
         super(plugin.getPlugin());
         this.plugin = plugin;
     }
-    
+
     protected final ICooldownsX getCooldownsX() {
         return this.plugin;
     }
@@ -104,13 +104,13 @@ public abstract class CooldownListener extends PluginListener<JavaPlugin> {
     @NotNull
     @SuppressWarnings("deprecation")
     protected final XMaterial getXMaterial(Block block) {
-        if(block == null) {
+        if (block == null) {
             return XMaterial.AIR;
         }
 
         Material bukkitMaterial = block.getType();
         int minorVersion = VersionUtility.getMinorVersion();
-        if(minorVersion < 13) {
+        if (minorVersion < 13) {
             byte data = block.getData();
             int materialId = bukkitMaterial.getId();
             return XMaterial.matchXMaterial(materialId, data).orElse(XMaterial.AIR);
@@ -145,7 +145,7 @@ public abstract class CooldownListener extends PluginListener<JavaPlugin> {
     protected final Set<ICooldownSettings> fetchCooldowns(CooldownType cooldownType) {
         ICooldownManager cooldownManager = getCooldownManager();
         List<ICooldownSettings> cooldownSettingsList = cooldownManager.getAllCooldownSettings();
-        if(cooldownSettingsList.isEmpty()) {
+        if (cooldownSettingsList.isEmpty()) {
             return Collections.emptySet();
         }
 
@@ -155,7 +155,7 @@ public abstract class CooldownListener extends PluginListener<JavaPlugin> {
     }
 
     protected final Set<ICooldownSettings> filter(Set<ICooldownSettings> original, XMaterial material) {
-        if(original.isEmpty()) {
+        if (original.isEmpty()) {
             return Collections.emptySet();
         }
 
@@ -165,7 +165,7 @@ public abstract class CooldownListener extends PluginListener<JavaPlugin> {
     }
 
     protected final Set<ICooldownSettings> filter(Set<ICooldownSettings> original, XPotion potion) {
-        if(original.isEmpty()) {
+        if (original.isEmpty()) {
             return Collections.emptySet();
         }
 
@@ -174,13 +174,13 @@ public abstract class CooldownListener extends PluginListener<JavaPlugin> {
     }
 
     protected final Set<ICooldownSettings> filter(Set<ICooldownSettings> original, Iterable<XPotion> potions) {
-        if(original.isEmpty()) {
+        if (original.isEmpty()) {
             return Collections.emptySet();
         }
 
         return original.parallelStream().filter(settings -> {
             for (XPotion potion : potions) {
-                if(settings.hasPotion(potion)) {
+                if (settings.hasPotion(potion)) {
                     return true;
                 }
             }
@@ -236,17 +236,17 @@ public abstract class CooldownListener extends PluginListener<JavaPlugin> {
                 printDebug("Player has bypass, skipping.");
                 continue;
             }
-            
+
             int amount = cooldown.getAmount();
-            if(amount > 1) {
+            if (amount > 1) {
                 int used = cooldownData.getActionCount(cooldown);
-                if(used < amount) {
+                if (used < amount) {
                     printDebug("Player has not triggered the action enough times, skipping.");
                     cooldownData.setActionCount(cooldown, used + 1);
                     continue;
                 }
-                
-                if(cooldown.isResetAmount()) {
+
+                if (cooldown.isResetAmount()) {
                     cooldownData.setActionCount(cooldown, 0);
                 }
             }
@@ -287,7 +287,7 @@ public abstract class CooldownListener extends PluginListener<JavaPlugin> {
 
     private void sendCooldownMessage(Player player, ICooldownSettings settings, Replacer replacer) {
         String messageFormat = settings.getMessageFormat();
-        if(messageFormat == null || messageFormat.isEmpty()) {
+        if (messageFormat == null || messageFormat.isEmpty()) {
             return;
         }
 
@@ -313,7 +313,7 @@ public abstract class CooldownListener extends PluginListener<JavaPlugin> {
 
     protected final void printDebug(String message) {
         ICooldownsX plugin = getCooldownsX();
-        if(!plugin.isDebugMode()) {
+        if (!plugin.isDebugMode()) {
             return;
         }
 

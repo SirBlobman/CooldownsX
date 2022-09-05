@@ -23,9 +23,9 @@ import com.github.sirblobman.cooldowns.dictionary.MaterialDictionary;
 import com.github.sirblobman.cooldowns.dictionary.PotionDictionary;
 import com.github.sirblobman.cooldowns.listener.ListenerConsume;
 import com.github.sirblobman.cooldowns.listener.ListenerInteract;
+import com.github.sirblobman.cooldowns.listener.ListenerPotion;
 import com.github.sirblobman.cooldowns.listener.ListenerUndying;
 import com.github.sirblobman.cooldowns.manager.CooldownManager;
-import com.github.sirblobman.cooldowns.listener.ListenerPotion;
 import com.github.sirblobman.cooldowns.placeholder.HookPlaceholderAPI;
 import com.github.sirblobman.cooldowns.task.ActionBarTask;
 import com.github.sirblobman.cooldowns.task.ExpireTask;
@@ -132,7 +132,7 @@ public final class CooldownPlugin extends ConfigurablePlugin implements ICooldow
             new ListenerUndying(this).register();
         }
 
-        if(minorVersion >= 13) {
+        if (minorVersion >= 13) {
             new ListenerPotion(this).register();
         }
     }

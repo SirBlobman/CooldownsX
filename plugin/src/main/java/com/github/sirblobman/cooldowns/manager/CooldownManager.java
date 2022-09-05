@@ -61,7 +61,7 @@ public final class CooldownManager implements ICooldownManager {
 
         ConfigurationManager configurationManager = getConfigurationManager();
         YamlConfiguration configuration = configurationManager.get("config.yml");
-        if(configuration.getBoolean("save-amounts-used", true)) {
+        if (configuration.getBoolean("save-amounts-used", true)) {
             newData.loadActionCounts();
         }
 
@@ -99,7 +99,7 @@ public final class CooldownManager implements ICooldownManager {
             printDebug("Loading cooldown '" + cooldownId + "'.");
 
             ConfigurationSection section = configuration.getConfigurationSection(cooldownId);
-            if(section == null) {
+            if (section == null) {
                 printDebug("'" + cooldownId + "' is not a valid cooldown section.");
                 continue;
             }
@@ -170,7 +170,7 @@ public final class CooldownManager implements ICooldownManager {
 
                 this.cooldownSettingsMap.put(cooldownId, cooldownSettings);
                 printDebug("Successfully loaded cooldown settings '" + cooldownId + "'.");
-            } catch(Exception ex) {
+            } catch (Exception ex) {
                 printDebug("Failed to load cooldown settings '" + cooldownId + "' because an error occurred:");
                 printDebug(ex);
             }

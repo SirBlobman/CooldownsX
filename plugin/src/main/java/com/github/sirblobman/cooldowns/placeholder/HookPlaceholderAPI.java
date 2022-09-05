@@ -67,12 +67,12 @@ public final class HookPlaceholderAPI extends PlaceholderExpansion {
             return null;
         }
 
-        if(!placeholder.startsWith("time_left_")) {
+        if (!placeholder.startsWith("time_left_")) {
             return null;
         }
 
         String subPlaceholder = placeholder.substring("time_left_".length());
-        if(subPlaceholder.startsWith("decimal_")) {
+        if (subPlaceholder.startsWith("decimal_")) {
             String id = subPlaceholder.substring("decimal_".length());
             return getTimeLeftDecimal(player, id);
         }
@@ -112,7 +112,7 @@ public final class HookPlaceholderAPI extends PlaceholderExpansion {
     @Nullable
     private String getTimeLeftDecimal(Player player, String id) {
         CooldownSettings settings = getCooldownSettings(id);
-        if(settings == null) {
+        if (settings == null) {
             return null;
         }
 
@@ -129,7 +129,7 @@ public final class HookPlaceholderAPI extends PlaceholderExpansion {
     @Nullable
     private String getTimeLeftInteger(Player player, String id) {
         CooldownSettings settings = getCooldownSettings(id);
-        if(settings == null) {
+        if (settings == null) {
             return null;
         }
 
