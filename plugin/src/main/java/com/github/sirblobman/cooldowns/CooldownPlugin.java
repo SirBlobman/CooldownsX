@@ -96,9 +96,11 @@ public final class CooldownPlugin extends ConfigurablePlugin implements ICooldow
 
         MaterialDictionary materialDictionary = getMaterialDictionary();
         materialDictionary.reloadConfiguration();
+        materialDictionary.saveConfiguration();
 
         PotionDictionary potionDictionary = getPotionDictionary();
         potionDictionary.reloadConfiguration();
+        potionDictionary.saveConfiguration();
 
         CooldownManager cooldownManager = getCooldownManager();
         cooldownManager.reloadConfig();
