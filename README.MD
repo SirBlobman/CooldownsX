@@ -47,18 +47,17 @@ To use the API you should make sure that CooldownsX is enabled on the server fir
 The main things you need to know are how to get the plugin instance and how to get data for a player:
 
 ```java
-import org.jetbrains.annotations.Nullable;
-
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.entity.Player;
 
 import com.github.sirblobman.cooldowns.api.ICooldownsX;
 import com.github.sirblobman.cooldowns.api.configuration.ICooldownSettings;
 import com.github.sirblobman.cooldowns.api.data.ICooldownData;
 import com.github.sirblobman.cooldowns.api.manager.ICooldownManager;
+
+import org.jetbrains.annotations.Nullable;
 
 public final class CooldownHelper {
     public ICooldownsX getCooldownsX() {
