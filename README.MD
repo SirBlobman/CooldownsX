@@ -49,6 +49,8 @@ The main things you need to know are how to get the plugin instance and how to g
 ```java
 import org.jetbrains.annotations.Nullable;
 
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.entity.Player;
@@ -60,7 +62,9 @@ import com.github.sirblobman.cooldowns.api.manager.ICooldownManager;
 
 public final class CooldownHelper {
     public ICooldownsX getCooldownsX() {
-        return (ICooldownsX) JavaPlugin.getPlugin(CooldownPlugin.class);
+        PluginManager pluginManager = Bukkit.getPluginManager();
+        Plugin plugin = pluginManager.getPlugin("CooldownsX");
+        return (ICooldownsX) plugin;
     }
 
     public ICooldownData getData(Player player) {
