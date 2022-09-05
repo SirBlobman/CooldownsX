@@ -1,0 +1,117 @@
+## These are the cooldowns that will be triggered by CooldownsX
+## You can add as many entries as you need.
+
+## Extra Information:
+## material: https://github.com/CryptoMorin/XSeries/blob/master/src/main/java/com/cryptomorin/xseries/XMaterial.java
+## cooldown-type: https://github.com/SirBlobman/CooldownsX/blob/main/src/main/java/com/github/sirblobman/cooldowns/object/CooldownType.java
+## potion-effect: https://github.com/CryptoMorin/XSeries/blob/master/src/main/java/com/cryptomorin/xseries/XPotion.java
+## combat-mode: https://github.com/SirBlobman/CooldownsX/blob/main/src/main/java/com/github/sirblobman/cooldowns/object/CombatMode.java
+
+# Example One: Ender Pearl Cooldown of 10 seconds.
+exampleOne:
+  # How many times can the action be done before the cooldown is triggered?
+  # Default: 1
+  amount: 1
+
+  # Should CooldownsX reset the action count after the cooldown is triggered?
+  reset-amount: false
+
+  # How long must players wait before doing the action again?
+  # Default: 10 seconds
+  cooldown: 10
+
+  # Valid cooldown types can be found in the link above.
+  # Default: INTERACT_ITEM
+  cooldown-type: INTERACT_ITEM
+
+  # Valid XMaterial types can be found in the link above.
+  # Default: [] (Empty List)
+  material:
+    - ENDER_PEARL
+
+  # The bypass permission is optional.
+  # When the permission is not set or empty, bypass will not be possible for that item.
+  # Default: No bypass
+  bypass-permission: "cooldownsx.bypass.ENDER_PEARL"
+
+  # The packet cooldown setting is optional and only works in Spigot 1.9 or higher.
+  # This also requires a cooldown type with a material.
+  # This will show a cooldown bar on the item itself, but may prevent some item features, such as crossbow reloading.
+  # Default: false
+  packet-cooldown: true
+
+  # Requires CombatLogX
+  # Valid combat modes can be found above.
+  # Default: "IGNORE"
+  combat-mode: "FALSE"
+
+  # Requires CombatLogX and 'combat-mode: "DIFFERENT"'
+  # Default: 5 seconds
+  # combat-cooldown-seconds: 5
+
+  # A list of worlds in which this cooldown should be disabled.
+  # If this option is not set, the cooldown will work in all worlds.
+  # World names are case-sensitive.
+  disabled-world-list:
+    - "World2"
+    - "wOrLd3"
+
+  # Set this to true if the 'disabled-world-list' should be the list of enabled worlds instead.
+  # Default: false
+  disabled-world-list-inverted: false
+
+  # What message will be displayed in chat when the player tries to do the action?
+  # Default: "" (no message)
+  message-format: "<red>You must wait <gray>{time_left}</gray> seconds before using <gray>{material}</gray> again.</red>"
+
+  # The action bar section is optional.
+  action-bar:
+    # Should the action bar be enabled for this item?
+    # Default: false
+    enabled: true
+
+    # What priority does this action bar have?
+    # Higher priority means it will display on top of other cooldown action bars with lower priority.
+    # If more than one item has the same priority, a random one may be chosen.
+    # Default: 0
+    priority: 0
+
+    # What message will be displayed?
+    # Placeholders:
+    # {time_left}: The amount of time left in seconds.
+    # Default: disabled (no message)
+    message-format: "<green>Ender Pearl Cooldown:</green> <red>{time_left} seconds</red>"
+
+exampleTwo:
+  cooldown: 5
+  cooldown-type: CONSUME_ITEM
+  material:
+    - CHORUS_FRUIT
+    - GOLDEN_APPLE
+
+exampleThree:
+  cooldown: 30
+  cooldown-type: CONSUME_ITEM
+  material:
+    - ENCHANTED_GOLDEN_APPLE
+  action-bar:
+    enabled: true
+    priority: 1
+    message-format: "<green>Enchanted Golden Apple Cooldown:</green> <red>{time_left} seconds</red>"
+
+exampleFour:
+  cooldown-type: UNDYING
+  cooldown: 30
+
+exampleFive:
+  cooldown: 30
+  cooldown-type: POTION
+  potion-effect: INCREASE_DAMAGE
+
+exampleSix:
+  cooldown: 30
+  cooldown-type: INTERACT_ITEM
+  material:
+    - FIREWORK_ROCKET
+  amount: 5
+  reset-amount: true

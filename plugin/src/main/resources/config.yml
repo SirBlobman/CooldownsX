@@ -1,0 +1,12 @@
+# Should the plugin be allowed to check for updates?
+update-checker: true
+
+# Should debug messages be sent to the console?
+debug-mode: false
+
+# Should CooldownsX send action bars to players with active cooldowns?
+use-action-bar: true
+
+# Should CooldownsX save amounts used for items that use that features?
+# If this is set to false, amount used will reset every time you restart your server.
+save-amounts-used: true
