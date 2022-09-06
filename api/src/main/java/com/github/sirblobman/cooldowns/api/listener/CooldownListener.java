@@ -41,9 +41,17 @@ import com.github.sirblobman.cooldowns.api.manager.ICooldownManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * A custom abstract listener class for all CooldownsX listeners.
+ * This class includes useful methods for filtering cooldowns.
+ * @author SirBlobman
+ */
 public abstract class CooldownListener extends PluginListener<JavaPlugin> {
     private final ICooldownsX plugin;
 
+    /**
+     * @param plugin The CooldownsX plugin instance that this listener belongs to.
+     */
     public CooldownListener(ICooldownsX plugin) {
         super(plugin.getPlugin());
         this.plugin = plugin;
