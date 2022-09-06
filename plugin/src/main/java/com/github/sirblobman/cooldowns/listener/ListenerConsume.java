@@ -13,7 +13,9 @@ import org.bukkit.entity.ThrownPotion;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.PotionSplashEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -67,7 +69,7 @@ public final class ListenerConsume extends CooldownListener {
             }
 
             Player affectedPlayer = (Player) affectedEntity;
-            printDebug("Checking affect player " + affectedPlayer.getName() + "...");
+            printDebug("Checking affected player " + affectedPlayer.getName() + "...");
 
             FakeCancellable fakeCancellable = new FakeCancellable();
             checkConsumePotion(affectedPlayer, potionList, fakeCancellable);
@@ -81,24 +83,63 @@ public final class ListenerConsume extends CooldownListener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onConsume(PlayerItemConsumeEvent e) {
+        printDebug("Detected PlayerItemConsumeEvent...");
+
         ItemStack item = e.getItem();
         if (ItemUtility.isAir(item)) {
+            printDebug("item is air/null, ignoring.");
             return;
         }
 
         Player player = e.getPlayer();
+        printDebug("Player: " + player.getName());
+
         XMaterial material = XMaterial.matchXMaterial(item);
         if (POTION_MATERIAL_SET.contains(material)) {
             List<XPotion> potions = getPotionEffects(item);
             if (!potions.isEmpty()) {
+                printDebug("Detected potions in consumed item: " + potions);
                 checkConsumePotion(player, potions, e);
             }
         } else {
+            printDebug("Detected item as non-potion (food/drink).");
             checkConsumeFood(player, material, e);
         }
     }
 
+    @EventHandler(priority = EventPriority.NORMAL)
+    public void onInteract(PlayerInteractEvent e) {
+        printDebug("Detected PlayerInteractEvent...");
+
+        Action action = e.getAction();
+        if (action != Action.RIGHT_CLICK_AIR && action != Action.RIGHT_CLICK_BLOCK) {
+            printDebug("Action is not right click air / right click block.");
+            return;
+        }
+
+        ItemStack item = e.getItem();
+        if (ItemUtility.isAir(item)) {
+            printDebug("item is air/null, ignoring.");
+            return;
+        }
+
+        Player player = e.getPlayer();
+        printDebug("Player: " + player.getName());
+
+        XMaterial material = XMaterial.matchXMaterial(item);
+        if (POTION_MATERIAL_SET.contains(material)) {
+            List<XPotion> potions = getPotionEffects(item);
+            if (!potions.isEmpty()) {
+                printDebug("Detected potions in clicked item: " + potions);
+                checkPotion(player, potions, e);
+            }
+        } else {
+            printDebug("No potion detected.");
+        }
+    }
+
     private void checkConsumeFood(Player player, XMaterial material, PlayerItemConsumeEvent e) {
+        printDebug("Checking consume food for player " + player.getName() + "...");
         Set<ICooldownSettings> cooldownSettingsList = fetchCooldowns(CooldownType.CONSUME_ITEM);
         if (cooldownSettingsList.isEmpty()) {
             return;
@@ -110,10 +151,15 @@ public final class ListenerConsume extends CooldownListener {
 
         ICooldownSettings activeCooldown = checkActiveCooldowns(player, activeCooldowns);
         if (activeCooldown != null) {
+            printDebug("Found active cooldown '" + activeCooldown.getId() + "for consume.");
             e.setCancelled(true);
             sendCooldownMessage(player, activeCooldown, material);
+            printDebug("Cancelled event and sent message to player.");
             updateInventoryLater(player);
+            printDebug("Triggered player inventory update for one tick later.");
             return;
+        } else {
+            printDebug("No active cooldowns found.");
         }
 
         Set<ICooldownSettings> allValidCooldowns = fetchCooldowns(CooldownType.CONSUME_ITEM);
@@ -122,7 +168,39 @@ public final class ListenerConsume extends CooldownListener {
     }
 
     private void checkConsumePotion(Player player, List<XPotion> potions, Cancellable e) {
-        printDebug("Checking consume potion for player " + player + "...");
+        printDebug("Checking consume potion for player " + player.getName() + "...");
+        printDebug("Potions to check: " + potions);
+
+        Set<ICooldownSettings> cooldownSettingsList = fetchCooldowns(CooldownType.POTION);
+        if (cooldownSettingsList.isEmpty()) {
+            printDebug("No cooldowns available with type POTION, ignoring.");
+            return;
+        }
+
+        ICooldownData cooldownData = getCooldownData(player);
+        Set<ICooldownSettings> allActiveCooldowns = cooldownData.getActiveCooldowns(CooldownType.POTION);
+        Set<ICooldownSettings> activeCooldowns = filter(allActiveCooldowns, potions);
+
+        ICooldownSettings activeCooldown = checkActiveCooldowns(player, activeCooldowns);
+        if (activeCooldown != null) {
+            printDebug("Found active cooldown '" + activeCooldown.getId() + "for potions.");
+            e.setCancelled(true);
+            sendCooldownMessage(player, activeCooldown, potions.get(0));
+            printDebug("Cancelled event and sent message to player.");
+            updateInventoryLater(player);
+            printDebug("Triggered player inventory update for one tick later.");
+            return;
+        } else {
+            printDebug("No active cooldowns found.");
+        }
+
+        Set<ICooldownSettings> allValidCooldowns = fetchCooldowns(CooldownType.POTION);
+        Set<ICooldownSettings> validCooldowns = filter(allValidCooldowns, potions);
+        checkValidCooldowns(player, validCooldowns);
+    }
+
+    private void checkPotion(Player player, List<XPotion> potions, Cancellable e) {
+        printDebug("Checking interact potion for player " + player.getName() + "...");
         printDebug("Potions to check: " + potions);
 
         Set<ICooldownSettings> cooldownSettingsList = fetchCooldowns(CooldownType.POTION);
