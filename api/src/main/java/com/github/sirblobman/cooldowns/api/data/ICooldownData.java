@@ -11,7 +11,7 @@ import com.github.sirblobman.cooldowns.api.configuration.ICooldownSettings;
 import com.github.sirblobman.api.configuration.PlayerDataManager;
 
 /**
- * Cooldown data interface for CooldownsX
+ * Interface for CooldownsX player data.
  * @author SirBlobman
  */
 public interface ICooldownData {

@@ -57,40 +57,73 @@ public abstract class CooldownListener extends PluginListener<JavaPlugin> {
         this.plugin = plugin;
     }
 
+    /**
+     * @return The CooldownsX plugin instance.
+     */
     protected final ICooldownsX getCooldownsX() {
         return this.plugin;
     }
 
+    /**
+     * Convenience Method
+     * @return The configuration manager from the plugin.
+     */
     protected final ConfigurationManager getConfigurationManager() {
         ICooldownsX plugin = getCooldownsX();
         return plugin.getConfigurationManager();
     }
 
+    /**
+     * Convenience Method
+     * @return The language manager from the plugin.
+     */
     protected final LanguageManager getLanguageManager() {
         ICooldownsX plugin = getCooldownsX();
         return plugin.getLanguageManager();
     }
 
+    /**
+     * Convenience Method
+     * @return The cooldown manager from the plugin.
+     */
     protected final ICooldownManager getCooldownManager() {
         ICooldownsX plugin = getCooldownsX();
         return plugin.getCooldownManager();
     }
 
+    /**
+     * Convenience Method
+     * @return The material dictionary from the plugin.
+     */
     protected final IDictionary<XMaterial> getMaterialDictionary() {
         ICooldownsX plugin = getCooldownsX();
         return plugin.getMaterialDictionary();
     }
 
+    /**
+     * Convenience Method
+     * @return The potion dictionary from the plugin.
+     */
     protected final IDictionary<XPotion> getPotionDictionary() {
         ICooldownsX plugin = getCooldownsX();
         return plugin.getPotionDictionary();
     }
 
+    /**
+     * Convenience Method
+     * @param player The player that owns the data.
+     * @return The player data from the cooldown manager.
+     */
     protected final ICooldownData getCooldownData(Player player) {
         ICooldownManager cooldownManager = getCooldownManager();
         return cooldownManager.getData(player);
     }
 
+    /**
+     * Convenience Method
+     * @param stack The item to use to match the XMaterial value.
+     * @return The XMaterial value, or {@link XMaterial#AIR} if there is an error.
+     */
     @NotNull
     protected final XMaterial getXMaterial(ItemStack stack) {
         if (stack == null) {
@@ -109,6 +142,11 @@ public abstract class CooldownListener extends PluginListener<JavaPlugin> {
         }
     }
 
+    /**
+     * Convenience Method
+     * @param block The block to use to match the XMaterial value.
+     * @return The XMaterial value, or {@link XMaterial#AIR} if there is an error.
+     */
     @NotNull
     @SuppressWarnings("deprecation")
     protected final XMaterial getXMaterial(Block block) {
@@ -116,18 +154,28 @@ public abstract class CooldownListener extends PluginListener<JavaPlugin> {
             return XMaterial.AIR;
         }
 
-        Material bukkitMaterial = block.getType();
-        int minorVersion = VersionUtility.getMinorVersion();
-        if (minorVersion < 13) {
-            byte data = block.getData();
-            int materialId = bukkitMaterial.getId();
-            return XMaterial.matchXMaterial(materialId, data).orElse(XMaterial.AIR);
-        } else {
-            return XMaterial.matchXMaterial(bukkitMaterial);
+        try {
+            Material bukkitMaterial = block.getType();
+            int minorVersion = VersionUtility.getMinorVersion();
+            if (minorVersion < 13) {
+                byte data = block.getData();
+                int materialId = bukkitMaterial.getId();
+                return XMaterial.matchXMaterial(materialId, data).orElse(XMaterial.AIR);
+            } else {
+                return XMaterial.matchXMaterial(bukkitMaterial);
+            }
+        } catch(IllegalArgumentException ex) {
+            return XMaterial.AIR;
         }
     }
 
-    protected final void sendPacket(Player player, XMaterial material, int ticksLeft) {
+    /**
+     * Send a cooldown packet to a player on the main thread.
+     * @param player The player that will receive the packet.
+     * @param material The material that will have a cooldown.
+     * @param ticks The amount of time (in ticks) for the cooldown.
+     */
+    protected final void sendPacket(Player player, XMaterial material, int ticks) {
         Validate.notNull(player, "player must not be null!");
         Validate.notNull(material, "material must not be null!");
 
@@ -137,11 +185,17 @@ public abstract class CooldownListener extends PluginListener<JavaPlugin> {
         }
 
         JavaPlugin plugin = getPlugin();
-        Runnable task = () -> sendPacket0(player, bukkitMaterial, ticksLeft);
+        Runnable task = () -> sendPacket0(player, bukkitMaterial, ticks);
         BukkitScheduler scheduler = Bukkit.getScheduler();
         scheduler.runTask(plugin, task);
     }
 
+    /**
+     * Directly send a cooldown packet without any delays.
+     * @param player The player that will receive the packet.
+     * @param material The material that will have a cooldown.
+     * @param ticks The amount of time (in ticks) for the cooldown.
+     */
     private void sendPacket0(Player player, Material material, int ticks) {
         ICooldownsX plugin = getCooldownsX();
         MultiVersionHandler multiVersionHandler = plugin.getMultiVersionHandler();
@@ -149,6 +203,10 @@ public abstract class CooldownListener extends PluginListener<JavaPlugin> {
         playerHandler.sendCooldownPacket(player, material, ticks);
     }
 
+    /**
+     * @param cooldownType The type to use as a filter.
+     * @return All available cooldowns matching the specified type.
+     */
     @NotNull
     protected final Set<ICooldownSettings> fetchCooldowns(CooldownType cooldownType) {
         ICooldownManager cooldownManager = getCooldownManager();
@@ -162,6 +220,11 @@ public abstract class CooldownListener extends PluginListener<JavaPlugin> {
                 .collect(Collectors.toSet());
     }
 
+    /**
+     * @param original The set of cooldowns to filter.
+     * @param material The material to use as a filter.
+     * @return A new {@link Set} of cooldowns filtered by the specified material.
+     */
     protected final Set<ICooldownSettings> filter(Set<ICooldownSettings> original, XMaterial material) {
         if (original.isEmpty()) {
             return Collections.emptySet();
@@ -172,6 +235,11 @@ public abstract class CooldownListener extends PluginListener<JavaPlugin> {
                 .collect(Collectors.toSet());
     }
 
+    /**
+     * @param original The set of cooldowns to filter.
+     * @param potion The potion to use as a filter.
+     * @return A new {@link Set} of cooldowns filtered by the specified potion.
+     */
     protected final Set<ICooldownSettings> filter(Set<ICooldownSettings> original, XPotion potion) {
         if (original.isEmpty()) {
             return Collections.emptySet();
@@ -180,7 +248,11 @@ public abstract class CooldownListener extends PluginListener<JavaPlugin> {
         Set<XPotion> potions = Collections.singleton(potion);
         return filter(original, potions);
     }
-
+    /**
+     * @param original The set of cooldowns to filter.
+     * @param potions The list of potions to use as a filter.
+     * @return A new {@link Set} of cooldowns filtered by the specified list of potions.
+     */
     protected final Set<ICooldownSettings> filter(Set<ICooldownSettings> original, Iterable<XPotion> potions) {
         if (original.isEmpty()) {
             return Collections.emptySet();
@@ -198,7 +270,12 @@ public abstract class CooldownListener extends PluginListener<JavaPlugin> {
     }
 
 
-    // Return a non-null value to cancel the event.
+    /**
+     * Check if any of the specified cooldowns are active on a player.
+     * @param player The player object.
+     * @param cooldowns The set of cooldowns to check.
+     * @return Null if there is not an active cooldown, or the first cooldown that is valid.
+     */
     @Nullable
     protected final ICooldownSettings checkActiveCooldowns(Player player, Set<ICooldownSettings> cooldowns) {
         World world = player.getWorld();
@@ -225,6 +302,11 @@ public abstract class CooldownListener extends PluginListener<JavaPlugin> {
         return null;
     }
 
+    /**
+     * Check and apply any of the specified cooldowns that are valid for the specified player.
+     * @param player The player object.
+     * @param cooldowns The set of cooldowns to check.
+     */
     protected final void checkValidCooldowns(Player player, Set<ICooldownSettings> cooldowns) {
         World world = player.getWorld();
         ICooldownData cooldownData = getCooldownData(player);
@@ -277,6 +359,12 @@ public abstract class CooldownListener extends PluginListener<JavaPlugin> {
         }
     }
 
+    /**
+     * Send a cooldown message to a player for a material-based cooldown.
+     * @param player The player that will receive the message.
+     * @param settings The cooldown that contains the message format.
+     * @param material The material for the cooldown.
+     */
     protected final void sendCooldownMessage(Player player, ICooldownSettings settings, XMaterial material) {
         IDictionary<XMaterial> materialDictionary = getMaterialDictionary();
         String materialName = materialDictionary.get(material);
@@ -285,6 +373,12 @@ public abstract class CooldownListener extends PluginListener<JavaPlugin> {
         sendCooldownMessage(player, settings, replacer);
     }
 
+    /**
+     * Send a cooldown message to a player for a potion-based cooldown.
+     * @param player The player that will receive the message.
+     * @param settings The cooldown that contains the message format.
+     * @param potion The potion for the cooldown.
+     */
     protected final void sendCooldownMessage(Player player, ICooldownSettings settings, XPotion potion) {
         IDictionary<XPotion> potionDictionary = getPotionDictionary();
         String potionName = potionDictionary.get(potion);
@@ -293,6 +387,12 @@ public abstract class CooldownListener extends PluginListener<JavaPlugin> {
         sendCooldownMessage(player, settings, replacer);
     }
 
+    /**
+     * Send a cooldown with a replaced message to a player.
+     * @param player The player that will receive the message.
+     * @param settings The cooldown that contains the message format.
+     * @param replacer The replacer for placeholders in the message.
+     */
     private void sendCooldownMessage(Player player, ICooldownSettings settings, Replacer replacer) {
         String messageFormat = settings.getMessageFormat();
         if (messageFormat == null || messageFormat.isEmpty()) {
@@ -319,6 +419,11 @@ public abstract class CooldownListener extends PluginListener<JavaPlugin> {
         languageManager.sendMessage(player, message);
     }
 
+    /**
+     * Print out a debugging message to the console
+     * @param message The message to print.
+     * @see ICooldownsX#isDebugMode()
+     */
     protected final void printDebug(String message) {
         ICooldownsX plugin = getCooldownsX();
         if (!plugin.isDebugMode()) {
@@ -333,6 +438,10 @@ public abstract class CooldownListener extends PluginListener<JavaPlugin> {
         logger.info(fullMessage);
     }
 
+    /**
+     * Update an inventory for a player. Runs one tick later.
+     * @param player The player that needs an update.
+     */
     protected final void updateInventoryLater(Player player) {
         JavaPlugin plugin = getPlugin();
         BukkitScheduler scheduler = Bukkit.getScheduler();

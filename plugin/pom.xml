@@ -102,6 +102,26 @@
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.3.0</version>
 
+                <configuration>
+                    <createSourcesJar>true</createSourcesJar>
+                    <useDependencyReducedPomInJar>true</useDependencyReducedPomInJar>
+
+                    <filters>
+                        <filter>
+                            <artifact>com.github.sirblobman.plugin.cooldowns:cooldowns-api</artifact>
+                            <excludes>
+                                <exclude>META-INF/MANIFEST.MF</exclude>
+                            </excludes>
+                        </filter>
+                        <filter>
+                            <artifact>com.github.sirblobman.plugin.cooldowns:cooldowns-modern</artifact>
+                            <excludes>
+                                <exclude>META-INF/MANIFEST.MF</exclude>
+                            </excludes>
+                        </filter>
+                    </filters>
+                </configuration>
+
                 <executions>
                     <execution>
                         <phase>package</phase>

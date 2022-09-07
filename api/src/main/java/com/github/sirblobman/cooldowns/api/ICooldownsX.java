@@ -11,7 +11,7 @@ import com.github.sirblobman.cooldowns.api.dictionary.IDictionary;
 import com.github.sirblobman.cooldowns.api.manager.ICooldownManager;
 
 /**
- * Interface for the CooldownsX Plugin instance.
+ * Interface for the CooldownsX plugin instance.
  * @author SirBlobman
  */
 public interface ICooldownsX {
