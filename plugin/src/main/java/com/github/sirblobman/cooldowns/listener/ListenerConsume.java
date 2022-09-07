@@ -9,13 +9,13 @@ import java.util.Set;
 
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.entity.ThrownPotion;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.PotionSplashEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -23,6 +23,7 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.projectiles.ProjectileSource;
 
 import com.github.sirblobman.api.utility.ItemUtility;
 import com.github.sirblobman.api.utility.VersionUtility;
@@ -108,34 +109,36 @@ public final class ListenerConsume extends CooldownListener {
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
-    public void onInteract(PlayerInteractEvent e) {
-        printDebug("Detected PlayerInteractEvent...");
+    public void onInteract(ProjectileLaunchEvent e) {
+        printDebug("Detected ProjectileLaunch...");
 
-        Action action = e.getAction();
-        if (action != Action.RIGHT_CLICK_AIR && action != Action.RIGHT_CLICK_BLOCK) {
-            printDebug("Action is not right click air / right click block.");
+        Projectile projectile = e.getEntity();
+        if(!(projectile instanceof ThrownPotion)) {
+            printDebug("Projectile was not a potion, ignoring.");
             return;
         }
 
-        ItemStack item = e.getItem();
-        if (ItemUtility.isAir(item)) {
-            printDebug("item is air/null, ignoring.");
+        ProjectileSource shooter = projectile.getShooter();
+        if(!(shooter instanceof Player)) {
+            printDebug("shooter was not a player, ignoring.");
             return;
         }
 
-        Player player = e.getPlayer();
+        ThrownPotion thrownPotion = (ThrownPotion) projectile;
+        List<XPotion> potionList = new ArrayList<>();
+        Collection<PotionEffect> potionEffectCollection = thrownPotion.getEffects();
+
+        for (PotionEffect potionEffect : potionEffectCollection) {
+            PotionEffectType potionEffectType = potionEffect.getType();
+            XPotion xpotion = XPotion.matchXPotion(potionEffectType);
+            potionList.add(xpotion);
+        }
+
+        Player player = (Player) shooter;
         printDebug("Player: " + player.getName());
 
-        XMaterial material = XMaterial.matchXMaterial(item);
-        if (POTION_MATERIAL_SET.contains(material)) {
-            List<XPotion> potions = getPotionEffects(item);
-            if (!potions.isEmpty()) {
-                printDebug("Detected potions in clicked item: " + potions);
-                checkPotion(player, potions, e);
-            }
-        } else {
-            printDebug("No potion detected.");
-        }
+        printDebug("Detected potions in projectile: " + potionList);
+        checkPotion(player, potionList, e);
     }
 
     private void checkConsumeFood(Player player, XMaterial material, PlayerItemConsumeEvent e) {
