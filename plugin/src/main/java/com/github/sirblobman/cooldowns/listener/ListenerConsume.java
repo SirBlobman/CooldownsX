@@ -113,13 +113,13 @@ public final class ListenerConsume extends CooldownListener {
         printDebug("Detected ProjectileLaunch...");
 
         Projectile projectile = e.getEntity();
-        if(!(projectile instanceof ThrownPotion)) {
+        if (!(projectile instanceof ThrownPotion)) {
             printDebug("Projectile was not a potion, ignoring.");
             return;
         }
 
         ProjectileSource shooter = projectile.getShooter();
-        if(!(shooter instanceof Player)) {
+        if (!(shooter instanceof Player)) {
             printDebug("shooter was not a player, ignoring.");
             return;
         }

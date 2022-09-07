@@ -6,12 +6,13 @@ import java.util.UUID;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
+import com.github.sirblobman.api.configuration.PlayerDataManager;
 import com.github.sirblobman.cooldowns.api.configuration.CooldownType;
 import com.github.sirblobman.cooldowns.api.configuration.ICooldownSettings;
-import com.github.sirblobman.api.configuration.PlayerDataManager;
 
 /**
  * Interface for CooldownsX player data.
+ *
  * @author SirBlobman
  */
 public interface ICooldownData {
@@ -50,7 +51,8 @@ public interface ICooldownData {
 
     /**
      * Set an expire time for the specified cooldown settings.
-     * @param settings The cooldown settings object.
+     *
+     * @param settings   The cooldown settings object.
      * @param expireTime The expire time for the cooldown.
      * @see System#currentTimeMillis()
      */
@@ -58,6 +60,7 @@ public interface ICooldownData {
 
     /**
      * Remove an active cooldown.
+     *
      * @param settings The cooldown settings object.
      */
     void removeCooldown(ICooldownSettings settings);
@@ -72,13 +75,14 @@ public interface ICooldownData {
 
     /**
      * @param settings The cooldown settings object.
-     * @param count The amount of times to set.
+     * @param count    The amount of times to set.
      * @see #getActionCount(ICooldownSettings)
      */
     void setActionCount(ICooldownSettings settings, int count);
 
     /**
      * Load all the action counts from the player data file.
+     *
      * @see #getPlayerId()
      * @see PlayerDataManager
      */
@@ -86,6 +90,7 @@ public interface ICooldownData {
 
     /**
      * Save all the stored action counts to the player data file.
+     *
      * @see #getPlayerId()
      * @see PlayerDataManager
      */

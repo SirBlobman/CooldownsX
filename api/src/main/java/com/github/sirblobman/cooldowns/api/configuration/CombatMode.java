@@ -2,6 +2,7 @@ package com.github.sirblobman.cooldowns.api.configuration;
 
 /**
  * CombatMode enum
+ *
  * @author SirBlobman
  */
 public enum CombatMode {

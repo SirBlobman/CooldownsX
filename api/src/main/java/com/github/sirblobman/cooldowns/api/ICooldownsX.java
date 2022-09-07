@@ -12,6 +12,7 @@ import com.github.sirblobman.cooldowns.api.manager.ICooldownManager;
 
 /**
  * Interface for the CooldownsX plugin instance.
+ *
  * @author SirBlobman
  */
 public interface ICooldownsX {
@@ -58,6 +59,7 @@ public interface ICooldownsX {
     /**
      * Send a debug message to the server log.
      * This method will not do anything when {@link #isDebugMode()} returns {@code false}.
+     *
      * @param message The message to print to the log.
      */
     void printDebug(String message);

@@ -43,6 +43,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * A custom abstract listener class for all CooldownsX listeners.
  * This class includes useful methods for filtering cooldowns.
+ *
  * @author SirBlobman
  */
 public abstract class CooldownListener extends PluginListener<JavaPlugin> {
@@ -65,6 +66,7 @@ public abstract class CooldownListener extends PluginListener<JavaPlugin> {
 
     /**
      * Convenience Method
+     *
      * @return The configuration manager from the plugin.
      */
     protected final ConfigurationManager getConfigurationManager() {
@@ -74,6 +76,7 @@ public abstract class CooldownListener extends PluginListener<JavaPlugin> {
 
     /**
      * Convenience Method
+     *
      * @return The language manager from the plugin.
      */
     protected final LanguageManager getLanguageManager() {
@@ -83,6 +86,7 @@ public abstract class CooldownListener extends PluginListener<JavaPlugin> {
 
     /**
      * Convenience Method
+     *
      * @return The cooldown manager from the plugin.
      */
     protected final ICooldownManager getCooldownManager() {
@@ -92,6 +96,7 @@ public abstract class CooldownListener extends PluginListener<JavaPlugin> {
 
     /**
      * Convenience Method
+     *
      * @return The material dictionary from the plugin.
      */
     protected final IDictionary<XMaterial> getMaterialDictionary() {
@@ -101,6 +106,7 @@ public abstract class CooldownListener extends PluginListener<JavaPlugin> {
 
     /**
      * Convenience Method
+     *
      * @return The potion dictionary from the plugin.
      */
     protected final IDictionary<XPotion> getPotionDictionary() {
@@ -110,6 +116,7 @@ public abstract class CooldownListener extends PluginListener<JavaPlugin> {
 
     /**
      * Convenience Method
+     *
      * @param player The player that owns the data.
      * @return The player data from the cooldown manager.
      */
@@ -120,6 +127,7 @@ public abstract class CooldownListener extends PluginListener<JavaPlugin> {
 
     /**
      * Convenience Method
+     *
      * @param stack The item to use to match the XMaterial value.
      * @return The XMaterial value, or {@link XMaterial#AIR} if there is an error.
      */
@@ -143,6 +151,7 @@ public abstract class CooldownListener extends PluginListener<JavaPlugin> {
 
     /**
      * Convenience Method
+     *
      * @param block The block to use to match the XMaterial value.
      * @return The XMaterial value, or {@link XMaterial#AIR} if there is an error.
      */
@@ -163,16 +172,17 @@ public abstract class CooldownListener extends PluginListener<JavaPlugin> {
             } else {
                 return XMaterial.matchXMaterial(bukkitMaterial);
             }
-        } catch(IllegalArgumentException ex) {
+        } catch (IllegalArgumentException ex) {
             return XMaterial.AIR;
         }
     }
 
     /**
      * Send a cooldown packet to a player on the main thread.
-     * @param player The player that will receive the packet.
+     *
+     * @param player   The player that will receive the packet.
      * @param material The material that will have a cooldown.
-     * @param ticks The amount of time (in ticks) for the cooldown.
+     * @param ticks    The amount of time (in ticks) for the cooldown.
      */
     protected final void sendPacket(Player player, XMaterial material, int ticks) {
         Validate.notNull(player, "player must not be null!");
@@ -191,9 +201,10 @@ public abstract class CooldownListener extends PluginListener<JavaPlugin> {
 
     /**
      * Directly send a cooldown packet without any delays.
-     * @param player The player that will receive the packet.
+     *
+     * @param player   The player that will receive the packet.
      * @param material The material that will have a cooldown.
-     * @param ticks The amount of time (in ticks) for the cooldown.
+     * @param ticks    The amount of time (in ticks) for the cooldown.
      */
     private void sendPacket0(Player player, Material material, int ticks) {
         ICooldownsX plugin = getCooldownsX();
@@ -236,7 +247,7 @@ public abstract class CooldownListener extends PluginListener<JavaPlugin> {
 
     /**
      * @param original The set of cooldowns to filter.
-     * @param potion The potion to use as a filter.
+     * @param potion   The potion to use as a filter.
      * @return A new {@link Set} of cooldowns filtered by the specified potion.
      */
     protected final Set<ICooldownSettings> filter(Set<ICooldownSettings> original, XPotion potion) {
@@ -247,9 +258,10 @@ public abstract class CooldownListener extends PluginListener<JavaPlugin> {
         Set<XPotion> potions = Collections.singleton(potion);
         return filter(original, potions);
     }
+
     /**
      * @param original The set of cooldowns to filter.
-     * @param potions The list of potions to use as a filter.
+     * @param potions  The list of potions to use as a filter.
      * @return A new {@link Set} of cooldowns filtered by the specified list of potions.
      */
     protected final Set<ICooldownSettings> filter(Set<ICooldownSettings> original, Iterable<XPotion> potions) {
@@ -271,7 +283,8 @@ public abstract class CooldownListener extends PluginListener<JavaPlugin> {
 
     /**
      * Check if any of the specified cooldowns are active on a player.
-     * @param player The player object.
+     *
+     * @param player    The player object.
      * @param cooldowns The set of cooldowns to check.
      * @return Null if there is not an active cooldown, or the first cooldown that is valid.
      */
@@ -303,7 +316,8 @@ public abstract class CooldownListener extends PluginListener<JavaPlugin> {
 
     /**
      * Check and apply any of the specified cooldowns that are valid for the specified player.
-     * @param player The player object.
+     *
+     * @param player    The player object.
      * @param cooldowns The set of cooldowns to check.
      */
     protected final void checkValidCooldowns(Player player, Set<ICooldownSettings> cooldowns) {
@@ -360,7 +374,8 @@ public abstract class CooldownListener extends PluginListener<JavaPlugin> {
 
     /**
      * Send a cooldown message to a player for a material-based cooldown.
-     * @param player The player that will receive the message.
+     *
+     * @param player   The player that will receive the message.
      * @param settings The cooldown that contains the message format.
      * @param material The material for the cooldown.
      */
@@ -374,9 +389,10 @@ public abstract class CooldownListener extends PluginListener<JavaPlugin> {
 
     /**
      * Send a cooldown message to a player for a potion-based cooldown.
-     * @param player The player that will receive the message.
+     *
+     * @param player   The player that will receive the message.
      * @param settings The cooldown that contains the message format.
-     * @param potion The potion for the cooldown.
+     * @param potion   The potion for the cooldown.
      */
     protected final void sendCooldownMessage(Player player, ICooldownSettings settings, XPotion potion) {
         IDictionary<XPotion> potionDictionary = getPotionDictionary();
@@ -388,7 +404,8 @@ public abstract class CooldownListener extends PluginListener<JavaPlugin> {
 
     /**
      * Send a cooldown with a replaced message to a player.
-     * @param player The player that will receive the message.
+     *
+     * @param player   The player that will receive the message.
      * @param settings The cooldown that contains the message format.
      * @param replacer The replacer for placeholders in the message.
      */
@@ -420,6 +437,7 @@ public abstract class CooldownListener extends PluginListener<JavaPlugin> {
 
     /**
      * Print out a debugging message to the console
+     *
      * @param message The message to print.
      * @see ICooldownsX#isDebugMode()
      */
@@ -434,6 +452,7 @@ public abstract class CooldownListener extends PluginListener<JavaPlugin> {
 
     /**
      * Update an inventory for a player. Runs one tick later.
+     *
      * @param player The player that needs an update.
      */
     protected final void updateInventoryLater(Player player) {

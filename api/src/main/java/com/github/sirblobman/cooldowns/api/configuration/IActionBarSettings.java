@@ -2,6 +2,7 @@ package com.github.sirblobman.cooldowns.api.configuration;
 
 /**
  * Interface for CooldownsX action bar settings.
+ *
  * @author SirBlobman
  */
 public interface IActionBarSettings extends Comparable<IActionBarSettings> {
@@ -13,6 +14,7 @@ public interface IActionBarSettings extends Comparable<IActionBarSettings> {
     /**
      * Action bars are ordered by priority.
      * Higher priority means it will be selected first.
+     *
      * @return The priority for this action bar.
      */
     int getPriority();

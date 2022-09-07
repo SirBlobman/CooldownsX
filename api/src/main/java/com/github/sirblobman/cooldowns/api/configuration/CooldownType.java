@@ -2,6 +2,7 @@ package com.github.sirblobman.cooldowns.api.configuration;
 
 /**
  * Cooldown type enum
+ *
  * @author SirBlobman
  */
 public enum CooldownType {

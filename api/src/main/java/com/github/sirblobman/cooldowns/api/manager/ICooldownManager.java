@@ -13,11 +13,13 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Interface for the CooldownsX Cooldown Manager instance.
  * The cooldown manager stores player data and cooldown settings by id.
+ *
  * @author SirBlobman
  */
 public interface ICooldownManager {
     /**
      * Get or create the cooldown data for a player.
+     *
      * @param player The player that will own the data.
      * @return New or existing cooldown data for the specified player.
      */

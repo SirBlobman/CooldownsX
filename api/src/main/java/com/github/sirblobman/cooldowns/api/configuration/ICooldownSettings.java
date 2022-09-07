@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Interface for CooldownsX configuration settings.
+ *
  * @author SirBlobman
  */
 public interface ICooldownSettings {
