@@ -6,7 +6,6 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
@@ -425,17 +424,12 @@ public abstract class CooldownListener extends PluginListener<JavaPlugin> {
      * @see ICooldownsX#isDebugMode()
      */
     protected final void printDebug(String message) {
-        ICooldownsX plugin = getCooldownsX();
-        if (!plugin.isDebugMode()) {
-            return;
-        }
-
         Class<?> thisClass = getClass();
         String className = thisClass.getSimpleName();
+        String fullMessage = String.format(Locale.US, "[%s] %s", className, message);
 
-        String fullMessage = String.format(Locale.US, "[Debug] [%s] %s", className, message);
-        Logger logger = getLogger();
-        logger.info(fullMessage);
+        ICooldownsX plugin = getCooldownsX();
+        plugin.printDebug(fullMessage);
     }
 
     /**
