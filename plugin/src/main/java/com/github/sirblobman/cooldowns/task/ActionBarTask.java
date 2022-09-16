@@ -26,7 +26,7 @@ public final class ActionBarTask extends CooldownTask {
     public void run() {
         Collection<? extends Player> onlinePlayerCollection = Bukkit.getOnlinePlayers();
         for (Player player : onlinePlayerCollection) {
-            printDebug("Checking action bar for player '" + player.getName() + "'.");
+            // printDebug("Checking action bar for player '" + player.getName() + "'.");
             checkActionBar(player);
         }
     }
@@ -35,7 +35,7 @@ public final class ActionBarTask extends CooldownTask {
         ICooldownData cooldownData = getCooldownData(player);
         Set<ICooldownSettings> activeCooldowns = cooldownData.getActiveCooldowns();
         if (activeCooldowns.isEmpty()) {
-            printDebug("Player does not have any active cooldowns.");
+            // printDebug("Player does not have any active cooldowns.");
             return;
         }
 
@@ -44,13 +44,13 @@ public final class ActionBarTask extends CooldownTask {
                 .sorted(Comparator.comparing(ICooldownSettings::getActionBarSettings).reversed())
                 .collect(Collectors.toList());
         if (cooldownSettingsList.isEmpty()) {
-            printDebug("Player active cooldowns don't have any action bars enabled.");
+            // printDebug("Player active cooldowns don't have any action bars enabled.");
             return;
         }
 
         ICooldownSettings cooldownSettings = cooldownSettingsList.get(0);
         sendActionBar(player, cooldownSettings);
-        printDebug("Sent action bar to player.");
+        // printDebug("Sent action bar to player.");
     }
 
     private void sendActionBar(Player player, ICooldownSettings settings) {
