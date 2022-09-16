@@ -106,7 +106,8 @@ exampleFour:
 exampleFive:
   cooldown: 30
   cooldown-type: POTION
-  potion-effect: INCREASE_DAMAGE
+  potion-effect:
+    - INCREASE_DAMAGE
 
 exampleSix:
   cooldown: 30
@@ -114,4 +115,12 @@ exampleSix:
   material:
     - FIREWORK_ROCKET
   amount: 5
+  reset-amount: true
+
+exampleSeven:
+  cooldown: 30
+  cooldown-type: POTION_THROW
+  potion-effect:
+    - HARM
+  amount: 2
   reset-amount: true

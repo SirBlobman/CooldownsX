@@ -25,11 +25,19 @@ public enum CooldownType {
     CONSUME_ITEM,
 
     /**
-     * Throwing or drinking a potion.
-     * Works for potions, splash potions, and lingering potions.
+     * Gaining a potion effect.
+     * Includes drinking and splash potions for 1.8.8-1.12.2.
+     * Uses EntityPotionEffectEvent in 1.13.2+ to detect when potions are added to a player.
      * Requires a potion effect type.
      */
     POTION,
+
+    /**
+     * Throwing a potion.
+     * Works for splash and lingering potions.
+     * Requires a potion effect type.
+     */
+    POTION_THROW,
 
     /**
      * Using an item to resurrect (currently only Totem of Undying)

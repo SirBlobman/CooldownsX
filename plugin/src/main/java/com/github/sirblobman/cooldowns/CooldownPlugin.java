@@ -25,6 +25,7 @@ import com.github.sirblobman.cooldowns.listener.ListenerConsume;
 import com.github.sirblobman.cooldowns.listener.ListenerInteract;
 import com.github.sirblobman.cooldowns.listener.ListenerPotionLegacy;
 import com.github.sirblobman.cooldowns.listener.ListenerPotionModern;
+import com.github.sirblobman.cooldowns.listener.ListenerPotionThrow;
 import com.github.sirblobman.cooldowns.listener.ListenerUndying;
 import com.github.sirblobman.cooldowns.manager.CooldownManager;
 import com.github.sirblobman.cooldowns.placeholder.HookPlaceholderAPI;
@@ -130,6 +131,7 @@ public final class CooldownPlugin extends ConfigurablePlugin implements ICooldow
     private void registerListeners(int minorVersion) {
         new ListenerConsume(this).register();
         new ListenerInteract(this).register();
+        new ListenerPotionThrow(this).register();
 
         if (minorVersion >= 11) {
             new ListenerUndying(this).register();
