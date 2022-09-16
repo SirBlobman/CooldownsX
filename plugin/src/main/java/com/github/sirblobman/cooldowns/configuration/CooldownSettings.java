@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permissible;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
 import com.github.sirblobman.api.utility.Validate;
@@ -252,11 +253,12 @@ public final class CooldownSettings implements ICooldownSettings {
         }
 
         PluginManager pluginManager = Bukkit.getPluginManager();
-        ICombatLogX combatLogX = (ICombatLogX) pluginManager.getPlugin("ConmbatLogX");
-        if (combatLogX == null) {
+        Plugin pluginCombatLogX = pluginManager.getPlugin("CombatLogX");
+        if (pluginCombatLogX == null) {
             throw new IllegalStateException("CombatLogX is null but the plugin is enabled?");
         }
 
+        ICombatLogX combatLogX = (ICombatLogX) pluginCombatLogX;
         ICombatManager combatManager = combatLogX.getCombatManager();
         boolean combat = combatManager.isInCombat(player);
 
