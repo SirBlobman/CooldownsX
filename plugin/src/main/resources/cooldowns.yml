@@ -3,9 +3,9 @@
 
 ## Extra Information:
 ## material: https://github.com/CryptoMorin/XSeries/blob/master/src/main/java/com/cryptomorin/xseries/XMaterial.java
-## cooldown-type: https://github.com/SirBlobman/CooldownsX/blob/main/src/main/java/com/github/sirblobman/cooldowns/object/CooldownType.java
+## cooldown-type: https://github.com/SirBlobman/CooldownsX/blob/main/api/src/main/java/com/github/sirblobman/cooldowns/api/configuration/CooldownType.java
 ## potion-effect: https://github.com/CryptoMorin/XSeries/blob/master/src/main/java/com/cryptomorin/xseries/XPotion.java
-## combat-mode: https://github.com/SirBlobman/CooldownsX/blob/main/src/main/java/com/github/sirblobman/cooldowns/object/CombatMode.java
+## combat-mode: https://github.com/SirBlobman/CooldownsX/blob/main/api/src/main/java/com/github/sirblobman/cooldowns/api/configuration/CombatMode.java
 
 # Example One: Ender Pearl Cooldown of 10 seconds.
 exampleOne:
