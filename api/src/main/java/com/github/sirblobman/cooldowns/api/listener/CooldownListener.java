@@ -1,5 +1,6 @@
 package com.github.sirblobman.cooldowns.api.listener;
 
+import java.text.DecimalFormat;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -21,8 +22,10 @@ import com.github.sirblobman.api.adventure.adventure.text.Component;
 import com.github.sirblobman.api.adventure.adventure.text.minimessage.MiniMessage;
 import com.github.sirblobman.api.configuration.ConfigurationManager;
 import com.github.sirblobman.api.language.LanguageManager;
-import com.github.sirblobman.api.language.Replacer;
-import com.github.sirblobman.api.language.SimpleReplacer;
+import com.github.sirblobman.api.language.replacer.DoubleReplacer;
+import com.github.sirblobman.api.language.replacer.LongReplacer;
+import com.github.sirblobman.api.language.replacer.Replacer;
+import com.github.sirblobman.api.language.replacer.StringReplacer;
 import com.github.sirblobman.api.nms.MultiVersionHandler;
 import com.github.sirblobman.api.nms.PlayerHandler;
 import com.github.sirblobman.api.plugin.listener.PluginListener;
@@ -383,7 +386,7 @@ public abstract class CooldownListener extends PluginListener<JavaPlugin> {
         IDictionary<XMaterial> materialDictionary = getMaterialDictionary();
         String materialName = materialDictionary.get(material);
 
-        Replacer replacer = new SimpleReplacer("{material}", materialName);
+        Replacer replacer = new StringReplacer("{material}", materialName);
         sendCooldownMessage(player, settings, replacer);
     }
 
@@ -398,7 +401,7 @@ public abstract class CooldownListener extends PluginListener<JavaPlugin> {
         IDictionary<XPotion> potionDictionary = getPotionDictionary();
         String potionName = potionDictionary.get(potion);
 
-        Replacer replacer = new SimpleReplacer("{potion}", potionName);
+        Replacer replacer = new StringReplacer("{potion}", potionName);
         sendCooldownMessage(player, settings, replacer);
     }
 
@@ -424,14 +427,16 @@ public abstract class CooldownListener extends PluginListener<JavaPlugin> {
 
 
         LanguageManager languageManager = getLanguageManager();
-        MiniMessage miniMessage = languageManager.getMiniMessage();
-        String timeLeftInteger = Long.toString(timeLeftSecondsInteger);
-        String timeLeftDecimal = languageManager.formatDecimal(player, timeLeftSeconds);
-        String messageFormatReplaced = replacer.replace(messageFormat);
+        DecimalFormat decimalFormat = languageManager.getDecimalFormat(player);
+        Replacer timeLeftIntegerReplacer = new LongReplacer("{time_left}", timeLeftSecondsInteger);
+        Replacer timeLeftDecimalReplacer = new DoubleReplacer("{time_left_decimal}", timeLeftSeconds,
+                decimalFormat);
 
-        String messageString = messageFormatReplaced.replace("{time_left}", timeLeftInteger)
-                .replace("{time_left_decimal}", timeLeftDecimal);
-        Component message = miniMessage.deserialize(messageString);
+        MiniMessage miniMessage = languageManager.getMiniMessage();
+        Component message = miniMessage.deserialize(messageFormat)
+                .replaceText(timeLeftIntegerReplacer.asReplacementConfig())
+                .replaceText(timeLeftDecimalReplacer.asReplacementConfig())
+                .replaceText(replacer.asReplacementConfig());
         languageManager.sendMessage(player, message);
     }
 

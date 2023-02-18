@@ -1,5 +1,6 @@
 package com.github.sirblobman.cooldowns.placeholder;
 
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -123,7 +124,8 @@ public final class HookPlaceholderAPI extends PlaceholderExpansion {
         double timeLeftSeconds = (timeLeftMillis / 1_000.0D);
 
         LanguageManager languageManager = getLanguageManager();
-        return languageManager.formatDecimal(player, timeLeftSeconds);
+        DecimalFormat decimalFormat = languageManager.getDecimalFormat(player);
+        return decimalFormat.format(timeLeftSeconds);
     }
 
     @Nullable

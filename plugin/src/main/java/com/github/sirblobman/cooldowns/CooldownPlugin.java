@@ -71,6 +71,10 @@ public final class CooldownPlugin extends ConfigurablePlugin implements ICooldow
         }
 
         reloadConfiguration();
+
+        LanguageManager languageManager = getLanguageManager();
+        languageManager.onPluginEnable();
+
         registerCommands();
         registerListeners(minorVersion);
         registerHooks();
@@ -94,7 +98,7 @@ public final class CooldownPlugin extends ConfigurablePlugin implements ICooldow
         configurationManager.reload("dictionary/potion.yml");
 
         LanguageManager languageManager = getLanguageManager();
-        languageManager.reloadLanguageFiles();
+        languageManager.reloadLanguages();
 
         MaterialDictionary materialDictionary = getMaterialDictionary();
         materialDictionary.reloadConfiguration();
@@ -178,6 +182,6 @@ public final class CooldownPlugin extends ConfigurablePlugin implements ICooldow
     private String getDefaultLanguageCode() {
         LanguageManager languageManager = getLanguageManager();
         Language defaultLanguage = languageManager.getDefaultLanguage();
-        return (defaultLanguage == null ? "none" : defaultLanguage.getLanguageCode());
+        return (defaultLanguage == null ? "none" : defaultLanguage.getLanguageName());
     }
 }

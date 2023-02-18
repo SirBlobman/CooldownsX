@@ -1,5 +1,6 @@
 package com.github.sirblobman.cooldowns.task;
 
+import java.text.DecimalFormat;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
@@ -70,7 +71,9 @@ public final class ActionBarTask extends CooldownTask {
         LanguageManager languageManager = getLanguageManager();
         MiniMessage miniMessage = languageManager.getMiniMessage();
         String timeLeftInteger = Long.toString(timeLeftSecondsInteger);
-        String timeLeftDecimal = languageManager.formatDecimal(player, timeLeftSeconds);
+
+        DecimalFormat decimalFormat = languageManager.getDecimalFormat(player);
+        String timeLeftDecimal = decimalFormat.format(timeLeftSeconds);
 
         String messageString = messageFormat.replace("{time_left}", timeLeftInteger)
                 .replace("{time_left_decimal}", timeLeftDecimal);
