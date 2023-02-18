@@ -2,12 +2,11 @@ pipeline {
     agent any
 
     options {
-        githubProjectProperty(projectUrlStr: "https://github.com/SirBlobman/CombatLogX")
+        githubProjectProperty(projectUrlStr: "https://github.com/SirBlobman/CooldownsX")
     }
 
     environment {
         DISCORD_URL = credentials('PUBLIC_DISCORD_WEBHOOK')
-        MAVEN_DEPLOY = credentials('MAVEN_DEPLOY')
     }
 
     triggers {
