@@ -1,5 +1,6 @@
 plugins {
     id("java")
+    id("maven-publish")
 }
 
 repositories {
@@ -13,4 +14,49 @@ dependencies {
     compileOnly("org.jetbrains:annotations:24.0.1")
     compileOnly("org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT")
     compileOnly("com.github.sirblobman.api:core:2.7-SNAPSHOT")
+}
+
+java {
+    withSourcesJar()
+    withJavadocJar()
+}
+
+publishing {
+    repositories {
+        maven {
+            url = uri("https://nexus.sirblobman.xyz/repository/public-snapshots/")
+
+            credentials {
+                var currentUsername = System.getenv("MAVEN_DEPLOY_USR")
+                if (currentUsername == null) {
+                    currentUsername = property("mavenUsernameSirBlobman") as String
+                }
+
+                var currentPassword = System.getenv("MAVEN_DEPLOY_PSW")
+                if (currentPassword == null) {
+                    currentPassword = property("mavenPasswordSirBlobman") as String
+                }
+
+                username = currentUsername
+                password = currentPassword
+            }
+        }
+    }
+
+    publications {
+        group = "com.github.sirblobman.plugin.cooldowns"
+        version = "5.0.0-SNAPSHOT"
+
+        create<MavenPublication>("maven") {
+            artifactId = "cooldowns-api"
+            from(components["java"])
+        }
+    }
+}
+
+tasks {
+    javadoc {
+        val standardOptions = options as StandardJavadocDocletOptions
+        standardOptions.addStringOption("Xdoclint:none", "-quiet")
+    }
 }

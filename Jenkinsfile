@@ -19,10 +19,16 @@ pipeline {
     }
 
     stages {
-        stage ("Maven: Clean Deploy") {
+        stage ("Gradle: Publish") {
             steps {
-                withMaven(options: [artifactsPublisher(disabled: true)]) {
-                    sh("mvn clean deploy")
+                withGradle {
+                    script {
+                        if (env.BRANCH_NAME == "main") {
+                            sh("./gradlew clean build publish --refresh-dependencies")
+                        } else {
+                            sh("./gradlew clean build --refresh-dependencies")
+                        }
+                    }
                 }
             }
         }
