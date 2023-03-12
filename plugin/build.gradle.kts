@@ -32,6 +32,11 @@ dependencies {
     compileOnly("me.clip:placeholderapi:2.11.2")
 }
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
 
 tasks {
     named<Jar>("jar") {

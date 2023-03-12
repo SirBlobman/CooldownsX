@@ -15,3 +15,8 @@ dependencies {
     compileOnly("org.spigotmc:spigot-api:1.14.4-R0.1-SNAPSHOT")
     compileOnly("com.github.sirblobman.api:core:2.7-SNAPSHOT")
 }
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
