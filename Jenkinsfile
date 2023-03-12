@@ -37,7 +37,7 @@ pipeline {
 
     post {
         success {
-            archiveArtifacts artifacts: 'plugin/target/CooldownsX-*.jar', fingerprint: true
+            archiveArtifacts artifacts: 'plugin/build/libs/CooldownsX-*.jar', fingerprint: true
         }
 
         always {
