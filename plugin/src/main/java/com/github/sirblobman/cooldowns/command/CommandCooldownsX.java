@@ -26,9 +26,9 @@ public final class CommandCooldownsX extends Command {
             JavaPlugin plugin = getPlugin();
             plugin.reloadConfig();
 
-            sendMessage(sender, "command.reload-success", null);
+            sendMessage(sender, "command.reload-success");
         } catch (Exception ex) {
-            sendMessage(sender, "command.reload-failure", null);
+            sendMessage(sender, "command.reload-failure");
         }
 
         return true;
