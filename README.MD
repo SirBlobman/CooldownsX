@@ -23,7 +23,7 @@ To use the api, add the following values to your `pom.xml` file:
     <!-- SirBlobman Public Repository -->
     <repository>
         <id>sirblobman-public</id>
-        <url>https://nexus.sirblobman.xyz/repository/public/</url>
+        <url>https://nexus.sirblobman.xyz/public/</url>
     </repository>
 </repositories>
 ```

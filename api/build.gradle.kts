@@ -7,7 +7,7 @@ repositories {
     mavenCentral()
     maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
     maven("https://oss.sonatype.org/content/repositories/snapshots/")
-    maven("https://nexus.sirblobman.xyz/repository/public/")
+    maven("https://nexus.sirblobman.xyz/public/")
 }
 
 dependencies {
@@ -27,7 +27,7 @@ java {
 publishing {
     repositories {
         maven {
-            url = uri("https://nexus.sirblobman.xyz/repository/public-snapshots/")
+            url = uri("https://nexus.sirblobman.xyz/public/")
 
             credentials {
                 var currentUsername = System.getenv("MAVEN_DEPLOY_USR")
