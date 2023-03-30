@@ -13,7 +13,7 @@ dependencies {
     compileOnly(project(":api"))
     compileOnly("org.jetbrains:annotations:24.0.1")
     compileOnly("org.spigotmc:spigot-api:1.14.4-R0.1-SNAPSHOT")
-    compileOnly("com.github.sirblobman.api:core:2.7-SNAPSHOT")
+    compileOnly("com.github.sirblobman.api:core:2.8-SNAPSHOT")
 }
 
 java {
