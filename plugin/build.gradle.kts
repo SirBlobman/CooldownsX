@@ -28,7 +28,7 @@ dependencies {
     compileOnly("org.jetbrains:annotations:24.0.1")
     compileOnly("org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT")
     compileOnly("com.github.sirblobman.api:core:2.7-SNAPSHOT")
-    compileOnly("com.github.sirblobman.combatlogx:api:11.2-SNAPSHOT")
+    compileOnly("com.github.sirblobman.combatlogx:api:11.3-SNAPSHOT")
     compileOnly("me.clip:placeholderapi:2.11.2")
 }
 
