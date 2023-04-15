@@ -40,7 +40,7 @@ To use the api, add the following values to your `pom.xml` file:
     <dependency>
         <groupId>com.github.sirblobman.plugin.cooldowns</groupId>
         <artifactId>cooldowns-api</artifactId>
-        <version>5.0.0-SNAPSHOT</version>
+        <version>5.1.0-SNAPSHOT</version>
         <scope>provided</scope>
     </dependency>
 </dependencies>
