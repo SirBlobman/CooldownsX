@@ -7,7 +7,10 @@ plugins {
     id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
-java.toolchain.languageVersion.set(JavaLanguageVersion.of(8))
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
 
 repositories {
     mavenCentral()
