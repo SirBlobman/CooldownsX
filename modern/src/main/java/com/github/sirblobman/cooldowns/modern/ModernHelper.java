@@ -15,7 +15,7 @@ import org.bukkit.potion.PotionType;
 
 import com.github.sirblobman.api.utility.ItemUtility;
 import com.github.sirblobman.api.utility.VersionUtility;
-import com.github.sirblobman.api.xseries.XPotion;
+import com.github.sirblobman.api.shaded.xseries.XPotion;
 
 public final class ModernHelper {
     public static boolean isCrossbowReloading(ItemStack item) {

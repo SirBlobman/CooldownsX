@@ -1,17 +1,13 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
-val baseVersion = findProperty("version.base") ?: "invalid"
-val betaString = ((findProperty("version.beta") ?: "false") as String)
-val jenkinsBuildNumber = System.getenv("BUILD_NUMBER") ?: "Unofficial"
-
-val betaBoolean = betaString.toBoolean()
-val betaVersion = if (betaBoolean) "Beta-" else ""
-val calculatedVersion = "$baseVersion.$betaVersion$jenkinsBuildNumber"
+val pluginVersion = rootProject.ext.get("pluginVersion") as String
 
 plugins {
     id("java")
-    id("com.github.johnrengelman.shadow") version "8.1.0"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
+
+java.toolchain.languageVersion.set(JavaLanguageVersion.of(8))
 
 repositories {
     mavenCentral()
@@ -22,19 +18,18 @@ repositories {
 }
 
 dependencies {
+    // Local Dependencies
     implementation(project(":api"))
     implementation(project(":modern"))
 
-    compileOnly("org.jetbrains:annotations:24.0.1")
-    compileOnly("org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT")
-    compileOnly("com.github.sirblobman.api:core:2.7-SNAPSHOT")
-    compileOnly("com.github.sirblobman.combatlogx:api:11.2-SNAPSHOT")
-    compileOnly("me.clip:placeholderapi:2.11.2")
-}
+    // Java Dependencies
+    compileOnly("org.jetbrains:annotations:24.0.1") // JetBrains Annotations
+    compileOnly("org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT") // Spigot API
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    // Plugin Dependencies
+    compileOnly("com.github.sirblobman.api:core:2.8-SNAPSHOT") // BlueSlimeCore
+    compileOnly("com.github.sirblobman.combatlogx:api:11.3-SNAPSHOT") // CombatLogX
+    compileOnly("me.clip:placeholderapi:2.11.3") // PlaceholderAPI
 }
 
 
@@ -45,11 +40,11 @@ tasks {
 
     named<ShadowJar>("shadowJar") {
         archiveClassifier.set(null as String?)
-        archiveFileName.set("CooldownsX-$calculatedVersion.jar")
+        archiveFileName.set("CooldownsX-$pluginVersion.jar")
     }
 
-    build {
-        dependsOn(shadowJar)
+    named("build") {
+        dependsOn("shadowJar")
     }
 
     processResources {
@@ -66,12 +61,12 @@ tasks {
                 "pluginDescription" to pluginDescription,
                 "pluginWebsite" to pluginWebsite,
                 "pluginMainClass" to pluginMainClass,
-                "pluginVersion" to calculatedVersion
+                "pluginVersion" to pluginVersion
             ))
         }
 
         filesMatching("config.yml") {
-            expand(mapOf("pluginVersion" to calculatedVersion))
+            expand(mapOf("pluginVersion" to pluginVersion))
         }
     }
 }

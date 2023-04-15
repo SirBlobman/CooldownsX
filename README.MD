@@ -2,7 +2,12 @@
 
 A plugin that adds configurable cooldowns to items.
 
-# Placeholders
+## Requirements
+
+- [SpigotMC](https://spigotmc.org/) or [PaperMC](https://papermc.io/) 1.8.8 - 1.19.4
+- [BlueSlimeCore](https://jenkins.sirblobman.xyz/job/SirBlobman/job/BlueSlimeCore/) 2.8.0 or higher.
+
+## Placeholders
 
 CooldownsX adds placeholders to plugins that support PlaceholderAPI.
 Review the table below for placeholder information:
@@ -12,7 +17,7 @@ Review the table below for placeholder information:
 | %cooldownsx_time_left_&lt;id&gt;%         | The amount of seconds left for a specific cooldown. (integer) | 5              |
 | %cooldownsx_time_left_decimal_&lt;id&gt;% | The amount of seconds left for a specific cooldown. (decimal) | 5.2            |
 
-# API Information
+## API Information
 
 CooldownsX has a useful API that is hosted on my own repository.
 To use the api, add the following values to your `pom.xml` file:

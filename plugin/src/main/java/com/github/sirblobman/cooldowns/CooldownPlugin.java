@@ -8,8 +8,8 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
-import com.github.sirblobman.api.bstats.bukkit.Metrics;
-import com.github.sirblobman.api.bstats.charts.SimplePie;
+import com.github.sirblobman.api.shaded.bstats.bukkit.Metrics;
+import com.github.sirblobman.api.shaded.bstats.charts.SimplePie;
 import com.github.sirblobman.api.configuration.ConfigurationManager;
 import com.github.sirblobman.api.core.CorePlugin;
 import com.github.sirblobman.api.language.Language;
@@ -80,7 +80,7 @@ public final class CooldownPlugin extends ConfigurablePlugin implements ICooldow
         registerHooks();
 
         registerUpdateChecker();
-        registerbStats();
+        register_bStats();
     }
 
     @Override
@@ -173,7 +173,7 @@ public final class CooldownPlugin extends ConfigurablePlugin implements ICooldow
         updateManager.addResource(this, 41981L);
     }
 
-    private void registerbStats() {
+    private void register_bStats() {
         Metrics metrics = new Metrics(this, 16126);
         SimplePie languagePie = new SimplePie("selected_language", this::getDefaultLanguageCode);
         metrics.addCustomChart(languagePie);
