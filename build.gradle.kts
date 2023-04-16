@@ -1,4 +1,4 @@
-val apiVersion = fetchProperty("api.version", "invalid")
+val apiVersion = fetchProperty("version.api", "invalid")
 rootProject.ext.set("apiVersion", apiVersion)
 
 val mavenUsername = fetchEnv("MAVEN_DEPLOY_USR", "mavenUsernameSirBlobman", "")
