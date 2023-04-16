@@ -1,17 +1,39 @@
-val apiVersion = findProperty("version.api") ?: "invalid"
+val apiVersion = fetchProperty("api.version", "invalid")
 rootProject.ext.set("apiVersion", apiVersion)
 
-val mavenDeployUsername = System.getenv("MAVEN_DEPLOY_USR") ?: findProperty("mavenUsernameSirBlobman") ?: ""
-rootProject.ext.set("mavenUsername", mavenDeployUsername)
+val mavenUsername = fetchEnv("MAVEN_DEPLOY_USR", "mavenUsernameSirBlobman", "")
+rootProject.ext.set("mavenUsername", mavenUsername)
 
-val mavenDeployPassword = System.getenv("MAVEN_DEPLOY_PSW") ?: findProperty("mavenPasswordSirBlobman") ?: ""
-rootProject.ext.set("mavenPassword", mavenDeployPassword)
+val mavenPassword = fetchEnv("MAVEN_DEPLOY_PSW", "mavenPasswordSirBlobman", "")
+rootProject.ext.set("mavenPassword", mavenPassword)
 
-val baseVersion = findProperty("version.base") ?: "invalid"
-val betaString = ((findProperty("version.beta") ?: "false") as String)
-val jenkinsBuildNumber = System.getenv("BUILD_NUMBER") ?: "Unofficial"
+val baseVersion = fetchProperty("version.base", "invalid")
+val betaString = fetchProperty("version.beta", "false")
+val jenkinsBuildNumber = fetchEnv("BUILD_NUMBER", null, "Unofficial")
 
 val betaBoolean = betaString.toBoolean()
 val betaVersion = if (betaBoolean) "Beta-" else ""
 val calculatedVersion = "$baseVersion.$betaVersion$jenkinsBuildNumber"
 rootProject.ext.set("pluginVersion", calculatedVersion)
+
+fun fetchProperty(propertyName: String, defaultValue: String): String {
+    val found = findProperty(propertyName)
+    if (found != null) {
+        return found.toString()
+    }
+
+    return defaultValue
+}
+
+fun fetchEnv(envName: String, propertyName: String?, defaultValue: String): String {
+    val found = System.getenv(envName)
+    if (found != null) {
+        return found
+    }
+
+    if (propertyName != null) {
+        return fetchProperty(propertyName, defaultValue)
+    }
+
+    return defaultValue
+}
