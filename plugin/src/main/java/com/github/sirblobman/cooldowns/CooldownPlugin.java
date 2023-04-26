@@ -8,7 +8,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitScheduler;
 
 import com.github.sirblobman.api.configuration.ConfigurationManager;
 import com.github.sirblobman.api.core.CorePlugin;
@@ -50,7 +49,7 @@ public final class CooldownPlugin extends ConfigurablePlugin implements ICooldow
     }
 
     @Override
-    public @NotNull JavaPlugin getPlugin() {
+    public @NotNull ConfigurablePlugin getPlugin() {
         return this;
     }
 
@@ -91,8 +90,7 @@ public final class CooldownPlugin extends ConfigurablePlugin implements ICooldow
 
     @Override
     public void onDisable() {
-        BukkitScheduler scheduler = Bukkit.getScheduler();
-        scheduler.cancelTasks(this);
+        // Empty Method
     }
 
     @Override
@@ -116,9 +114,6 @@ public final class CooldownPlugin extends ConfigurablePlugin implements ICooldow
 
         ICooldownManager cooldownManager = getCooldownManager();
         cooldownManager.reloadConfig();
-
-        BukkitScheduler scheduler = Bukkit.getScheduler();
-        scheduler.cancelTasks(this);
         registerTasks();
     }
 
@@ -178,7 +173,7 @@ public final class CooldownPlugin extends ConfigurablePlugin implements ICooldow
 
     private void registerUpdateChecker() {
         CorePlugin corePlugin = JavaPlugin.getPlugin(CorePlugin.class);
-        SpigotUpdateManager updateManager = corePlugin.getSpigotUpdateManager();
+        SpigotUpdateManager<?> updateManager = corePlugin.getSpigotUpdateManager();
         updateManager.addResource(this, 41981L);
     }
 

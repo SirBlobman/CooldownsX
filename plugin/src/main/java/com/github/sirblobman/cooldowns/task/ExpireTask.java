@@ -8,12 +8,12 @@ import org.jetbrains.annotations.NotNull;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import com.github.sirblobman.cooldowns.CooldownPlugin;
+import com.github.sirblobman.cooldowns.api.ICooldownsX;
 import com.github.sirblobman.cooldowns.api.configuration.ICooldownSettings;
 import com.github.sirblobman.cooldowns.api.data.ICooldownData;
 
 public final class ExpireTask extends CooldownTask {
-    public ExpireTask(@NotNull CooldownPlugin plugin) {
+    public ExpireTask(@NotNull ICooldownsX plugin) {
         super(plugin);
     }
 

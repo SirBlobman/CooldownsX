@@ -2,12 +2,12 @@ package com.github.sirblobman.cooldowns.api;
 
 import org.jetbrains.annotations.NotNull;
 
-import org.bukkit.plugin.java.JavaPlugin;
-
 import com.github.sirblobman.api.configuration.ConfigurationManager;
 import com.github.sirblobman.api.configuration.PlayerDataManager;
+import com.github.sirblobman.api.folia.IFoliaPlugin;
 import com.github.sirblobman.api.language.LanguageManager;
 import com.github.sirblobman.api.nms.MultiVersionHandler;
+import com.github.sirblobman.api.plugin.ConfigurablePlugin;
 import com.github.sirblobman.cooldowns.api.dictionary.IDictionary;
 import com.github.sirblobman.cooldowns.api.manager.ICooldownManager;
 import com.github.sirblobman.api.shaded.xseries.XMaterial;
@@ -18,11 +18,11 @@ import com.github.sirblobman.api.shaded.xseries.XPotion;
  *
  * @author SirBlobman
  */
-public interface ICooldownsX {
+public interface ICooldownsX extends IFoliaPlugin<ConfigurablePlugin> {
     /**
      * @return The Bukkit plugin instance for CooldownsX.
      */
-    @NotNull JavaPlugin getPlugin();
+    @NotNull ConfigurablePlugin getPlugin();
 
     /**
      * @return The ConfigurationManager instance for CooldownsX.

@@ -7,6 +7,8 @@ main: "${pluginMainClass}"
 version: "${pluginVersion}"
 api-version: "1.13"
 
+folia-supported: true
+
 authors:
   - "SirBlobman"
 

@@ -12,25 +12,25 @@ import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitScheduler;
 
 import com.github.sirblobman.api.configuration.ConfigurationManager;
+import com.github.sirblobman.api.folia.FoliaHelper;
+import com.github.sirblobman.api.folia.scheduler.TaskScheduler;
 import com.github.sirblobman.api.language.LanguageManager;
 import com.github.sirblobman.api.language.replacer.DoubleReplacer;
 import com.github.sirblobman.api.language.replacer.LongReplacer;
 import com.github.sirblobman.api.language.replacer.Replacer;
 import com.github.sirblobman.api.language.replacer.StringReplacer;
+import com.github.sirblobman.api.menu.task.CloseInventoryTask;
 import com.github.sirblobman.api.nms.MultiVersionHandler;
 import com.github.sirblobman.api.nms.PlayerHandler;
+import com.github.sirblobman.api.plugin.ConfigurablePlugin;
 import com.github.sirblobman.api.plugin.listener.PluginListener;
-import com.github.sirblobman.api.utility.Validate;
 import com.github.sirblobman.api.utility.VersionUtility;
 import com.github.sirblobman.cooldowns.api.ICooldownsX;
 import com.github.sirblobman.cooldowns.api.configuration.CooldownType;
@@ -49,7 +49,7 @@ import com.github.sirblobman.api.shaded.xseries.XPotion;
  *
  * @author SirBlobman
  */
-public abstract class CooldownListener extends PluginListener<JavaPlugin> {
+public abstract class CooldownListener extends PluginListener<ConfigurablePlugin> {
     private final ICooldownsX plugin;
 
     /**
@@ -186,18 +186,12 @@ public abstract class CooldownListener extends PluginListener<JavaPlugin> {
      * @param ticks    The amount of time (in ticks) for the cooldown.
      */
     protected final void sendPacket(@NotNull Player player, @NotNull XMaterial material, int ticks) {
-        Validate.notNull(player, "player must not be null!");
-        Validate.notNull(material, "material must not be null!");
-
         Material bukkitMaterial = material.parseMaterial();
         if (bukkitMaterial == null) {
             return;
         }
 
-        JavaPlugin plugin = getPlugin();
-        Runnable task = () -> sendPacket0(player, bukkitMaterial, ticks);
-        BukkitScheduler scheduler = Bukkit.getScheduler();
-        scheduler.runTask(plugin, task);
+        sendPacketBukkit(player, bukkitMaterial, ticks);
     }
 
     /**
@@ -207,7 +201,7 @@ public abstract class CooldownListener extends PluginListener<JavaPlugin> {
      * @param material The material that will have a cooldown.
      * @param ticks    The amount of time (in ticks) for the cooldown.
      */
-    private void sendPacket0(@NotNull Player player, @NotNull Material material, int ticks) {
+    private void sendPacketBukkit(@NotNull Player player, @NotNull Material material, int ticks) {
         ICooldownsX plugin = getCooldownsX();
         MultiVersionHandler multiVersionHandler = plugin.getMultiVersionHandler();
         PlayerHandler playerHandler = multiVersionHandler.getPlayerHandler();
@@ -464,8 +458,12 @@ public abstract class CooldownListener extends PluginListener<JavaPlugin> {
      * @param player The player that needs an update.
      */
     protected final void updateInventoryLater(@NotNull Player player) {
-        JavaPlugin plugin = getPlugin();
-        BukkitScheduler scheduler = Bukkit.getScheduler();
-        scheduler.runTaskLater(plugin, player::closeInventory, 1L);
+        ICooldownsX cooldownsX = getCooldownsX();
+        FoliaHelper<ConfigurablePlugin> foliaHelper = cooldownsX.getFoliaHelper();
+        TaskScheduler<ConfigurablePlugin> scheduler = foliaHelper.getScheduler();
+
+        ConfigurablePlugin plugin = cooldownsX.getPlugin();
+        CloseInventoryTask<ConfigurablePlugin> task = new CloseInventoryTask<>(plugin, player);
+        scheduler.scheduleEntityTask(task);
     }
 }

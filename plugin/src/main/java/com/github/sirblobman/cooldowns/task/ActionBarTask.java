@@ -13,7 +13,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.github.sirblobman.api.language.LanguageManager;
-import com.github.sirblobman.cooldowns.CooldownPlugin;
+import com.github.sirblobman.cooldowns.api.ICooldownsX;
 import com.github.sirblobman.cooldowns.api.configuration.IActionBarSettings;
 import com.github.sirblobman.cooldowns.api.configuration.ICooldownSettings;
 import com.github.sirblobman.cooldowns.api.data.ICooldownData;
@@ -21,7 +21,7 @@ import com.github.sirblobman.api.shaded.adventure.text.Component;
 import com.github.sirblobman.api.shaded.adventure.text.minimessage.MiniMessage;
 
 public final class ActionBarTask extends CooldownTask {
-    public ActionBarTask(@NotNull CooldownPlugin plugin) {
+    public ActionBarTask(@NotNull ICooldownsX plugin) {
         super(plugin);
     }
 
