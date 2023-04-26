@@ -43,7 +43,7 @@ exampleOne:
   # Requires CombatLogX
   # Valid combat modes can be found above.
   # Default: "IGNORE"
-  combat-mode: "FALSE"
+  combat-mode: "IGNORE"
 
   # Requires CombatLogX and 'combat-mode: "DIFFERENT"'
   # Default: 5 seconds
