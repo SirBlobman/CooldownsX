@@ -3,6 +3,9 @@ package com.github.sirblobman.cooldowns.api.configuration;
 import java.util.List;
 import java.util.Optional;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permissible;
@@ -10,9 +13,6 @@ import org.bukkit.permissions.Permission;
 
 import com.github.sirblobman.api.shaded.xseries.XMaterial;
 import com.github.sirblobman.api.shaded.xseries.XPotion;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Interface for CooldownsX configuration settings.
@@ -112,25 +112,25 @@ public interface ICooldownSettings {
      * @see #getCombatCooldownSeconds()
      * @see #getCooldownSeconds()
      */
-    int getCooldownSeconds(Player player);
+    int getCooldownSeconds(@NotNull Player player);
 
     /**
      * @param material The XMaterial value.
      * @return {@code true} if the material list exists and contains the value.
      */
-    boolean hasMaterial(XMaterial material);
+    boolean hasMaterial(@NotNull XMaterial material);
 
     /**
      * @param potion The XPotion value.
      * @return {@code true} if the potion list exists and contains the value.
      */
-    boolean hasPotion(XPotion potion);
+    boolean hasPotion(@NotNull XPotion potion);
 
     /**
      * @param world The world object to check.
      * @return {@code true} if the cooldown should not trigger in the specified world.
      */
-    boolean isDisabled(World world);
+    boolean isDisabled(@NotNull World world);
 
     /**
      * @param permissible The object that may or may not have the bypass permission. Usually a {@link Player}.
@@ -138,5 +138,5 @@ public interface ICooldownSettings {
      * @see #getBypassPermissionName()
      * @see #getBypassPermission()
      */
-    boolean canBypass(Permissible permissible);
+    boolean canBypass(@NotNull Permissible permissible);
 }
