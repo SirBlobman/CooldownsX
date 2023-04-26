@@ -9,6 +9,9 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -18,8 +21,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
-import com.github.sirblobman.api.shaded.adventure.text.Component;
-import com.github.sirblobman.api.shaded.adventure.text.minimessage.MiniMessage;
 import com.github.sirblobman.api.configuration.ConfigurationManager;
 import com.github.sirblobman.api.language.LanguageManager;
 import com.github.sirblobman.api.language.replacer.DoubleReplacer;
@@ -31,17 +32,16 @@ import com.github.sirblobman.api.nms.PlayerHandler;
 import com.github.sirblobman.api.plugin.listener.PluginListener;
 import com.github.sirblobman.api.utility.Validate;
 import com.github.sirblobman.api.utility.VersionUtility;
-import com.github.sirblobman.api.shaded.xseries.XMaterial;
-import com.github.sirblobman.api.shaded.xseries.XPotion;
 import com.github.sirblobman.cooldowns.api.ICooldownsX;
 import com.github.sirblobman.cooldowns.api.configuration.CooldownType;
 import com.github.sirblobman.cooldowns.api.configuration.ICooldownSettings;
 import com.github.sirblobman.cooldowns.api.data.ICooldownData;
 import com.github.sirblobman.cooldowns.api.dictionary.IDictionary;
 import com.github.sirblobman.cooldowns.api.manager.ICooldownManager;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import com.github.sirblobman.api.shaded.adventure.text.Component;
+import com.github.sirblobman.api.shaded.adventure.text.minimessage.MiniMessage;
+import com.github.sirblobman.api.shaded.xseries.XMaterial;
+import com.github.sirblobman.api.shaded.xseries.XPotion;
 
 /**
  * A custom abstract listener class for all CooldownsX listeners.
@@ -158,7 +158,7 @@ public abstract class CooldownListener extends PluginListener<JavaPlugin> {
      * @return The XMaterial value, or {@link XMaterial#AIR} if there is an error.
      */
     @SuppressWarnings("deprecation")
-    protected final @NotNull XMaterial getXMaterial(Block block) {
+    protected final @NotNull XMaterial getXMaterial(@Nullable Block block) {
         if (block == null) {
             return XMaterial.AIR;
         }

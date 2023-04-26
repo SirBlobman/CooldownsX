@@ -2,6 +2,8 @@ package com.github.sirblobman.cooldowns.listener;
 
 import java.util.Set;
 
+import org.jetbrains.annotations.NotNull;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -9,16 +11,15 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
 
 import com.github.sirblobman.api.utility.ItemUtility;
-import com.github.sirblobman.api.shaded.xseries.XMaterial;
-import com.github.sirblobman.cooldowns.CooldownPlugin;
+import com.github.sirblobman.cooldowns.api.ICooldownsX;
 import com.github.sirblobman.cooldowns.api.configuration.CooldownType;
 import com.github.sirblobman.cooldowns.api.configuration.ICooldownSettings;
 import com.github.sirblobman.cooldowns.api.data.ICooldownData;
 import com.github.sirblobman.cooldowns.api.listener.CooldownListener;
+import com.github.sirblobman.api.shaded.xseries.XMaterial;
 
 public final class ListenerConsume extends CooldownListener {
-
-    public ListenerConsume(CooldownPlugin plugin) {
+    public ListenerConsume(@NotNull ICooldownsX plugin) {
         super(plugin);
     }
 
@@ -39,7 +40,7 @@ public final class ListenerConsume extends CooldownListener {
         checkFood(player, material, e);
     }
 
-    private void checkFood(Player player, XMaterial material, PlayerItemConsumeEvent e) {
+    private void checkFood(@NotNull Player player, @NotNull XMaterial material, @NotNull PlayerItemConsumeEvent e) {
         printDebug("Checking consume food for player " + player.getName() + "...");
         Set<ICooldownSettings> cooldownSettingsList = fetchCooldowns(CooldownType.CONSUME_ITEM);
         if (cooldownSettingsList.isEmpty()) {

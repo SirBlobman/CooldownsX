@@ -8,6 +8,9 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
@@ -15,60 +18,51 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import com.github.sirblobman.api.configuration.PlayerDataManager;
-import com.github.sirblobman.api.utility.Validate;
-import com.github.sirblobman.cooldowns.CooldownPlugin;
+import com.github.sirblobman.cooldowns.api.ICooldownsX;
 import com.github.sirblobman.cooldowns.api.configuration.CooldownType;
 import com.github.sirblobman.cooldowns.api.configuration.ICooldownSettings;
 import com.github.sirblobman.cooldowns.api.data.ICooldownData;
-import com.github.sirblobman.cooldowns.manager.CooldownManager;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import com.github.sirblobman.cooldowns.api.manager.ICooldownManager;
 
 public final class CooldownData implements ICooldownData {
-    private final CooldownPlugin plugin;
+    private final ICooldownsX plugin;
     private final UUID playerId;
     private final Map<ICooldownSettings, Long> activeCooldownMap;
     private final Map<ICooldownSettings, Integer> amountCooldownMap;
 
-    public CooldownData(CooldownPlugin plugin, OfflinePlayer player) {
-        Validate.notNull(player, "player must not be null!");
-
-        this.plugin = Validate.notNull(plugin, "plugin must not be null!");
+    public CooldownData(@NotNull ICooldownsX plugin, @NotNull OfflinePlayer player) {
+        this.plugin = plugin;
         this.playerId = player.getUniqueId();
         this.activeCooldownMap = new ConcurrentHashMap<>();
         this.amountCooldownMap = new ConcurrentHashMap<>();
     }
 
-    @NotNull
     @Override
-    public UUID getPlayerId() {
+    public @NotNull UUID getPlayerId() {
         return this.playerId;
     }
 
-    @NotNull
     @Override
-    public OfflinePlayer getOfflinePlayer() {
+    public @NotNull OfflinePlayer getOfflinePlayer() {
         UUID playerId = getPlayerId();
         return Bukkit.getOfflinePlayer(playerId);
     }
 
-    @Nullable
     @Override
-    public Player getPlayer() {
+    public @Nullable Player getPlayer() {
         UUID playerId = getPlayerId();
         return Bukkit.getPlayer(playerId);
     }
 
     @Override
-    public Set<ICooldownSettings> getActiveCooldowns() {
+    public @NotNull Set<ICooldownSettings> getActiveCooldowns() {
         Set<ICooldownSettings> keySet = this.activeCooldownMap.keySet();
         Set<ICooldownSettings> activeCooldownSet = new HashSet<>(keySet);
         return Collections.unmodifiableSet(activeCooldownSet);
     }
 
     @Override
-    public Set<ICooldownSettings> getActiveCooldowns(CooldownType cooldownType) {
+    public @NotNull Set<ICooldownSettings> getActiveCooldowns(@NotNull CooldownType cooldownType) {
         Set<ICooldownSettings> allActiveCooldowns = getActiveCooldowns();
         Set<ICooldownSettings> matchingSet = new HashSet<>();
 
@@ -83,14 +77,12 @@ public final class CooldownData implements ICooldownData {
     }
 
     @Override
-    public long getCooldownExpireTime(ICooldownSettings settings) {
-        Validate.notNull(settings, "settings must not be null!");
+    public long getCooldownExpireTime(@NotNull ICooldownSettings settings) {
         return this.activeCooldownMap.getOrDefault(settings, 0L);
     }
 
     @Override
-    public void setCooldown(ICooldownSettings settings, long expireMillis) {
-        Validate.notNull(settings, "settings must not be null!");
+    public void setCooldown(@NotNull ICooldownSettings settings, long expireMillis) {
         long systemMillis = System.currentTimeMillis();
         if (systemMillis >= expireMillis) {
             return;
@@ -100,25 +92,22 @@ public final class CooldownData implements ICooldownData {
     }
 
     @Override
-    public void removeCooldown(ICooldownSettings settings) {
-        Validate.notNull(settings, "settings must not be null!");
+    public void removeCooldown(@NotNull ICooldownSettings settings) {
         this.activeCooldownMap.remove(settings);
     }
 
     @Override
-    public int getActionCount(ICooldownSettings settings) {
-        Validate.notNull(settings, "settings must not be null!");
+    public int getActionCount(@NotNull ICooldownSettings settings) {
         return this.amountCooldownMap.getOrDefault(settings, 0);
     }
 
     @Override
-    public void setActionCount(ICooldownSettings settings, int amount) {
-        Validate.notNull(settings, "settings must not be null!");
+    public void setActionCount(@NotNull ICooldownSettings settings, int amount) {
         this.amountCooldownMap.put(settings, amount);
     }
 
     public void loadActionCounts() {
-        CooldownPlugin plugin = getPlugin();
+        ICooldownsX plugin = getCooldownsX();
         PlayerDataManager playerDataManager = plugin.getPlayerDataManager();
         this.amountCooldownMap.clear();
 
@@ -129,7 +118,7 @@ public final class CooldownData implements ICooldownData {
             return;
         }
 
-        CooldownManager cooldownManager = plugin.getCooldownManager();
+        ICooldownManager cooldownManager = plugin.getCooldownManager();
         Set<String> cooldownIdSet = actionCountSection.getKeys(false);
         for (String cooldownId : cooldownIdSet) {
             ICooldownSettings settings = cooldownManager.getCooldownSettings(cooldownId);
@@ -144,7 +133,7 @@ public final class CooldownData implements ICooldownData {
 
     @Override
     public void saveActionCounts() {
-        CooldownPlugin plugin = getPlugin();
+        ICooldownsX plugin = getCooldownsX();
         PlayerDataManager playerDataManager = plugin.getPlayerDataManager();
 
         OfflinePlayer player = getOfflinePlayer();
@@ -163,7 +152,7 @@ public final class CooldownData implements ICooldownData {
         playerDataManager.save(player);
     }
 
-    private CooldownPlugin getPlugin() {
+    private @NotNull ICooldownsX getCooldownsX() {
         return this.plugin;
     }
 }

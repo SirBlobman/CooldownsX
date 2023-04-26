@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.CrossbowMeta;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -18,7 +21,7 @@ import com.github.sirblobman.api.utility.VersionUtility;
 import com.github.sirblobman.api.shaded.xseries.XPotion;
 
 public final class ModernHelper {
-    public static boolean isCrossbowReloading(ItemStack item) {
+    public static boolean isCrossbowReloading(@Nullable ItemStack item) {
         if (ItemUtility.isAir(item)) {
             return false;
         }
@@ -37,7 +40,7 @@ public final class ModernHelper {
         return !crossbowMeta.hasChargedProjectiles();
     }
 
-    public static List<XPotion> getPotionEffects(ItemStack item) {
+    public static @NotNull List<XPotion> getPotionEffects(@Nullable ItemStack item) {
         if (ItemUtility.isAir(item)) {
             return Collections.emptyList();
         }

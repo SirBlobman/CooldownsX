@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+import org.jetbrains.annotations.NotNull;
+
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.ThrownPotion;
@@ -16,15 +18,15 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.ProjectileSource;
 
-import com.github.sirblobman.api.shaded.xseries.XPotion;
 import com.github.sirblobman.cooldowns.api.ICooldownsX;
 import com.github.sirblobman.cooldowns.api.configuration.CooldownType;
 import com.github.sirblobman.cooldowns.api.configuration.ICooldownSettings;
 import com.github.sirblobman.cooldowns.api.data.ICooldownData;
 import com.github.sirblobman.cooldowns.api.listener.CooldownListener;
+import com.github.sirblobman.api.shaded.xseries.XPotion;
 
 public final class ListenerPotionThrow extends CooldownListener {
-    public ListenerPotionThrow(ICooldownsX plugin) {
+    public ListenerPotionThrow(@NotNull ICooldownsX plugin) {
         super(plugin);
     }
 
@@ -55,7 +57,7 @@ public final class ListenerPotionThrow extends CooldownListener {
         checkPotionThrow(player, potionList, e);
     }
 
-    private List<XPotion> getPotionEffects(ThrownPotion thrownPotion) {
+    private List<XPotion> getPotionEffects(@NotNull ThrownPotion thrownPotion) {
         List<XPotion> potionList = new ArrayList<>();
 
         Collection<PotionEffect> thrownPotionEffects = thrownPotion.getEffects();
@@ -68,7 +70,7 @@ public final class ListenerPotionThrow extends CooldownListener {
         return potionList;
     }
 
-    private void checkPotionThrow(Player player, List<XPotion> potionList, Cancellable e) {
+    private void checkPotionThrow(@NotNull Player player, @NotNull List<XPotion> potionList, @NotNull Cancellable e) {
         printDebug("Checking potion throw for player '" + player.getName() + "'...");
         printDebug("Potions to check: " + potionList);
 

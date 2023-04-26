@@ -6,6 +6,9 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -16,16 +19,13 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
 import com.github.sirblobman.api.utility.Validate;
-import com.github.sirblobman.api.shaded.xseries.XMaterial;
-import com.github.sirblobman.api.shaded.xseries.XPotion;
 import com.github.sirblobman.combatlogx.api.ICombatLogX;
 import com.github.sirblobman.combatlogx.api.manager.ICombatManager;
 import com.github.sirblobman.cooldowns.api.configuration.CombatMode;
 import com.github.sirblobman.cooldowns.api.configuration.CooldownType;
 import com.github.sirblobman.cooldowns.api.configuration.ICooldownSettings;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import com.github.sirblobman.api.shaded.xseries.XMaterial;
+import com.github.sirblobman.api.shaded.xseries.XPotion;
 
 public final class CooldownSettings implements ICooldownSettings {
     private final String id;
@@ -52,8 +52,8 @@ public final class CooldownSettings implements ICooldownSettings {
 
     private String messageFormat;
 
-    public CooldownSettings(String id) {
-        this.id = Validate.notEmpty(id, "id must not be empty!");
+    public CooldownSettings(@NotNull String id) {
+        this.id = id;
 
         this.amount = 1;
         this.resetAmount = false;
@@ -78,9 +78,8 @@ public final class CooldownSettings implements ICooldownSettings {
         this.messageFormat = null;
     }
 
-    @NotNull
     @Override
-    public String getId() {
+    public @NotNull String getId() {
         return this.id;
     }
 
@@ -107,19 +106,17 @@ public final class CooldownSettings implements ICooldownSettings {
         }
     }
 
-    @NotNull
     @Override
-    public CooldownType getCooldownType() {
+    public @NotNull CooldownType getCooldownType() {
         return this.cooldownType;
     }
 
-    public void setCooldownType(CooldownType cooldownType) {
+    public void setCooldownType(@NotNull CooldownType cooldownType) {
         this.cooldownType = cooldownType;
     }
 
-    @NotNull
     @Override
-    public Optional<List<XMaterial>> getMaterialList() {
+    public @NotNull Optional<List<XMaterial>> getMaterialList() {
         return Optional.ofNullable(this.materialList);
     }
 
@@ -127,9 +124,8 @@ public final class CooldownSettings implements ICooldownSettings {
         this.materialList = materialList;
     }
 
-    @NotNull
     @Override
-    public Optional<List<XPotion>> getPotionList() {
+    public @NotNull Optional<List<XPotion>> getPotionList() {
         return Optional.ofNullable(this.potionList);
     }
 
@@ -137,20 +133,18 @@ public final class CooldownSettings implements ICooldownSettings {
         this.potionList = potionList;
     }
 
-    @Nullable
     @Override
-    public String getBypassPermissionName() {
+    public @Nullable String getBypassPermissionName() {
         return this.bypassPermissionName;
     }
 
-    public void setBypassPermissionName(String bypassPermissionName) {
+    public void setBypassPermissionName(@Nullable String bypassPermissionName) {
         this.bypassPermissionName = bypassPermissionName;
         this.bypassPermission = null;
     }
 
-    @Nullable
     @Override
-    public Permission getBypassPermission() {
+    public @Nullable Permission getBypassPermission() {
         if (this.bypassPermission != null) {
             return this.bypassPermission;
         }
@@ -166,7 +160,7 @@ public final class CooldownSettings implements ICooldownSettings {
     }
 
     @Override
-    public boolean canBypass(Permissible permissible) {
+    public boolean canBypass(@NotNull Permissible permissible) {
         Permission permission = getBypassPermission();
         if (permission == null) {
             return false;
@@ -184,12 +178,11 @@ public final class CooldownSettings implements ICooldownSettings {
         this.usePacketCooldown = usePacketCooldown;
     }
 
-    @NotNull
-    public CombatMode getCombatMode() {
+    public @NotNull CombatMode getCombatMode() {
         return this.combatMode;
     }
 
-    public void setCombatMode(CombatMode combatMode) {
+    public void setCombatMode(@NotNull CombatMode combatMode) {
         this.combatMode = combatMode;
     }
 
@@ -204,8 +197,8 @@ public final class CooldownSettings implements ICooldownSettings {
         }
     }
 
-    @NotNull
-    public List<String> getDisabledWorldList() {
+    @Override
+    public @NotNull List<String> getDisabledWorldList() {
         return this.disabledWorldList;
     }
 
@@ -224,29 +217,25 @@ public final class CooldownSettings implements ICooldownSettings {
     }
 
     @Override
-    public boolean isDisabled(World world) {
-        Validate.notNull(world, "world must not be null!");
+    public boolean isDisabled(@NotNull World world) {
         String worldName = world.getName();
-
         List<String> disabledWorldList = getDisabledWorldList();
         boolean contains = disabledWorldList.contains(worldName);
         boolean invert = isInvertWorldList();
         return (invert != contains);
     }
 
-    @NotNull
     @Override
-    public ActionBarSettings getActionBarSettings() {
+    public @NotNull ActionBarSettings getActionBarSettings() {
         return this.actionBarSettings;
     }
 
-    public void setActionBarSettings(ActionBarSettings actionBarSettings) {
-        Validate.notNull(actionBarSettings, "actionBarSettings must not be null!");
+    public void setActionBarSettings(@NotNull ActionBarSettings actionBarSettings) {
         this.actionBarSettings = actionBarSettings;
     }
 
     @Override
-    public int getCooldownSeconds(Player player) {
+    public int getCooldownSeconds(@NotNull Player player) {
         CombatMode combatMode = getCombatMode();
         if (combatMode == CombatMode.IGNORE || isCombatLogXMissing()) {
             return getCooldownSeconds();
@@ -282,7 +271,7 @@ public final class CooldownSettings implements ICooldownSettings {
     }
 
     @Override
-    public boolean hasMaterial(XMaterial material) {
+    public boolean hasMaterial(@NotNull XMaterial material) {
         Optional<List<XMaterial>> optionalMaterialList = getMaterialList();
         if (optionalMaterialList.isPresent()) {
             List<XMaterial> materialList = optionalMaterialList.get();
@@ -293,7 +282,7 @@ public final class CooldownSettings implements ICooldownSettings {
     }
 
     @Override
-    public boolean hasPotion(XPotion potion) {
+    public boolean hasPotion(@NotNull XPotion potion) {
         Optional<List<XPotion>> optionalPotionList = getPotionList();
         if (optionalPotionList.isPresent()) {
             List<XPotion> potionList = optionalPotionList.get();
@@ -303,13 +292,12 @@ public final class CooldownSettings implements ICooldownSettings {
         return false;
     }
 
-    @Nullable
     @Override
-    public String getMessageFormat() {
+    public @Nullable String getMessageFormat() {
         return this.messageFormat;
     }
 
-    public void setMessageFormat(String messageFormat) {
+    public void setMessageFormat(@Nullable String messageFormat) {
         this.messageFormat = messageFormat;
     }
 
@@ -323,7 +311,7 @@ public final class CooldownSettings implements ICooldownSettings {
     }
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         String id = getId();
         return String.format(Locale.US, "CooldownSettings{%s}", id);
     }
@@ -335,7 +323,7 @@ public final class CooldownSettings implements ICooldownSettings {
     }
 
     @Override
-    public boolean equals(Object object) {
+    public boolean equals(@Nullable Object object) {
         if (super.equals(object)) {
             return true;
         }

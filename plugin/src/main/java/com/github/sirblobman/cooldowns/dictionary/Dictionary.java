@@ -3,10 +3,11 @@ package com.github.sirblobman.cooldowns.dictionary;
 import java.util.EnumMap;
 import java.util.Map;
 
+import org.jetbrains.annotations.NotNull;
+
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import com.github.sirblobman.api.configuration.ConfigurationManager;
-import com.github.sirblobman.api.utility.Validate;
 import com.github.sirblobman.cooldowns.api.ICooldownsX;
 import com.github.sirblobman.cooldowns.api.dictionary.IDictionary;
 
@@ -16,44 +17,44 @@ public abstract class Dictionary<E extends Enum<E>> implements IDictionary<E> {
     private final Class<E> enumClass;
     private final Map<E, String> dictionary;
 
-    public Dictionary(ICooldownsX plugin, String fileName, Class<E> enumClass) {
-        this.plugin = Validate.notNull(plugin, "plugin must not be null!");
-        this.fileName = Validate.notEmpty(fileName, "fileName must not be empty!");
-        this.enumClass = Validate.notNull(enumClass, "enumClass must not be null!");
+    public Dictionary(@NotNull ICooldownsX plugin, @NotNull String fileName, @NotNull Class<E> enumClass) {
+        this.plugin = plugin;
+        this.fileName = fileName;
+        this.enumClass = enumClass;
         this.dictionary = new EnumMap<>(this.enumClass);
     }
 
-    protected final ICooldownsX getPlugin() {
+    protected final @NotNull ICooldownsX getPlugin() {
         return this.plugin;
     }
 
-    protected final String getFileName() {
+    protected final @NotNull String getFileName() {
         return this.fileName;
     }
 
-    protected final Class<E> getEnumClass() {
+    protected final @NotNull Class<E> getEnumClass() {
         return this.enumClass;
     }
 
-    protected final ConfigurationManager getConfigurationManager() {
+    protected final @NotNull ConfigurationManager getConfigurationManager() {
         ICooldownsX plugin = getPlugin();
         return plugin.getConfigurationManager();
     }
 
-    protected final YamlConfiguration getConfiguration() {
+    protected final @NotNull YamlConfiguration getConfiguration() {
         String fileName = getFileName();
         ConfigurationManager configurationManager = getConfigurationManager();
         return configurationManager.get(fileName);
     }
 
     @Override
-    public String get(E key) {
+    public @NotNull String get(@NotNull E key) {
         String defaultName = key.toString();
         return this.dictionary.getOrDefault(key, defaultName);
     }
 
     @Override
-    public void set(E key, String value) {
+    public void set(@NotNull E key, @NotNull String value) {
         this.dictionary.put(key, value);
     }
 

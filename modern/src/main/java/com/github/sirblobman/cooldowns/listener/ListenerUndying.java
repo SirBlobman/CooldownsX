@@ -2,21 +2,23 @@ package com.github.sirblobman.cooldowns.listener;
 
 import java.util.Set;
 
+import org.jetbrains.annotations.NotNull;
+
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityResurrectEvent;
 
-import com.github.sirblobman.api.shaded.xseries.XMaterial;
 import com.github.sirblobman.cooldowns.api.ICooldownsX;
 import com.github.sirblobman.cooldowns.api.configuration.CooldownType;
 import com.github.sirblobman.cooldowns.api.configuration.ICooldownSettings;
 import com.github.sirblobman.cooldowns.api.data.ICooldownData;
 import com.github.sirblobman.cooldowns.api.listener.CooldownListener;
+import com.github.sirblobman.api.shaded.xseries.XMaterial;
 
 public final class ListenerUndying extends CooldownListener {
-    public ListenerUndying(ICooldownsX plugin) {
+    public ListenerUndying(@NotNull ICooldownsX plugin) {
         super(plugin);
     }
 

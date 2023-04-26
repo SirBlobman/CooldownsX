@@ -2,22 +2,24 @@ package com.github.sirblobman.cooldowns;
 
 import java.util.logging.Logger;
 
+import org.jetbrains.annotations.NotNull;
+
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
-import com.github.sirblobman.api.shaded.bstats.bukkit.Metrics;
-import com.github.sirblobman.api.shaded.bstats.charts.SimplePie;
 import com.github.sirblobman.api.configuration.ConfigurationManager;
 import com.github.sirblobman.api.core.CorePlugin;
 import com.github.sirblobman.api.language.Language;
 import com.github.sirblobman.api.language.LanguageManager;
 import com.github.sirblobman.api.plugin.ConfigurablePlugin;
-import com.github.sirblobman.api.update.UpdateManager;
+import com.github.sirblobman.api.update.SpigotUpdateManager;
 import com.github.sirblobman.api.utility.VersionUtility;
 import com.github.sirblobman.cooldowns.api.ICooldownsX;
+import com.github.sirblobman.cooldowns.api.dictionary.IDictionary;
+import com.github.sirblobman.cooldowns.api.manager.ICooldownManager;
 import com.github.sirblobman.cooldowns.command.CommandCooldownsX;
 import com.github.sirblobman.cooldowns.dictionary.MaterialDictionary;
 import com.github.sirblobman.cooldowns.dictionary.PotionDictionary;
@@ -31,6 +33,10 @@ import com.github.sirblobman.cooldowns.manager.CooldownManager;
 import com.github.sirblobman.cooldowns.placeholder.HookPlaceholderAPI;
 import com.github.sirblobman.cooldowns.task.ActionBarTask;
 import com.github.sirblobman.cooldowns.task.ExpireTask;
+import com.github.sirblobman.api.shaded.bstats.bukkit.Metrics;
+import com.github.sirblobman.api.shaded.bstats.charts.SimplePie;
+import com.github.sirblobman.api.shaded.xseries.XMaterial;
+import com.github.sirblobman.api.shaded.xseries.XPotion;
 
 public final class CooldownPlugin extends ConfigurablePlugin implements ICooldownsX {
     private final CooldownManager cooldownManager;
@@ -44,7 +50,7 @@ public final class CooldownPlugin extends ConfigurablePlugin implements ICooldow
     }
 
     @Override
-    public CooldownPlugin getPlugin() {
+    public @NotNull JavaPlugin getPlugin() {
         return this;
     }
 
@@ -100,15 +106,15 @@ public final class CooldownPlugin extends ConfigurablePlugin implements ICooldow
         LanguageManager languageManager = getLanguageManager();
         languageManager.reloadLanguages();
 
-        MaterialDictionary materialDictionary = getMaterialDictionary();
+        IDictionary<XMaterial> materialDictionary = getMaterialDictionary();
         materialDictionary.reloadConfiguration();
         materialDictionary.saveConfiguration();
 
-        PotionDictionary potionDictionary = getPotionDictionary();
+        IDictionary<XPotion> potionDictionary = getPotionDictionary();
         potionDictionary.reloadConfiguration();
         potionDictionary.saveConfiguration();
 
-        CooldownManager cooldownManager = getCooldownManager();
+        ICooldownManager cooldownManager = getCooldownManager();
         cooldownManager.reloadConfig();
 
         BukkitScheduler scheduler = Bukkit.getScheduler();
@@ -116,15 +122,18 @@ public final class CooldownPlugin extends ConfigurablePlugin implements ICooldow
         registerTasks();
     }
 
-    public CooldownManager getCooldownManager() {
+    @Override
+    public @NotNull ICooldownManager getCooldownManager() {
         return this.cooldownManager;
     }
 
-    public MaterialDictionary getMaterialDictionary() {
+    @Override
+    public @NotNull IDictionary<XMaterial> getMaterialDictionary() {
         return this.materialDictionary;
     }
 
-    public PotionDictionary getPotionDictionary() {
+    @Override
+    public @NotNull IDictionary<XPotion> getPotionDictionary() {
         return this.potionDictionary;
     }
 
@@ -169,7 +178,7 @@ public final class CooldownPlugin extends ConfigurablePlugin implements ICooldow
 
     private void registerUpdateChecker() {
         CorePlugin corePlugin = JavaPlugin.getPlugin(CorePlugin.class);
-        UpdateManager updateManager = corePlugin.getUpdateManager();
+        SpigotUpdateManager updateManager = corePlugin.getSpigotUpdateManager();
         updateManager.addResource(this, 41981L);
     }
 
@@ -179,7 +188,7 @@ public final class CooldownPlugin extends ConfigurablePlugin implements ICooldow
         metrics.addCustomChart(languagePie);
     }
 
-    private String getDefaultLanguageCode() {
+    private @NotNull String getDefaultLanguageCode() {
         LanguageManager languageManager = getLanguageManager();
         Language defaultLanguage = languageManager.getDefaultLanguage();
         return (defaultLanguage == null ? "none" : defaultLanguage.getLanguageName());

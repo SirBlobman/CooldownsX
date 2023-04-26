@@ -5,25 +5,26 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.PluginDescriptionFile;
-
-import com.github.sirblobman.api.language.LanguageManager;
-import com.github.sirblobman.api.utility.Validate;
-import com.github.sirblobman.cooldowns.CooldownPlugin;
-import com.github.sirblobman.cooldowns.api.data.ICooldownData;
-import com.github.sirblobman.cooldowns.configuration.CooldownSettings;
-import com.github.sirblobman.cooldowns.manager.CooldownManager;
-
-import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public final class HookPlaceholderAPI extends PlaceholderExpansion {
-    private final CooldownPlugin plugin;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.plugin.java.JavaPlugin;
 
-    public HookPlaceholderAPI(CooldownPlugin plugin) {
-        this.plugin = Validate.notNull(plugin, "plugin must not be null!");
+import com.github.sirblobman.api.language.LanguageManager;
+import com.github.sirblobman.cooldowns.api.ICooldownsX;
+import com.github.sirblobman.cooldowns.api.configuration.ICooldownSettings;
+import com.github.sirblobman.cooldowns.api.data.ICooldownData;
+import com.github.sirblobman.cooldowns.api.manager.ICooldownManager;
+
+import me.clip.placeholderapi.expansion.PlaceholderExpansion;
+
+public final class HookPlaceholderAPI extends PlaceholderExpansion {
+    private final ICooldownsX plugin;
+
+    public HookPlaceholderAPI(@NotNull ICooldownsX plugin) {
+        this.plugin = plugin;
     }
 
     @Override
@@ -36,34 +37,30 @@ public final class HookPlaceholderAPI extends PlaceholderExpansion {
         return true;
     }
 
-    @NotNull
     @Override
-    public String getIdentifier() {
-        CooldownPlugin plugin = getCooldownPlugin();
+    public @NotNull String getIdentifier() {
+        JavaPlugin plugin = getJavaPlugin();
         String pluginName = plugin.getName();
         return pluginName.toLowerCase(Locale.US);
     }
 
-    @NotNull
     @Override
-    public String getAuthor() {
-        CooldownPlugin plugin = getCooldownPlugin();
+    public @NotNull String getAuthor() {
+        JavaPlugin plugin = getJavaPlugin();
         PluginDescriptionFile description = plugin.getDescription();
         List<String> authorList = description.getAuthors();
         return String.join(", ", authorList);
     }
 
-    @NotNull
     @Override
-    public String getVersion() {
-        CooldownPlugin plugin = getCooldownPlugin();
+    public @NotNull String getVersion() {
+        JavaPlugin plugin = getJavaPlugin();
         PluginDescriptionFile description = plugin.getDescription();
         return description.getVersion();
     }
 
-    @Nullable
     @Override
-    public String onPlaceholderRequest(Player player, @NotNull String placeholder) {
+    public @Nullable String onPlaceholderRequest(@Nullable Player player, @NotNull String placeholder) {
         if (player == null) {
             return null;
         }
@@ -81,44 +78,44 @@ public final class HookPlaceholderAPI extends PlaceholderExpansion {
         return getTimeLeftInteger(player, subPlaceholder);
     }
 
-    @NotNull
-    private CooldownPlugin getCooldownPlugin() {
+    private @NotNull ICooldownsX getCooldownsX() {
         return this.plugin;
     }
 
-    @NotNull
-    private LanguageManager getLanguageManager() {
-        CooldownPlugin plugin = getCooldownPlugin();
+    private @NotNull JavaPlugin getJavaPlugin() {
+        ICooldownsX plugin = getCooldownsX();
+        return plugin.getPlugin();
+    }
+
+    private @NotNull LanguageManager getLanguageManager() {
+        ICooldownsX plugin = getCooldownsX();
         return plugin.getLanguageManager();
     }
 
-    @NotNull
-    private CooldownManager getCooldownManager() {
-        CooldownPlugin plugin = getCooldownPlugin();
+    private @NotNull ICooldownManager getCooldownManager() {
+        ICooldownsX plugin = getCooldownsX();
         return plugin.getCooldownManager();
     }
 
-    @NotNull
-    private ICooldownData getCooldownData(Player player) {
-        CooldownManager cooldownManager = getCooldownManager();
-        return cooldownManager.getData(player);
+    private @NotNull ICooldownData getCooldownData(@NotNull Player player) {
+        ICooldownManager manager = getCooldownManager();
+        return manager.getData(player);
+    }
+
+    private @Nullable ICooldownSettings getCooldownSettings(@NotNull String id) {
+        ICooldownManager manager = getCooldownManager();
+        return manager.getCooldownSettings(id);
     }
 
     @Nullable
-    private CooldownSettings getCooldownSettings(String id) {
-        CooldownManager cooldownManager = getCooldownManager();
-        return cooldownManager.getCooldownSettings(id);
-    }
-
-    @Nullable
-    private String getTimeLeftDecimal(Player player, String id) {
-        CooldownSettings settings = getCooldownSettings(id);
+    private String getTimeLeftDecimal(@NotNull Player player, @NotNull String id) {
+        ICooldownSettings settings = getCooldownSettings(id);
         if (settings == null) {
             return null;
         }
 
-        ICooldownData cooldownData = getCooldownData(player);
-        double expireTimeMillis = cooldownData.getCooldownExpireTime(settings);
+        ICooldownData data = getCooldownData(player);
+        double expireTimeMillis = data.getCooldownExpireTime(settings);
         double systemTimeMillis = System.currentTimeMillis();
         double timeLeftMillis = Math.max(0.0D, expireTimeMillis - systemTimeMillis);
         double timeLeftSeconds = (timeLeftMillis / 1_000.0D);
@@ -128,9 +125,8 @@ public final class HookPlaceholderAPI extends PlaceholderExpansion {
         return decimalFormat.format(timeLeftSeconds);
     }
 
-    @Nullable
-    private String getTimeLeftInteger(Player player, String id) {
-        CooldownSettings settings = getCooldownSettings(id);
+    private @Nullable String getTimeLeftInteger(@NotNull Player player, @NotNull String id) {
+        ICooldownSettings settings = getCooldownSettings(id);
         if (settings == null) {
             return null;
         }

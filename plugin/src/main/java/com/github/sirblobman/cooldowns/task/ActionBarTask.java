@@ -7,19 +7,21 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.jetbrains.annotations.NotNull;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import com.github.sirblobman.api.shaded.adventure.text.Component;
-import com.github.sirblobman.api.shaded.adventure.text.minimessage.MiniMessage;
 import com.github.sirblobman.api.language.LanguageManager;
 import com.github.sirblobman.cooldowns.CooldownPlugin;
 import com.github.sirblobman.cooldowns.api.configuration.IActionBarSettings;
 import com.github.sirblobman.cooldowns.api.configuration.ICooldownSettings;
 import com.github.sirblobman.cooldowns.api.data.ICooldownData;
+import com.github.sirblobman.api.shaded.adventure.text.Component;
+import com.github.sirblobman.api.shaded.adventure.text.minimessage.MiniMessage;
 
 public final class ActionBarTask extends CooldownTask {
-    public ActionBarTask(CooldownPlugin plugin) {
+    public ActionBarTask(@NotNull CooldownPlugin plugin) {
         super(plugin);
     }
 
@@ -27,16 +29,14 @@ public final class ActionBarTask extends CooldownTask {
     public void run() {
         Collection<? extends Player> onlinePlayerCollection = Bukkit.getOnlinePlayers();
         for (Player player : onlinePlayerCollection) {
-            // printDebug("Checking action bar for player '" + player.getName() + "'.");
             checkActionBar(player);
         }
     }
 
-    private void checkActionBar(Player player) {
+    private void checkActionBar(@NotNull Player player) {
         ICooldownData cooldownData = getCooldownData(player);
         Set<ICooldownSettings> activeCooldowns = cooldownData.getActiveCooldowns();
         if (activeCooldowns.isEmpty()) {
-            // printDebug("Player does not have any active cooldowns.");
             return;
         }
 
@@ -45,16 +45,14 @@ public final class ActionBarTask extends CooldownTask {
                 .sorted(Comparator.comparing(ICooldownSettings::getActionBarSettings).reversed())
                 .collect(Collectors.toList());
         if (cooldownSettingsList.isEmpty()) {
-            // printDebug("Player active cooldowns don't have any action bars enabled.");
             return;
         }
 
         ICooldownSettings cooldownSettings = cooldownSettingsList.get(0);
         sendActionBar(player, cooldownSettings);
-        // printDebug("Sent action bar to player.");
     }
 
-    private void sendActionBar(Player player, ICooldownSettings settings) {
+    private void sendActionBar(@NotNull Player player, @NotNull ICooldownSettings settings) {
         IActionBarSettings actionBarSettings = settings.getActionBarSettings();
         String messageFormat = actionBarSettings.getMessageFormat();
         if (messageFormat == null || messageFormat.isEmpty()) {

@@ -2,6 +2,8 @@ package com.github.sirblobman.cooldowns.listener;
 
 import java.util.Set;
 
+import org.jetbrains.annotations.NotNull;
+
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Result;
@@ -12,16 +14,16 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import com.github.sirblobman.api.utility.ItemUtility;
-import com.github.sirblobman.api.shaded.xseries.XMaterial;
-import com.github.sirblobman.cooldowns.CooldownPlugin;
+import com.github.sirblobman.cooldowns.api.ICooldownsX;
 import com.github.sirblobman.cooldowns.api.configuration.CooldownType;
 import com.github.sirblobman.cooldowns.api.configuration.ICooldownSettings;
 import com.github.sirblobman.cooldowns.api.data.ICooldownData;
 import com.github.sirblobman.cooldowns.api.listener.CooldownListener;
 import com.github.sirblobman.cooldowns.modern.ModernHelper;
+import com.github.sirblobman.api.shaded.xseries.XMaterial;
 
 public final class ListenerInteract extends CooldownListener {
-    public ListenerInteract(CooldownPlugin plugin) {
+    public ListenerInteract(@NotNull ICooldownsX plugin) {
         super(plugin);
     }
 
@@ -44,7 +46,7 @@ public final class ListenerInteract extends CooldownListener {
         checkItem(player, item, e);
     }
 
-    private void checkItem(Player player, ItemStack item, PlayerInteractEvent e) {
+    private void checkItem(@NotNull Player player, @NotNull ItemStack item, @NotNull PlayerInteractEvent e) {
         if (ItemUtility.isAir(item)) {
             return;
         }
@@ -80,7 +82,7 @@ public final class ListenerInteract extends CooldownListener {
         checkValidCooldowns(player, validCooldowns);
     }
 
-    private void checkBlock(Player player, Block block, PlayerInteractEvent e) {
+    private void checkBlock(@NotNull Player player, @NotNull Block block, @NotNull PlayerInteractEvent e) {
         XMaterial material = getXMaterial(block);
         if (material == XMaterial.AIR) {
             return;

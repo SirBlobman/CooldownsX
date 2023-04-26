@@ -15,15 +15,16 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import com.github.sirblobman.api.configuration.ConfigurationManager;
-import com.github.sirblobman.api.utility.Validate;
-import com.github.sirblobman.api.shaded.xseries.XMaterial;
-import com.github.sirblobman.api.shaded.xseries.XPotion;
-import com.github.sirblobman.cooldowns.CooldownPlugin;
+import com.github.sirblobman.cooldowns.api.ICooldownsX;
 import com.github.sirblobman.cooldowns.api.configuration.CombatMode;
 import com.github.sirblobman.cooldowns.api.configuration.CooldownType;
 import com.github.sirblobman.cooldowns.api.configuration.ICooldownSettings;
@@ -32,32 +33,30 @@ import com.github.sirblobman.cooldowns.api.manager.ICooldownManager;
 import com.github.sirblobman.cooldowns.configuration.ActionBarSettings;
 import com.github.sirblobman.cooldowns.configuration.CooldownSettings;
 import com.github.sirblobman.cooldowns.object.CooldownData;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import com.github.sirblobman.api.shaded.xseries.XMaterial;
+import com.github.sirblobman.api.shaded.xseries.XPotion;
 
 public final class CooldownManager implements ICooldownManager {
-    private final CooldownPlugin plugin;
-    private final Map<UUID, CooldownData> cooldownDataMap;
-    private final Map<String, CooldownSettings> cooldownSettingsMap;
+    private final ICooldownsX plugin;
+    private final Map<UUID, ICooldownData> cooldownDataMap;
+    private final Map<String, ICooldownSettings> cooldownSettingsMap;
 
-    public CooldownManager(CooldownPlugin plugin) {
-        this.plugin = Validate.notNull(plugin, "plugin must not be null!");
+    public CooldownManager(@NotNull ICooldownsX plugin) {
+        this.plugin = plugin;
         this.cooldownDataMap = new ConcurrentHashMap<>();
         this.cooldownSettingsMap = new HashMap<>();
     }
 
-    @NotNull
     @Override
-    public ICooldownData getData(OfflinePlayer player) {
+    public @NotNull ICooldownData getData(@NotNull OfflinePlayer player) {
         UUID playerId = player.getUniqueId();
-        CooldownData cooldownData = this.cooldownDataMap.getOrDefault(playerId, null);
+        ICooldownData cooldownData = this.cooldownDataMap.getOrDefault(playerId, null);
         if (cooldownData != null) {
             return cooldownData;
         }
 
-        CooldownPlugin plugin = getPlugin();
-        CooldownData newData = new CooldownData(plugin, player);
+        ICooldownsX plugin = getCooldownsX();
+        ICooldownData newData = new CooldownData(plugin, player);
 
         ConfigurationManager configurationManager = getConfigurationManager();
         YamlConfiguration configuration = configurationManager.get("config.yml");
@@ -69,15 +68,14 @@ public final class CooldownManager implements ICooldownManager {
         return newData;
     }
 
-    @Nullable
-    public CooldownSettings getCooldownSettings(String id) {
+    @Override
+    public @Nullable ICooldownSettings getCooldownSettings(@NotNull String id) {
         return this.cooldownSettingsMap.get(id);
     }
 
-    @NotNull
-    public List<ICooldownSettings> getAllCooldownSettings() {
-        Collection<CooldownSettings> valueCollection = this.cooldownSettingsMap.values();
-        List<CooldownSettings> cooldownSettingsList = new ArrayList<>(valueCollection);
+    public @NotNull List<ICooldownSettings> getAllCooldownSettings() {
+        Collection<ICooldownSettings> valueCollection = this.cooldownSettingsMap.values();
+        List<ICooldownSettings> cooldownSettingsList = new ArrayList<>(valueCollection);
         return Collections.unmodifiableList(cooldownSettingsList);
     }
 
@@ -171,8 +169,7 @@ public final class CooldownManager implements ICooldownManager {
                 this.cooldownSettingsMap.put(cooldownId, cooldownSettings);
                 printDebug("Successfully loaded cooldown settings '" + cooldownId + "'.");
             } catch (Exception ex) {
-                printDebug("Failed to load cooldown settings '" + cooldownId + "' because an error occurred:");
-                printDebug(ex);
+                printDebug("Failed to load cooldown settings '" + cooldownId + "':", ex);
             }
         }
 
@@ -180,17 +177,22 @@ public final class CooldownManager implements ICooldownManager {
         printDebug("Reload Cooldown Settings End");
     }
 
-    private CooldownPlugin getPlugin() {
+    private @NotNull ICooldownsX getCooldownsX() {
         return this.plugin;
     }
 
-    private ConfigurationManager getConfigurationManager() {
-        CooldownPlugin plugin = getPlugin();
+    private @NotNull JavaPlugin getJavaPlugin() {
+        ICooldownsX plugin = getCooldownsX();
+        return plugin.getPlugin();
+    }
+
+    private @NotNull ConfigurationManager getConfigurationManager() {
+        ICooldownsX plugin = getCooldownsX();
         return plugin.getConfigurationManager();
     }
 
-    private Logger getLogger() {
-        CooldownPlugin plugin = getPlugin();
+    private @NotNull Logger getLogger() {
+        JavaPlugin plugin = getJavaPlugin();
         return plugin.getLogger();
     }
 
@@ -200,22 +202,21 @@ public final class CooldownManager implements ICooldownManager {
         return !configuration.getBoolean("debug-mode", false);
     }
 
-    private void printDebug(String message) {
-        if (isDebugModeDisabled()) {
-            return;
-        }
-
-        String finalMessage = String.format(Locale.US, "[Debug] %s", message);
-        Logger logger = getLogger();
-        logger.info(finalMessage);
+    private void printDebug(@NotNull String message) {
+        printDebug(message, null);
     }
 
-    private void printDebug(Throwable throwable) {
+    private void printDebug(@NotNull String message, @Nullable Throwable throwable) {
         if (isDebugModeDisabled()) {
             return;
         }
 
         Logger logger = getLogger();
-        logger.log(Level.WARNING, "[Debug]:", throwable);
+        String logMessage = String.format(Locale.US, "[Debug] %s", message);
+        if (throwable == null) {
+            logger.info(logMessage);
+        } else {
+            logger.log(Level.WARNING, message, throwable);
+        }
     }
 }

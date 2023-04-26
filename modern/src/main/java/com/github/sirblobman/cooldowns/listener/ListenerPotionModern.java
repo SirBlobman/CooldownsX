@@ -6,6 +6,8 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
+import org.jetbrains.annotations.NotNull;
+
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -20,14 +22,14 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import com.github.sirblobman.api.utility.ItemUtility;
-import com.github.sirblobman.api.shaded.xseries.XMaterial;
-import com.github.sirblobman.api.shaded.xseries.XPotion;
 import com.github.sirblobman.cooldowns.api.ICooldownsX;
 import com.github.sirblobman.cooldowns.api.configuration.CooldownType;
 import com.github.sirblobman.cooldowns.api.configuration.ICooldownSettings;
 import com.github.sirblobman.cooldowns.api.data.ICooldownData;
 import com.github.sirblobman.cooldowns.api.listener.CooldownListener;
 import com.github.sirblobman.cooldowns.modern.ModernHelper;
+import com.github.sirblobman.api.shaded.xseries.XMaterial;
+import com.github.sirblobman.api.shaded.xseries.XPotion;
 
 public final class ListenerPotionModern extends CooldownListener {
     private static final Set<XMaterial> POTION_MATERIAL_SET;
@@ -36,7 +38,7 @@ public final class ListenerPotionModern extends CooldownListener {
         POTION_MATERIAL_SET = EnumSet.of(XMaterial.POTION, XMaterial.SPLASH_POTION, XMaterial.LINGERING_POTION);
     }
 
-    public ListenerPotionModern(ICooldownsX plugin) {
+    public ListenerPotionModern(@NotNull ICooldownsX plugin) {
         super(plugin);
     }
 
@@ -130,7 +132,7 @@ public final class ListenerPotionModern extends CooldownListener {
         checkValidCooldowns(player, validCooldowns);
     }
 
-    private boolean isNotPotion(ItemStack item) {
+    private boolean isNotPotion(@NotNull ItemStack item) {
         if (ItemUtility.isAir(item)) {
             return true;
         }
@@ -139,7 +141,7 @@ public final class ListenerPotionModern extends CooldownListener {
         return !POTION_MATERIAL_SET.contains(material);
     }
 
-    private List<XPotion> getCustomEffects(ItemStack item) {
+    private @NotNull List<XPotion> getCustomEffects(@NotNull ItemStack item) {
         if (ItemUtility.isAir(item)) {
             return Collections.emptyList();
         }
@@ -165,7 +167,7 @@ public final class ListenerPotionModern extends CooldownListener {
         return potionList;
     }
 
-    private List<XPotion> getPotionEffects(ItemStack item) {
+    private @NotNull List<XPotion> getPotionEffects(@NotNull ItemStack item) {
         if (ItemUtility.isAir(item)) {
             return Collections.emptyList();
         }

@@ -1,5 +1,7 @@
 package com.github.sirblobman.cooldowns.api.configuration;
 
+import org.jetbrains.annotations.Nullable;
+
 /**
  * Interface for CooldownsX action bar settings.
  *
@@ -22,5 +24,5 @@ public interface IActionBarSettings extends Comparable<IActionBarSettings> {
     /**
      * @return The message format for this action bar.
      */
-    String getMessageFormat();
+    @Nullable String getMessageFormat();
 }

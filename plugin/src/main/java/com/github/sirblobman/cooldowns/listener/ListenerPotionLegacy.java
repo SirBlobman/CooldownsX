@@ -7,6 +7,9 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.ThrownPotion;
@@ -24,8 +27,6 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.github.sirblobman.api.utility.ItemUtility;
 import com.github.sirblobman.api.utility.VersionUtility;
-import com.github.sirblobman.api.shaded.xseries.XMaterial;
-import com.github.sirblobman.api.shaded.xseries.XPotion;
 import com.github.sirblobman.cooldowns.api.ICooldownsX;
 import com.github.sirblobman.cooldowns.api.configuration.CooldownType;
 import com.github.sirblobman.cooldowns.api.configuration.ICooldownSettings;
@@ -33,6 +34,8 @@ import com.github.sirblobman.cooldowns.api.data.ICooldownData;
 import com.github.sirblobman.cooldowns.api.listener.CooldownListener;
 import com.github.sirblobman.cooldowns.modern.ModernHelper;
 import com.github.sirblobman.cooldowns.object.FakeCancellable;
+import com.github.sirblobman.api.shaded.xseries.XMaterial;
+import com.github.sirblobman.api.shaded.xseries.XPotion;
 
 public final class ListenerPotionLegacy extends CooldownListener {
     private static final Set<XMaterial> POTION_MATERIAL_SET;
@@ -41,7 +44,7 @@ public final class ListenerPotionLegacy extends CooldownListener {
         POTION_MATERIAL_SET = EnumSet.of(XMaterial.POTION, XMaterial.SPLASH_POTION, XMaterial.LINGERING_POTION);
     }
 
-    public ListenerPotionLegacy(ICooldownsX plugin) {
+    public ListenerPotionLegacy(@NotNull ICooldownsX plugin) {
         super(plugin);
     }
 
@@ -98,7 +101,7 @@ public final class ListenerPotionLegacy extends CooldownListener {
         checkPotion(player, potionList, e);
     }
 
-    private boolean isNotPotion(ItemStack item) {
+    private boolean isNotPotion(@NotNull ItemStack item) {
         if (ItemUtility.isAir(item)) {
             return true;
         }
@@ -107,7 +110,7 @@ public final class ListenerPotionLegacy extends CooldownListener {
         return !POTION_MATERIAL_SET.contains(material);
     }
 
-    private List<XPotion> getPotionEffects(ThrownPotion thrownPotion) {
+    private List<XPotion> getPotionEffects(@NotNull ThrownPotion thrownPotion) {
         List<XPotion> potionList = new ArrayList<>();
 
         Collection<PotionEffect> thrownPotionEffects = thrownPotion.getEffects();
@@ -120,7 +123,7 @@ public final class ListenerPotionLegacy extends CooldownListener {
         return potionList;
     }
 
-    private List<XPotion> getCustomEffects(ItemStack item) {
+    private @NotNull List<XPotion> getCustomEffects(@Nullable ItemStack item) {
         if (ItemUtility.isAir(item)) {
             return Collections.emptyList();
         }
@@ -146,7 +149,7 @@ public final class ListenerPotionLegacy extends CooldownListener {
         return potionList;
     }
 
-    private List<XPotion> getLegacyPotionEffects(ItemStack item) {
+    private @NotNull List<XPotion> getLegacyPotionEffects(@Nullable ItemStack item) {
         if (ItemUtility.isAir(item)) {
             return Collections.emptyList();
         }
@@ -167,7 +170,7 @@ public final class ListenerPotionLegacy extends CooldownListener {
         return potionList;
     }
 
-    private List<XPotion> getPotionEffects(ItemStack item) {
+    private @NotNull List<XPotion> getPotionEffects(@Nullable ItemStack item) {
         if (ItemUtility.isAir(item)) {
             return Collections.emptyList();
         }
@@ -187,7 +190,7 @@ public final class ListenerPotionLegacy extends CooldownListener {
         return potionList;
     }
 
-    private void checkPotion(Player player, List<XPotion> potionList, Cancellable e) {
+    private void checkPotion(@NotNull Player player, @NotNull List<XPotion> potionList, @NotNull Cancellable e) {
         printDebug("Checking consume potion for player '" + player.getName() + "'...");
         printDebug("Potions to check: " + potionList);
 

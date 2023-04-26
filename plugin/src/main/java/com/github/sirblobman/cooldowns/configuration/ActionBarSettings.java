@@ -1,8 +1,9 @@
 package com.github.sirblobman.cooldowns.configuration;
 
-import com.github.sirblobman.cooldowns.api.configuration.IActionBarSettings;
-
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import com.github.sirblobman.cooldowns.api.configuration.IActionBarSettings;
 
 public final class ActionBarSettings implements IActionBarSettings {
     private boolean enabled;
@@ -34,9 +35,8 @@ public final class ActionBarSettings implements IActionBarSettings {
         this.priority = priority;
     }
 
-    @Nullable
     @Override
-    public String getMessageFormat() {
+    public @Nullable String getMessageFormat() {
         return this.messageFormat;
     }
 
@@ -45,7 +45,7 @@ public final class ActionBarSettings implements IActionBarSettings {
     }
 
     @Override
-    public int compareTo(IActionBarSettings other) {
+    public int compareTo(@NotNull IActionBarSettings other) {
         int thisPriority = this.getPriority();
         int otherPriority = other.getPriority();
         return Integer.compare(thisPriority, otherPriority);

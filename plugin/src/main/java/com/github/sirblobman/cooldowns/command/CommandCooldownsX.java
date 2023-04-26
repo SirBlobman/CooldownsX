@@ -3,25 +3,27 @@ package com.github.sirblobman.cooldowns.command;
 import java.util.Collections;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.github.sirblobman.api.command.Command;
-import com.github.sirblobman.cooldowns.CooldownPlugin;
+import com.github.sirblobman.cooldowns.api.ICooldownsX;
 
 public final class CommandCooldownsX extends Command {
-    public CommandCooldownsX(CooldownPlugin plugin) {
-        super(plugin, "cooldownsx");
+    public CommandCooldownsX(@NotNull ICooldownsX plugin) {
+        super(plugin.getPlugin(), "cooldownsx");
         setPermissionName("cooldownsx.command.cooldownsx");
     }
 
     @Override
-    protected List<String> onTabComplete(CommandSender sender, String[] args) {
+    protected @NotNull List<String> onTabComplete(@NotNull CommandSender sender, String @NotNull [] args) {
         return Collections.emptyList();
     }
 
     @Override
-    protected boolean execute(CommandSender sender, String[] args) {
+    protected boolean execute(@NotNull CommandSender sender, String @NotNull [] args) {
         try {
             JavaPlugin plugin = getPlugin();
             plugin.reloadConfig();

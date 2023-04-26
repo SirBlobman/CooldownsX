@@ -1,14 +1,17 @@
 package com.github.sirblobman.cooldowns.api;
 
+import org.jetbrains.annotations.NotNull;
+
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.github.sirblobman.api.configuration.ConfigurationManager;
+import com.github.sirblobman.api.configuration.PlayerDataManager;
 import com.github.sirblobman.api.language.LanguageManager;
 import com.github.sirblobman.api.nms.MultiVersionHandler;
-import com.github.sirblobman.api.shaded.xseries.XMaterial;
-import com.github.sirblobman.api.shaded.xseries.XPotion;
 import com.github.sirblobman.cooldowns.api.dictionary.IDictionary;
 import com.github.sirblobman.cooldowns.api.manager.ICooldownManager;
+import com.github.sirblobman.api.shaded.xseries.XMaterial;
+import com.github.sirblobman.api.shaded.xseries.XPotion;
 
 /**
  * Interface for the CooldownsX plugin instance.
@@ -19,37 +22,42 @@ public interface ICooldownsX {
     /**
      * @return The Bukkit plugin instance for CooldownsX.
      */
-    JavaPlugin getPlugin();
+    @NotNull JavaPlugin getPlugin();
 
     /**
      * @return The ConfigurationManager instance for CooldownsX.
      */
-    ConfigurationManager getConfigurationManager();
+    @NotNull ConfigurationManager getConfigurationManager();
 
     /**
      * @return The LanguageManager instance for CooldownsX
      */
-    LanguageManager getLanguageManager();
+    @NotNull LanguageManager getLanguageManager();
+
+    /**
+     * @return The PlayerDataManager instance for CooldownsX
+     */
+    @NotNull PlayerDataManager getPlayerDataManager();
 
     /**
      * @return The MultiVersionHandler instance for CooldownsX
      */
-    MultiVersionHandler getMultiVersionHandler();
+    @NotNull MultiVersionHandler getMultiVersionHandler();
 
     /**
      * @return The cooldown manager instance.
      */
-    ICooldownManager getCooldownManager();
+    @NotNull ICooldownManager getCooldownManager();
 
     /**
      * @return The dictionary instance to map XMaterial keys to strings.
      */
-    IDictionary<XMaterial> getMaterialDictionary();
+    @NotNull IDictionary<XMaterial> getMaterialDictionary();
 
     /**
      * @return The dictionary instance to map XPotion keys to strings.
      */
-    IDictionary<XPotion> getPotionDictionary();
+    @NotNull IDictionary<XPotion> getPotionDictionary();
 
     /**
      * @return {@code true} if the plugin has debug-mode enabled, otherwise {@code false}.
@@ -62,5 +70,5 @@ public interface ICooldownsX {
      *
      * @param message The message to print to the log.
      */
-    void printDebug(String message);
+    void printDebug(@NotNull String message);
 }
