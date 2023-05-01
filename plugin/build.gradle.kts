@@ -31,7 +31,7 @@ dependencies {
 
     // Plugin Dependencies
     compileOnly("com.github.sirblobman.api:core:2.8-SNAPSHOT") // BlueSlimeCore
-    compileOnly("com.github.sirblobman.combatlogx:api:11.3-SNAPSHOT") // CombatLogX
+    compileOnly("com.github.sirblobman.combatlogx:api:11.4-SNAPSHOT") // CombatLogX
     compileOnly("me.clip:placeholderapi:2.11.3") // PlaceholderAPI
 }
 
