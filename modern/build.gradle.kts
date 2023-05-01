@@ -23,5 +23,5 @@ dependencies {
     compileOnly("org.spigotmc:spigot-api:1.14.4-R0.1-SNAPSHOT") // Spigot API
 
     // Plugin Dependencies
-    compileOnly("com.github.sirblobman.api:core:2.8-SNAPSHOT") // BlueSlimeCore
+    compileOnly("com.github.sirblobman.api:core:2.9-SNAPSHOT") // BlueSlimeCore
 }
