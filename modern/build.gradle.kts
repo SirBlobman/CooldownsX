@@ -20,8 +20,11 @@ dependencies {
 
     // Java Dependencies
     compileOnly("org.jetbrains:annotations:24.0.1") // JetBrains Annotations
-    compileOnly("org.spigotmc:spigot-api:1.14.4-R0.1-SNAPSHOT") // Spigot API
 
-    // Plugin Dependencies
-    compileOnly("com.github.sirblobman.api:core:2.9-dev-SNAPSHOT") // BlueSlimeCore
+    // Spigot API
+    compileOnly("org.spigotmc:spigot-api:1.14.4-R0.1-SNAPSHOT")
+
+    // BlueSlimeCore
+    val coreVersion = rootProject.ext.get("coreVersion")
+    compileOnly("com.github.sirblobman.api:core:$coreVersion")
 }

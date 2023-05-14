@@ -6,7 +6,6 @@ plugins {
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
-
     withSourcesJar()
     withJavadocJar()
 }
@@ -19,9 +18,15 @@ repositories {
 }
 
 dependencies {
+    // Java Dependencies
     compileOnly("org.jetbrains:annotations:24.0.1")
+
+    // Spigot API
     compileOnly("org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT")
-    compileOnly("com.github.sirblobman.api:core:2.9-dev-SNAPSHOT")
+
+    // BlueSlimeCore
+    val coreVersion = rootProject.ext.get("coreVersion")
+    compileOnly("com.github.sirblobman.api:core:$coreVersion")
 }
 
 publishing {

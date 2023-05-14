@@ -173,7 +173,7 @@ public final class CooldownPlugin extends ConfigurablePlugin implements ICooldow
 
     private void registerUpdateChecker() {
         CorePlugin corePlugin = JavaPlugin.getPlugin(CorePlugin.class);
-        SpigotUpdateManager<?> updateManager = corePlugin.getSpigotUpdateManager();
+        SpigotUpdateManager updateManager = corePlugin.getSpigotUpdateManager();
         updateManager.addResource(this, 41981L);
     }
 

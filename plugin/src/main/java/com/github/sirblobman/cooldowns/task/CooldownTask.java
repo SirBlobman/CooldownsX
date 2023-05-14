@@ -8,12 +8,11 @@ import com.github.sirblobman.api.folia.FoliaHelper;
 import com.github.sirblobman.api.folia.details.TaskDetails;
 import com.github.sirblobman.api.folia.scheduler.TaskScheduler;
 import com.github.sirblobman.api.language.LanguageManager;
-import com.github.sirblobman.api.plugin.ConfigurablePlugin;
 import com.github.sirblobman.cooldowns.api.ICooldownsX;
 import com.github.sirblobman.cooldowns.api.data.ICooldownData;
 import com.github.sirblobman.cooldowns.api.manager.ICooldownManager;
 
-public abstract class CooldownTask extends TaskDetails<ConfigurablePlugin> {
+public abstract class CooldownTask extends TaskDetails {
     private final ICooldownsX plugin;
 
     public CooldownTask(@NotNull ICooldownsX plugin) {
@@ -21,7 +20,7 @@ public abstract class CooldownTask extends TaskDetails<ConfigurablePlugin> {
         this.plugin = plugin;
     }
 
-    protected final ICooldownsX getCooldownsX() {
+    protected final @NotNull ICooldownsX getCooldownsX() {
         return this.plugin;
     }
 
@@ -45,8 +44,8 @@ public abstract class CooldownTask extends TaskDetails<ConfigurablePlugin> {
         setPeriod(1L);
 
         ICooldownsX cooldownsX = getCooldownsX();
-        FoliaHelper<ConfigurablePlugin> foliaHelper = cooldownsX.getFoliaHelper();
-        TaskScheduler<ConfigurablePlugin> scheduler = foliaHelper.getScheduler();
+        FoliaHelper foliaHelper = cooldownsX.getFoliaHelper();
+        TaskScheduler scheduler = foliaHelper.getScheduler();
         scheduler.scheduleAsyncTask(this);
     }
 

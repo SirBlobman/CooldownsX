@@ -1,6 +1,3 @@
-# Should the plugin be allowed to check for updates?
-update-checker: true
-
 # Should debug messages be sent to the console?
 debug-mode: false
 

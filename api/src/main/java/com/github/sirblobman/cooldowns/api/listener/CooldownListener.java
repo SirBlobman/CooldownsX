@@ -26,7 +26,7 @@ import com.github.sirblobman.api.language.replacer.DoubleReplacer;
 import com.github.sirblobman.api.language.replacer.LongReplacer;
 import com.github.sirblobman.api.language.replacer.Replacer;
 import com.github.sirblobman.api.language.replacer.StringReplacer;
-import com.github.sirblobman.api.menu.task.CloseInventoryTask;
+import com.github.sirblobman.api.menu.task.CloseMenuTask;
 import com.github.sirblobman.api.nms.MultiVersionHandler;
 import com.github.sirblobman.api.nms.PlayerHandler;
 import com.github.sirblobman.api.plugin.ConfigurablePlugin;
@@ -453,17 +453,17 @@ public abstract class CooldownListener extends PluginListener<ConfigurablePlugin
     }
 
     /**
-     * Update an inventory for a player. Runs one tick later.
+     * Close an inventory for a player. Runs one tick later.
      *
-     * @param player The player that needs an update.
+     * @param player The player that needs their inventory closed.
      */
-    protected final void updateInventoryLater(@NotNull Player player) {
+    protected final void closeInventoryLater(@NotNull Player player) {
         ICooldownsX cooldownsX = getCooldownsX();
-        FoliaHelper<ConfigurablePlugin> foliaHelper = cooldownsX.getFoliaHelper();
-        TaskScheduler<ConfigurablePlugin> scheduler = foliaHelper.getScheduler();
+        FoliaHelper foliaHelper = cooldownsX.getFoliaHelper();
+        TaskScheduler scheduler = foliaHelper.getScheduler();
 
         ConfigurablePlugin plugin = cooldownsX.getPlugin();
-        CloseInventoryTask<ConfigurablePlugin> task = new CloseInventoryTask<>(plugin, player);
+        CloseMenuTask task = new CloseMenuTask(plugin, player);
         scheduler.scheduleEntityTask(task);
     }
 }

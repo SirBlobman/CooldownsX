@@ -214,7 +214,7 @@ public final class ListenerPotionLegacy extends CooldownListener {
             sendCooldownMessage(player, activeCooldown, firstPotion);
             printDebug("Cancelled event and triggered message for player.");
 
-            updateInventoryLater(player);
+            closeInventoryLater(player);
             printDebug("Triggered player inventory update for one tick later.");
             return;
         }

@@ -27,11 +27,16 @@ dependencies {
 
     // Java Dependencies
     compileOnly("org.jetbrains:annotations:24.0.1") // JetBrains Annotations
-    compileOnly("org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT") // Spigot API
+
+    // Spigot API
+    compileOnly("org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT")
+
+    // BlueSlimeCore
+    val coreVersion = rootProject.ext.get("coreVersion")
+    compileOnly("com.github.sirblobman.api:core:$coreVersion")
 
     // Plugin Dependencies
-    compileOnly("com.github.sirblobman.api:core:2.9-dev-SNAPSHOT") // BlueSlimeCore
-    compileOnly("com.github.sirblobman.combatlogx:api:11.3-SNAPSHOT") // CombatLogX
+    compileOnly("com.github.sirblobman.combatlogx:api:11.4-SNAPSHOT") // CombatLogX
     compileOnly("me.clip:placeholderapi:2.11.3") // PlaceholderAPI
 }
 
@@ -58,14 +63,16 @@ tasks {
         val pluginMainClass = (findProperty("bukkit.plugin.main") ?: "") as String
 
         filesMatching("plugin.yml") {
-            expand(mapOf(
-                "pluginName" to pluginName,
-                "pluginPrefix" to pluginPrefix,
-                "pluginDescription" to pluginDescription,
-                "pluginWebsite" to pluginWebsite,
-                "pluginMainClass" to pluginMainClass,
-                "pluginVersion" to pluginVersion
-            ))
+            expand(
+                mapOf(
+                    "pluginName" to pluginName,
+                    "pluginPrefix" to pluginPrefix,
+                    "pluginDescription" to pluginDescription,
+                    "pluginWebsite" to pluginWebsite,
+                    "pluginMainClass" to pluginMainClass,
+                    "pluginVersion" to pluginVersion
+                )
+            )
         }
 
         filesMatching("config.yml") {

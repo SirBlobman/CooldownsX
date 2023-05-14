@@ -71,7 +71,7 @@ public final class ListenerPotionModern extends CooldownListener {
             e.setCancelled(true);
             sendCooldownMessage(player, activeCooldown, potionList.get(0));
             printDebug("Cancelled event and sent message to player.");
-            updateInventoryLater(player);
+            closeInventoryLater(player);
             printDebug("Triggered player inventory update for one tick later.");
         } else {
             printDebug("No active cooldowns for potion " + potionList + ".");
@@ -120,7 +120,7 @@ public final class ListenerPotionModern extends CooldownListener {
             e.setCancelled(true);
             sendCooldownMessage(player, activeCooldown, potion);
             printDebug("Cancelled event and sent message to player.");
-            updateInventoryLater(player);
+            closeInventoryLater(player);
             printDebug("Triggered player inventory update for one tick later.");
             return;
         } else {
