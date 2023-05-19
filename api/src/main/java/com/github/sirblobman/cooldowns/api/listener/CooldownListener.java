@@ -27,8 +27,6 @@ import com.github.sirblobman.api.language.replacer.LongReplacer;
 import com.github.sirblobman.api.language.replacer.Replacer;
 import com.github.sirblobman.api.language.replacer.StringReplacer;
 import com.github.sirblobman.api.menu.task.CloseMenuTask;
-import com.github.sirblobman.api.nms.MultiVersionHandler;
-import com.github.sirblobman.api.nms.PlayerHandler;
 import com.github.sirblobman.api.plugin.ConfigurablePlugin;
 import com.github.sirblobman.api.plugin.listener.PluginListener;
 import com.github.sirblobman.api.utility.VersionUtility;
@@ -38,6 +36,7 @@ import com.github.sirblobman.cooldowns.api.configuration.ICooldownSettings;
 import com.github.sirblobman.cooldowns.api.data.ICooldownData;
 import com.github.sirblobman.cooldowns.api.dictionary.IDictionary;
 import com.github.sirblobman.cooldowns.api.manager.ICooldownManager;
+import com.github.sirblobman.cooldowns.api.task.PacketCooldownTask;
 import com.github.sirblobman.api.shaded.adventure.text.Component;
 import com.github.sirblobman.api.shaded.adventure.text.minimessage.MiniMessage;
 import com.github.sirblobman.api.shaded.xseries.XMaterial;
@@ -179,7 +178,7 @@ public abstract class CooldownListener extends PluginListener<ConfigurablePlugin
     }
 
     /**
-     * Send a cooldown packet to a player on the main thread.
+     * Send a cooldown packet to a player with a 1 tick delay.
      *
      * @param player   The player that will receive the packet.
      * @param material The material that will have a cooldown.
@@ -191,21 +190,9 @@ public abstract class CooldownListener extends PluginListener<ConfigurablePlugin
             return;
         }
 
-        sendPacketBukkit(player, bukkitMaterial, ticks);
-    }
-
-    /**
-     * Directly send a cooldown packet without any delays.
-     *
-     * @param player   The player that will receive the packet.
-     * @param material The material that will have a cooldown.
-     * @param ticks    The amount of time (in ticks) for the cooldown.
-     */
-    private void sendPacketBukkit(@NotNull Player player, @NotNull Material material, int ticks) {
         ICooldownsX plugin = getCooldownsX();
-        MultiVersionHandler multiVersionHandler = plugin.getMultiVersionHandler();
-        PlayerHandler playerHandler = multiVersionHandler.getPlayerHandler();
-        playerHandler.sendCooldownPacket(player, material, ticks);
+        PacketCooldownTask task = new PacketCooldownTask(plugin, player, bukkitMaterial, ticks);
+        plugin.getFoliaHelper().getScheduler().scheduleEntityTask(task);
     }
 
     /**
