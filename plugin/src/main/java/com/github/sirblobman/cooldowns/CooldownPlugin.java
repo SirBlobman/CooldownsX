@@ -26,6 +26,7 @@ import com.github.sirblobman.cooldowns.dictionary.MaterialDictionary;
 import com.github.sirblobman.cooldowns.dictionary.PotionDictionary;
 import com.github.sirblobman.cooldowns.listener.ListenerConsume;
 import com.github.sirblobman.cooldowns.listener.ListenerInteract;
+import com.github.sirblobman.cooldowns.listener.ListenerPlaceEntity;
 import com.github.sirblobman.cooldowns.listener.ListenerPotionLegacy;
 import com.github.sirblobman.cooldowns.listener.ListenerPotionModern;
 import com.github.sirblobman.cooldowns.listener.ListenerPotionThrow;
@@ -155,14 +156,21 @@ public final class CooldownPlugin extends ConfigurablePlugin implements ICooldow
         new ListenerInteract(this).register();
         new ListenerPotionThrow(this).register();
 
+        // Totem of Undying was added in 1.11
         if (minorVersion >= 11) {
             new ListenerUndying(this).register();
         }
 
+        // EntityPotionEffectEvent was added in Spigot 1.13.2
         if (minorVersion >= 13) {
             new ListenerPotionModern(this).register();
         } else {
             new ListenerPotionLegacy(this).register();
+        }
+
+        // EntityPlaceEvent was drafted in Spigot 1.13.2
+        if (minorVersion >= 13) {
+            new ListenerPlaceEntity(this).register();
         }
     }
 
