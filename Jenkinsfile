@@ -23,11 +23,11 @@ pipeline {
             steps {
                 withGradle {
                     script {
+                        sh("./gradlew --refresh-dependencies clean build")
                         if (env.BRANCH_NAME == "main") {
-                            sh("./gradlew clean build publish --refresh-dependencies --no-daemon")
-                        } else {
-                            sh("./gradlew clean build --refresh-dependencies --no-daemon")
+                            sh("./gradlew publish")
                         }
+                        sh("./gradlew --stop")
                     }
                 }
             }
@@ -41,13 +41,13 @@ pipeline {
 
         always {
             script {
-                discordSend webhookURL: DISCORD_URL,
-                        title: "${env.JOB_NAME}",
-                        link: "${env.BUILD_URL}",
+                discordSend webhookURL: DISCORD_URL, title: "CooldownsX", link: "${env.BUILD_URL}",
                         result: currentBuild.currentResult,
-                        description: "**Build:** ${env.BUILD_NUMBER}\n**Status:** ${currentBuild.currentResult}",
-                        enableArtifactsList: false,
-                        showChangeset: true
+                        description: """\
+                            **Branch:** ${env.GIT_BRANCH}
+                            **Build:** ${env.BUILD_NUMBER}
+                            **Status:** ${currentBuild.currentResult}""".stripIndent(),
+                        enableArtifactsList: false, showChangeset: true
             }
         }
     }
