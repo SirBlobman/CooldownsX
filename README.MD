@@ -5,7 +5,7 @@ A plugin that adds configurable cooldowns to items.
 ## Requirements
 
 - [SpigotMC](https://spigotmc.org/) or [PaperMC](https://papermc.io/) 1.8.8 - 1.19.4
-- [BlueSlimeCore](https://jenkins.sirblobman.xyz/job/SirBlobman/job/BlueSlimeCore/) 2.8.0 or higher.
+- [BlueSlimeCore](https://jenkins.sirblobman.xyz/job/SirBlobman/job/BlueSlimeCore/) 2.9.0 or higher.
 
 ## Placeholders
 
