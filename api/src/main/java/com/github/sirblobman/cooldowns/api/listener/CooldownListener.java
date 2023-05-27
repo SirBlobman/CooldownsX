@@ -15,6 +15,7 @@ import org.jetbrains.annotations.Nullable;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -26,7 +27,6 @@ import com.github.sirblobman.api.language.replacer.DoubleReplacer;
 import com.github.sirblobman.api.language.replacer.LongReplacer;
 import com.github.sirblobman.api.language.replacer.Replacer;
 import com.github.sirblobman.api.language.replacer.StringReplacer;
-import com.github.sirblobman.api.menu.task.CloseMenuTask;
 import com.github.sirblobman.api.plugin.ConfigurablePlugin;
 import com.github.sirblobman.api.plugin.listener.PluginListener;
 import com.github.sirblobman.api.utility.VersionUtility;
@@ -37,6 +37,7 @@ import com.github.sirblobman.cooldowns.api.data.ICooldownData;
 import com.github.sirblobman.cooldowns.api.dictionary.IDictionary;
 import com.github.sirblobman.cooldowns.api.manager.ICooldownManager;
 import com.github.sirblobman.cooldowns.api.task.PacketCooldownTask;
+import com.github.sirblobman.cooldowns.api.task.UpdateInventoryTask;
 import com.github.sirblobman.api.shaded.adventure.text.Component;
 import com.github.sirblobman.api.shaded.adventure.text.minimessage.MiniMessage;
 import com.github.sirblobman.api.shaded.xseries.XMaterial;
@@ -114,6 +115,11 @@ public abstract class CooldownListener extends PluginListener<ConfigurablePlugin
     protected final @NotNull IDictionary<XPotion> getPotionDictionary() {
         ICooldownsX plugin = getCooldownsX();
         return plugin.getPotionDictionary();
+    }
+
+    protected final IDictionary<EntityType> getEntityDictionary() {
+        ICooldownsX plugin = getCooldownsX();
+        return plugin.getEntityDictionary();
     }
 
     /**
@@ -224,6 +230,22 @@ public abstract class CooldownListener extends PluginListener<ConfigurablePlugin
 
         return original.parallelStream()
                 .filter(settings -> settings.hasMaterial(material))
+                .collect(Collectors.toSet());
+    }
+
+    /**
+     * @param original The set of cooldowns to filter.
+     * @param entityType The entity type to use as a filter.
+     * @return A new {@link Set} of cooldowns filtered by the specified material.
+     */
+    protected final @NotNull Set<ICooldownSettings> filter(@NotNull Set<ICooldownSettings> original,
+                                                           @NotNull EntityType entityType) {
+        if (original.isEmpty()) {
+            return Collections.emptySet();
+        }
+
+        return original.parallelStream()
+                .filter(settings -> settings.hasEntity(entityType))
                 .collect(Collectors.toSet());
     }
 
@@ -389,6 +411,22 @@ public abstract class CooldownListener extends PluginListener<ConfigurablePlugin
     }
 
     /**
+     * Send a cooldown message to a player for a potion-based cooldown.
+     *
+     * @param player   The player that will receive the message.
+     * @param settings The cooldown that contains the message format.
+     * @param entityType The entity type for the cooldown.
+     */
+    protected final void sendCooldownMessage(@NotNull Player player, @NotNull ICooldownSettings settings,
+                                             @NotNull EntityType entityType) {
+        IDictionary<EntityType> entityDictionary = getEntityDictionary();
+        String potionName = entityDictionary.get(entityType);
+
+        Replacer replacer = new StringReplacer("{entity}", potionName);
+        sendCooldownMessage(player, settings, replacer);
+    }
+
+    /**
      * Send a cooldown with a replaced message to a player.
      *
      * @param player   The player that will receive the message.
@@ -440,17 +478,16 @@ public abstract class CooldownListener extends PluginListener<ConfigurablePlugin
     }
 
     /**
-     * Close an inventory for a player. Runs one tick later.
-     *
+     * Update an inventory for a player. Runs one tick later.
      * @param player The player that needs their inventory closed.
      */
-    protected final void closeInventoryLater(@NotNull Player player) {
+    protected final void updateInventoryLater(@NotNull Player player) {
         ICooldownsX cooldownsX = getCooldownsX();
         FoliaHelper foliaHelper = cooldownsX.getFoliaHelper();
         TaskScheduler scheduler = foliaHelper.getScheduler();
 
         ConfigurablePlugin plugin = cooldownsX.getPlugin();
-        CloseMenuTask task = new CloseMenuTask(plugin, player);
+        UpdateInventoryTask task = new UpdateInventoryTask(plugin, player);
         scheduler.scheduleEntityTask(task);
     }
 }

@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -20,6 +21,7 @@ import com.github.sirblobman.cooldowns.api.ICooldownsX;
 import com.github.sirblobman.cooldowns.api.dictionary.IDictionary;
 import com.github.sirblobman.cooldowns.api.manager.ICooldownManager;
 import com.github.sirblobman.cooldowns.command.CommandCooldownsX;
+import com.github.sirblobman.cooldowns.dictionary.EntityDictionary;
 import com.github.sirblobman.cooldowns.dictionary.MaterialDictionary;
 import com.github.sirblobman.cooldowns.dictionary.PotionDictionary;
 import com.github.sirblobman.cooldowns.listener.ListenerConsume;
@@ -41,11 +43,13 @@ public final class CooldownPlugin extends ConfigurablePlugin implements ICooldow
     private final CooldownManager cooldownManager;
     private final MaterialDictionary materialDictionary;
     private final PotionDictionary potionDictionary;
+    private final EntityDictionary entityDictionary;
 
     public CooldownPlugin() {
         this.cooldownManager = new CooldownManager(this);
         this.materialDictionary = new MaterialDictionary(this);
         this.potionDictionary = new PotionDictionary(this);
+        this.entityDictionary = new EntityDictionary(this);
     }
 
     @Override
@@ -60,6 +64,7 @@ public final class CooldownPlugin extends ConfigurablePlugin implements ICooldow
         configurationManager.saveDefault("cooldowns.yml");
         configurationManager.saveDefault("dictionary/material.yml");
         configurationManager.saveDefault("dictionary/potion.yml");
+        configurationManager.saveDefault("dictionary/entity.yml");
 
         LanguageManager languageManager = getLanguageManager();
         languageManager.saveDefaultLanguageFiles();
@@ -112,6 +117,10 @@ public final class CooldownPlugin extends ConfigurablePlugin implements ICooldow
         potionDictionary.reloadConfiguration();
         potionDictionary.saveConfiguration();
 
+        IDictionary<EntityType> entityDictionary = getEntityDictionary();
+        entityDictionary.reloadConfiguration();
+        entityDictionary.saveConfiguration();
+
         ICooldownManager cooldownManager = getCooldownManager();
         cooldownManager.reloadConfig();
         registerTasks();
@@ -130,6 +139,11 @@ public final class CooldownPlugin extends ConfigurablePlugin implements ICooldow
     @Override
     public @NotNull IDictionary<XPotion> getPotionDictionary() {
         return this.potionDictionary;
+    }
+
+    @Override
+    public @NotNull IDictionary<EntityType> getEntityDictionary() {
+        return this.entityDictionary;
     }
 
     private void registerCommands() {

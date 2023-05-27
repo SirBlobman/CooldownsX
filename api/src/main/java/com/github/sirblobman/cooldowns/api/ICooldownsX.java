@@ -2,6 +2,8 @@ package com.github.sirblobman.cooldowns.api;
 
 import org.jetbrains.annotations.NotNull;
 
+import org.bukkit.entity.EntityType;
+
 import com.github.sirblobman.api.configuration.ConfigurationManager;
 import com.github.sirblobman.api.configuration.PlayerDataManager;
 import com.github.sirblobman.api.language.LanguageManager;
@@ -58,6 +60,11 @@ public interface ICooldownsX extends IMultiVersionPlugin {
      * @return The dictionary instance to map XPotion keys to strings.
      */
     @NotNull IDictionary<XPotion> getPotionDictionary();
+
+    /**
+     * @return The dictionary instance to map EntityType keys to strings.
+     */
+    @NotNull IDictionary<EntityType> getEntityDictionary();
 
     /**
      * @return {@code true} if the plugin has debug-mode enabled, otherwise {@code false}.

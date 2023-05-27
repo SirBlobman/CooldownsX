@@ -41,6 +41,14 @@ public enum CooldownType {
 
     /**
      * Using an item to resurrect (currently only Totem of Undying)
+     * Only works on Spigot 1.11.2 or higher.
      */
-    UNDYING
+    UNDYING,
+
+    /**
+     * Placing an entity, like end crystal, armor stand, or minecraft
+     * Only works on Spigot 1.13.2 or higher.
+     * Requires an entity type.
+     */
+    PLACE_ENTITY
 }

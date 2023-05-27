@@ -38,3 +38,19 @@ fun fetchEnv(envName: String, propertyName: String?, defaultValue: String): Stri
 
     return defaultValue
 }
+
+allprojects {
+    tasks {
+        withType<JavaCompile> {
+            options.encoding = "UTF-8"
+            options.compilerArgs.add("-Xlint:deprecation")
+            options.compilerArgs.add("-Xlint:unchecked")
+        }
+
+        withType<Javadoc> {
+            options.encoding = "UTF-8"
+            val standardOptions = options as StandardJavadocDocletOptions
+            standardOptions.addStringOption("Xdoclint:none", "-quiet")
+        }
+    }
+}

@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import org.bukkit.World;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permissible;
 import org.bukkit.permissions.Permission;
@@ -49,6 +50,11 @@ public interface ICooldownSettings {
      * @return The optional list of potion effects for this cooldown.
      */
     @NotNull Optional<List<XPotion>> getPotionList();
+
+    /**
+     * @return the optional list of entity types for this cooldown.
+     */
+    @NotNull Optional<List<EntityType>> getEntityList();
 
     /**
      * @return The name of the bypass permission for this cooldown.
@@ -125,6 +131,12 @@ public interface ICooldownSettings {
      * @return {@code true} if the potion list exists and contains the value.
      */
     boolean hasPotion(@NotNull XPotion potion);
+
+    /**
+     * @param entityType The EntityType value.
+     * @return {@code true} if the entity list exists and contains the value.
+     */
+    boolean hasEntity(@NotNull EntityType entityType);
 
     /**
      * @param world The world object to check.

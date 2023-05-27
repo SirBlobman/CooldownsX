@@ -6,6 +6,7 @@
 ## potion-effect: https://github.com/CryptoMorin/XSeries/blob/master/src/main/java/com/cryptomorin/xseries/XPotion.java
 ## cooldown-type: https://github.com/SirBlobman/CooldownsX/blob/main/api/src/main/java/com/github/sirblobman/cooldowns/api/configuration/CooldownType.java
 ## combat-mode: https://github.com/SirBlobman/CooldownsX/blob/main/api/src/main/java/com/github/sirblobman/cooldowns/api/configuration/CombatMode.java
+## entity: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/EntityType.html
 
 # Example One: Ender Pearl Cooldown of 10 seconds.
 exampleOne:
@@ -122,5 +123,13 @@ exampleSeven:
   cooldown-type: POTION_THROW
   potion-effect:
     - HARM
+  amount: 2
+  reset-amount: true
+
+exampleEight:
+  cooldown: 30
+  cooldown-type: PLACE_ENTITY
+  entity:
+    - END_CRYSTAL
   amount: 2
   reset-amount: true

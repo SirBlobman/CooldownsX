@@ -73,7 +73,7 @@ public final class ListenerInteract extends CooldownListener {
         if (activeCooldown != null) {
             e.setUseItemInHand(Result.DENY);
             sendCooldownMessage(player, activeCooldown, material);
-            closeInventoryLater(player);
+            updateInventoryLater(player);
             return;
         }
 
@@ -101,7 +101,7 @@ public final class ListenerInteract extends CooldownListener {
         if (activeCooldown != null) {
             e.setUseInteractedBlock(Result.DENY);
             sendCooldownMessage(player, activeCooldown, material);
-            closeInventoryLater(player);
+            updateInventoryLater(player);
             return;
         }
 

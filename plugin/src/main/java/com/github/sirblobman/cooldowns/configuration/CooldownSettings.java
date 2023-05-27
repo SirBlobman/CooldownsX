@@ -11,6 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permissible;
 import org.bukkit.permissions.Permission;
@@ -37,6 +38,7 @@ public final class CooldownSettings implements ICooldownSettings {
 
     private List<XMaterial> materialList;
     private List<XPotion> potionList;
+    private List<EntityType> entityList;
 
     private String bypassPermissionName;
     private transient Permission bypassPermission;
@@ -62,6 +64,7 @@ public final class CooldownSettings implements ICooldownSettings {
 
         this.materialList = null;
         this.potionList = null;
+        this.entityList = null;
 
         this.bypassPermissionName = null;
         this.bypassPermission = null;
@@ -131,6 +134,15 @@ public final class CooldownSettings implements ICooldownSettings {
 
     public void setPotionList(@Nullable List<XPotion> potionList) {
         this.potionList = potionList;
+    }
+
+    @Override
+    public @NotNull Optional<List<EntityType>> getEntityList() {
+        return Optional.ofNullable(this.entityList);
+    }
+
+    public void setEntityList(@Nullable List<EntityType> entityList) {
+        this.entityList = entityList;
     }
 
     @Override
@@ -287,6 +299,17 @@ public final class CooldownSettings implements ICooldownSettings {
         if (optionalPotionList.isPresent()) {
             List<XPotion> potionList = optionalPotionList.get();
             return potionList.contains(potion);
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean hasEntity(@NotNull EntityType entityType) {
+        Optional<List<EntityType>> optionalEntityList = getEntityList();
+        if (optionalEntityList.isPresent()) {
+            List<EntityType> entityList = optionalEntityList.get();
+            return entityList.contains(entityType);
         }
 
         return false;

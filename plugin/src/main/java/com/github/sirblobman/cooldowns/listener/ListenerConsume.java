@@ -57,7 +57,7 @@ public final class ListenerConsume extends CooldownListener {
             e.setCancelled(true);
             sendCooldownMessage(player, activeCooldown, material);
             printDebug("Cancelled event and sent message to player.");
-            closeInventoryLater(player);
+            updateInventoryLater(player);
             printDebug("Triggered player inventory update for one tick later.");
             return;
         } else {

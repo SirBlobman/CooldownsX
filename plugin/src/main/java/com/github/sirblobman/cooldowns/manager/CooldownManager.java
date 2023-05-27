@@ -21,9 +21,11 @@ import org.jetbrains.annotations.Nullable;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.github.sirblobman.api.configuration.ConfigurationManager;
+import com.github.sirblobman.api.utility.ConfigurationHelper;
 import com.github.sirblobman.cooldowns.api.ICooldownsX;
 import com.github.sirblobman.cooldowns.api.configuration.CombatMode;
 import com.github.sirblobman.cooldowns.api.configuration.CooldownType;
@@ -108,6 +110,7 @@ public final class CooldownManager implements ICooldownManager {
             String cooldownTypeName = section.getString("cooldown-type", "INTERACT_ITEM");
             List<String> materialNameList = section.getStringList("material");
             List<String> potionNameList = section.getStringList("potion-effect");
+            List<String> entityTypeList = section.getStringList("entity");
             String bypassPermissionName = section.getString("bypass-permission");
             boolean packetCooldown = section.getBoolean("packet-cooldown", false);
             String combatModeName = section.getString("combat-mode", "IGNORE");
@@ -143,6 +146,8 @@ public final class CooldownManager implements ICooldownManager {
                         .filter(Optional::isPresent).map(Optional::get).collect(Collectors.toList());
                 List<XPotion> potionList = potionNameList.stream().map(XPotion::matchXPotion)
                         .filter(Optional::isPresent).map(Optional::get).collect(Collectors.toList());
+                List<EntityType> entityList = new ArrayList<>(ConfigurationHelper.parseEnums(entityTypeList,
+                        EntityType.class));
                 CombatMode combatMode = CombatMode.valueOf(combatModeName);
 
                 CooldownSettings cooldownSettings = new CooldownSettings(cooldownId);
@@ -152,6 +157,7 @@ public final class CooldownManager implements ICooldownManager {
                 cooldownSettings.setCooldownType(cooldownType);
                 cooldownSettings.setMaterialList(materialList);
                 cooldownSettings.setPotionList(potionList);
+                cooldownSettings.setEntityList(entityList);
                 cooldownSettings.setBypassPermissionName(bypassPermissionName);
                 cooldownSettings.setUsePacketCooldown(packetCooldown);
                 cooldownSettings.setCombatMode(combatMode);

@@ -37,7 +37,7 @@ public final class ListenerUndying extends CooldownListener {
         if (activeCooldown != null) {
             e.setCancelled(true);
             sendCooldownMessage(player, activeCooldown, XMaterial.TOTEM_OF_UNDYING);
-            closeInventoryLater(player);
+            updateInventoryLater(player);
             return;
         }
 
