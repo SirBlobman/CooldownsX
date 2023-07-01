@@ -70,10 +70,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
-import api.com.github.sirblobman.plugin.cooldown.CooldownsX;
-import configuration.api.com.github.sirblobman.plugin.cooldown.Cooldown;
-import data.api.com.github.sirblobman.plugin.cooldown.PlayerCooldown;
-import data.api.com.github.sirblobman.plugin.cooldown.PlayerCooldownManager;
+import com.github.sirblobman.plugin.cooldown.CooldownsX;
+import com.github.sirblobman.plugin.cooldown.Cooldown;
+import com.github.sirblobman.plugin.cooldown.PlayerCooldown;
+import com.github.sirblobman.plugin.cooldown.PlayerCooldownManager;
 
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
