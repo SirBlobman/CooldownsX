@@ -1,21 +1,26 @@
 # CooldownsX
 
-A plugin that adds configurable cooldowns to items.
+A plugin that adds customizable cool down timers to items.
+Using this plugin, you can ensure that your server is balanced and that players
+use items strategically instead of spamming them. 
 
 ## Requirements
 
-- [SpigotMC](https://spigotmc.org/) or [PaperMC](https://papermc.io/) 1.8.8 - 1.19.4
-- [BlueSlimeCore](https://jenkins.sirblobman.xyz/job/SirBlobman/job/BlueSlimeCore/) 2.9.0 or higher.
+- Java 8 required, Java 17 recommended.
+- [Spigot](https://spigotmc.org/), [Paper](https://papermc.io/downloads/paper), or [Folia](https://papermc.io/software/folia) 1.8.8 - 1.20.1.
+- [BlueSlimeCore](https://jenkins.sirblobman.xyz/job/SirBlobman/job/BlueSlimeCore/) 2.9.3 or higher.
 
 ## Placeholders
 
 CooldownsX adds placeholders to plugins that support PlaceholderAPI.
 Review the table below for placeholder information:
 
-| Placeholder                               | Description                                                   | Example Output |
-|-------------------------------------------|---------------------------------------------------------------|----------------|
-| %cooldownsx_time_left_&lt;id&gt;%         | The amount of seconds left for a specific cooldown. (integer) | 5              |
-| %cooldownsx_time_left_decimal_&lt;id&gt;% | The amount of seconds left for a specific cooldown. (decimal) | 5.2            |
+| Placeholder                           | Description                                                   | Example Output |
+|---------------------------------------|---------------------------------------------------------------|----------------|
+| %cooldownsx_time_left_`<id>`%         | The amount of seconds left for a specific cooldown. (integer) | 5              |
+| %cooldownsx_time_left_decimal_`<id>`% | The amount of seconds left for a specific cooldown. (decimal) | 5.2            |
+
+`<id>`: The configuration identifier. 
 
 ## API Information
 
@@ -65,10 +70,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
-import com.github.sirblobman.cooldowns.api.CooldownsX;
-import com.github.sirblobman.cooldowns.api.configuration.Cooldown;
-import com.github.sirblobman.cooldowns.api.data.PlayerCooldown;
-import com.github.sirblobman.cooldowns.api.data.PlayerCooldownManager;
+import api.com.github.sirblobman.plugin.cooldown.CooldownsX;
+import configuration.api.com.github.sirblobman.plugin.cooldown.Cooldown;
+import data.api.com.github.sirblobman.plugin.cooldown.PlayerCooldown;
+import data.api.com.github.sirblobman.plugin.cooldown.PlayerCooldownManager;
 
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;

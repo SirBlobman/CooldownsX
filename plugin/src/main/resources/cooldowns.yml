@@ -9,6 +9,8 @@
 ## entity: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/EntityType.html
 
 # Example One: Ender Pearl Cooldown of 10 seconds.
+# The identifier can be used in PlaceholderAPI requests.
+# e.g. %cooldownsx_time_left_exampleOne%
 exampleOne:
   # How many times can the action be done before the cooldown is triggered?
   # Default: 1
