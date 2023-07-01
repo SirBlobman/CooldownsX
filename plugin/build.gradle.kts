@@ -1,22 +1,21 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
-val pluginVersion = rootProject.ext.get("pluginVersion") as String
+fun fetchProperty(propertyName: String, defaultValue: String): String {
+    val found = findProperty(propertyName)
+    if (found != null) {
+        return found.toString()
+    }
+
+    return defaultValue
+}
 
 plugins {
-    id("java")
     id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
-}
-
 repositories {
-    mavenCentral()
     maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
-    maven("https://oss.sonatype.org/content/repositories/snapshots")
-    maven("https://nexus.sirblobman.xyz/public/")
+    maven("https://oss.sonatype.org/content/repositories/snapshots/")
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
 }
 
@@ -25,15 +24,8 @@ dependencies {
     implementation(project(":api"))
     implementation(project(":modern"))
 
-    // Java Dependencies
-    compileOnly("org.jetbrains:annotations:24.0.1") // JetBrains Annotations
-
     // Spigot API
     compileOnly("org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT")
-
-    // BlueSlimeCore
-    val coreVersion = rootProject.ext.get("coreVersion")
-    compileOnly("com.github.sirblobman.api:core:$coreVersion")
 
     // Plugin Dependencies
     compileOnly("com.github.sirblobman.combatlogx:api:11.4-SNAPSHOT") // CombatLogX
@@ -48,7 +40,7 @@ tasks {
 
     named<ShadowJar>("shadowJar") {
         archiveClassifier.set(null as String?)
-        archiveFileName.set("CooldownsX-$pluginVersion.jar")
+        archiveBaseName.set("CooldownsX")
     }
 
     named("build") {
@@ -56,11 +48,11 @@ tasks {
     }
 
     processResources {
-        val pluginName = (findProperty("bukkit.plugin.name") ?: "") as String
-        val pluginPrefix = (findProperty("bukkit.plugin.prefix") ?: "") as String
-        val pluginDescription = (findProperty("bukkit.plugin.description") ?: "") as String
-        val pluginWebsite = (findProperty("bukkit.plugin.website") ?: "") as String
-        val pluginMainClass = (findProperty("bukkit.plugin.main") ?: "") as String
+        val pluginName = fetchProperty("bukkit.plugin.name", "")
+        val pluginPrefix = fetchProperty("bukkit.plugin.prefix", "")
+        val pluginDescription = fetchProperty("bukkit.plugin.description", "")
+        val pluginWebsite = fetchProperty("bukkit.plugin.website", "")
+        val pluginMainClass = fetchProperty("bukkit.plugin.main", "")
 
         filesMatching("plugin.yml") {
             expand(
@@ -70,13 +62,13 @@ tasks {
                     "pluginDescription" to pluginDescription,
                     "pluginWebsite" to pluginWebsite,
                     "pluginMainClass" to pluginMainClass,
-                    "pluginVersion" to pluginVersion
+                    "pluginVersion" to version
                 )
             )
         }
 
         filesMatching("config.yml") {
-            expand(mapOf("pluginVersion" to pluginVersion))
+            expand(mapOf("pluginVersion" to version))
         }
     }
 }

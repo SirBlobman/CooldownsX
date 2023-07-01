@@ -8,12 +8,12 @@ import org.jetbrains.annotations.NotNull;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import com.github.sirblobman.cooldowns.api.ICooldownsX;
-import com.github.sirblobman.cooldowns.api.configuration.ICooldownSettings;
-import com.github.sirblobman.cooldowns.api.data.ICooldownData;
+import com.github.sirblobman.cooldowns.api.CooldownsX;
+import com.github.sirblobman.cooldowns.api.configuration.Cooldown;
+import com.github.sirblobman.cooldowns.api.data.PlayerCooldown;
 
 public final class ExpireTask extends CooldownTask {
-    public ExpireTask(@NotNull ICooldownsX plugin) {
+    public ExpireTask(@NotNull CooldownsX plugin) {
         super(plugin);
     }
 
@@ -26,14 +26,14 @@ public final class ExpireTask extends CooldownTask {
     }
 
     private void checkPlayer(@NotNull Player player) {
-        ICooldownData cooldownData = getCooldownData(player);
-        Set<ICooldownSettings> activeCooldownSet = cooldownData.getActiveCooldowns();
-        for (ICooldownSettings cooldown : activeCooldownSet) {
+        PlayerCooldown cooldownData = getCooldownData(player);
+        Set<Cooldown> activeCooldownSet = cooldownData.getActiveCooldowns();
+        for (Cooldown cooldown : activeCooldownSet) {
             checkCooldown(cooldownData, cooldown);
         }
     }
 
-    private void checkCooldown(@NotNull ICooldownData data, @NotNull ICooldownSettings cooldown) {
+    private void checkCooldown(@NotNull PlayerCooldown data, @NotNull Cooldown cooldown) {
         long expireMillis = data.getCooldownExpireTime(cooldown);
         long systemMillis = System.currentTimeMillis();
         if (systemMillis >= expireMillis) {

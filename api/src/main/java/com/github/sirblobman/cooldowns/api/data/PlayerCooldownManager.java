@@ -1,4 +1,4 @@
-package com.github.sirblobman.cooldowns.api.manager;
+package com.github.sirblobman.cooldowns.api.data;
 
 import java.util.List;
 
@@ -7,8 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 import org.bukkit.OfflinePlayer;
 
-import com.github.sirblobman.cooldowns.api.configuration.ICooldownSettings;
-import com.github.sirblobman.cooldowns.api.data.ICooldownData;
+import com.github.sirblobman.cooldowns.api.configuration.Cooldown;
 
 /**
  * Interface for the CooldownsX Cooldown Manager instance.
@@ -16,25 +15,25 @@ import com.github.sirblobman.cooldowns.api.data.ICooldownData;
  *
  * @author SirBlobman
  */
-public interface ICooldownManager {
+public interface PlayerCooldownManager {
     /**
      * Get or create the cooldown data for a player.
      *
      * @param player The player that will own the data.
      * @return New or existing cooldown data for the specified player.
      */
-    @NotNull ICooldownData getData(@NotNull OfflinePlayer player);
+    @NotNull PlayerCooldown getData(@NotNull OfflinePlayer player);
 
     /**
      * @param id The id of the settings in the configuration file.
      * @return A cooldown settings object if one matches the id, otherwise {@code null}.
      */
-    @Nullable ICooldownSettings getCooldownSettings(@NotNull String id);
+    @Nullable Cooldown getCooldownSettings(@NotNull String id);
 
     /**
      * @return A list of all cooldown settings that are currently loaded.
      */
-    @NotNull List<ICooldownSettings> getAllCooldownSettings();
+    @NotNull List<Cooldown> getAllCooldownSettings();
 
     /**
      * Reloads all cooldowns from the configuration file.

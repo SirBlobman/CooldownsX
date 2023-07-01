@@ -1,40 +1,54 @@
+val mavenUsername = fetchEnv("MAVEN_DEPLOY_USR", "mavenUsernameSirBlobman", "")
+val mavenPassword = fetchEnv("MAVEN_DEPLOY_PSW", "mavenPasswordSirBlobman", "")
+version = fetchProperty("version.api", "invalid")
+
+fun fetchProperty(propertyName: String, defaultValue: String): String {
+    val found = findProperty(propertyName)
+    if (found != null) {
+        return found.toString()
+    }
+
+    return defaultValue
+}
+
+fun fetchEnv(envName: String, propertyName: String?, defaultValue: String): String {
+    val found = System.getenv(envName)
+    if (found != null) {
+        return found
+    }
+
+    if (propertyName != null) {
+        return fetchProperty(propertyName, defaultValue)
+    }
+
+    return defaultValue
+}
+
 plugins {
-    id("java")
     id("maven-publish")
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
     withSourcesJar()
     withJavadocJar()
 }
 
 repositories {
-    mavenCentral()
     maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
     maven("https://oss.sonatype.org/content/repositories/snapshots/")
-    maven("https://nexus.sirblobman.xyz/public/")
 }
 
 dependencies {
-    // Java Dependencies
-    compileOnly("org.jetbrains:annotations:24.0.1")
-
     // Spigot API
     compileOnly("org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT")
-
-    // BlueSlimeCore
-    val coreVersion = rootProject.ext.get("coreVersion")
-    compileOnly("com.github.sirblobman.api:core:$coreVersion")
 }
 
 publishing {
     repositories {
         maven("https://nexus.sirblobman.xyz/public/") {
             credentials {
-                username = rootProject.ext.get("mavenUsername") as String
-                password = rootProject.ext.get("mavenPassword") as String
+                username = mavenUsername
+                password = mavenPassword
             }
         }
     }
@@ -43,13 +57,7 @@ publishing {
         create<MavenPublication>("maven") {
             groupId = "com.github.sirblobman.plugin.cooldowns"
             artifactId = "cooldowns-api"
-            version = rootProject.ext.get("apiVersion") as String
             from(components["java"])
         }
     }
-}
-
-tasks.withType<Javadoc> {
-    val standardOptions = options as StandardJavadocDocletOptions
-    standardOptions.addStringOption("Xdoclint:none", "-quiet")
 }

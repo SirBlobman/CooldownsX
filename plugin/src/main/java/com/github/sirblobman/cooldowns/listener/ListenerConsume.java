@@ -11,15 +11,15 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
 
 import com.github.sirblobman.api.utility.ItemUtility;
-import com.github.sirblobman.cooldowns.api.ICooldownsX;
+import com.github.sirblobman.cooldowns.api.CooldownsX;
+import com.github.sirblobman.cooldowns.api.configuration.Cooldown;
 import com.github.sirblobman.cooldowns.api.configuration.CooldownType;
-import com.github.sirblobman.cooldowns.api.configuration.ICooldownSettings;
-import com.github.sirblobman.cooldowns.api.data.ICooldownData;
+import com.github.sirblobman.cooldowns.api.data.PlayerCooldown;
 import com.github.sirblobman.cooldowns.api.listener.CooldownListener;
 import com.github.sirblobman.api.shaded.xseries.XMaterial;
 
 public final class ListenerConsume extends CooldownListener {
-    public ListenerConsume(@NotNull ICooldownsX plugin) {
+    public ListenerConsume(@NotNull CooldownsX plugin) {
         super(plugin);
     }
 
@@ -42,16 +42,16 @@ public final class ListenerConsume extends CooldownListener {
 
     private void checkFood(@NotNull Player player, @NotNull XMaterial material, @NotNull PlayerItemConsumeEvent e) {
         printDebug("Checking consume food for player " + player.getName() + "...");
-        Set<ICooldownSettings> cooldownSettingsList = fetchCooldowns(CooldownType.CONSUME_ITEM);
+        Set<Cooldown> cooldownSettingsList = fetchCooldowns(CooldownType.CONSUME_ITEM);
         if (cooldownSettingsList.isEmpty()) {
             return;
         }
 
-        ICooldownData cooldownData = getCooldownData(player);
-        Set<ICooldownSettings> allActiveCooldowns = cooldownData.getActiveCooldowns(CooldownType.CONSUME_ITEM);
-        Set<ICooldownSettings> activeCooldowns = filter(allActiveCooldowns, material);
+        PlayerCooldown cooldownData = getCooldownData(player);
+        Set<Cooldown> allActiveCooldowns = cooldownData.getActiveCooldowns(CooldownType.CONSUME_ITEM);
+        Set<Cooldown> activeCooldowns = filter(allActiveCooldowns, material);
 
-        ICooldownSettings activeCooldown = checkActiveCooldowns(player, activeCooldowns);
+        Cooldown activeCooldown = checkActiveCooldowns(player, activeCooldowns);
         if (activeCooldown != null) {
             printDebug("Found active cooldown '" + activeCooldown.getId() + "for consume.");
             e.setCancelled(true);
@@ -64,8 +64,8 @@ public final class ListenerConsume extends CooldownListener {
             printDebug("No active cooldowns found.");
         }
 
-        Set<ICooldownSettings> allValidCooldowns = fetchCooldowns(CooldownType.CONSUME_ITEM);
-        Set<ICooldownSettings> validCooldowns = filter(allValidCooldowns, material);
+        Set<Cooldown> allValidCooldowns = fetchCooldowns(CooldownType.CONSUME_ITEM);
+        Set<Cooldown> validCooldowns = filter(allValidCooldowns, material);
         checkValidCooldowns(player, validCooldowns);
     }
 }

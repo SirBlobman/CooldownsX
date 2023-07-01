@@ -18,19 +18,19 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import com.github.sirblobman.api.configuration.PlayerDataManager;
-import com.github.sirblobman.cooldowns.api.ICooldownsX;
+import com.github.sirblobman.cooldowns.api.CooldownsX;
+import com.github.sirblobman.cooldowns.api.configuration.Cooldown;
 import com.github.sirblobman.cooldowns.api.configuration.CooldownType;
-import com.github.sirblobman.cooldowns.api.configuration.ICooldownSettings;
-import com.github.sirblobman.cooldowns.api.data.ICooldownData;
-import com.github.sirblobman.cooldowns.api.manager.ICooldownManager;
+import com.github.sirblobman.cooldowns.api.data.PlayerCooldown;
+import com.github.sirblobman.cooldowns.api.data.PlayerCooldownManager;
 
-public final class CooldownData implements ICooldownData {
-    private final ICooldownsX plugin;
+public final class CooldownData implements PlayerCooldown {
+    private final CooldownsX plugin;
     private final UUID playerId;
-    private final Map<ICooldownSettings, Long> activeCooldownMap;
-    private final Map<ICooldownSettings, Integer> amountCooldownMap;
+    private final Map<Cooldown, Long> activeCooldownMap;
+    private final Map<Cooldown, Integer> amountCooldownMap;
 
-    public CooldownData(@NotNull ICooldownsX plugin, @NotNull OfflinePlayer player) {
+    public CooldownData(@NotNull CooldownsX plugin, @NotNull OfflinePlayer player) {
         this.plugin = plugin;
         this.playerId = player.getUniqueId();
         this.activeCooldownMap = new ConcurrentHashMap<>();
@@ -55,18 +55,18 @@ public final class CooldownData implements ICooldownData {
     }
 
     @Override
-    public @NotNull Set<ICooldownSettings> getActiveCooldowns() {
-        Set<ICooldownSettings> keySet = this.activeCooldownMap.keySet();
-        Set<ICooldownSettings> activeCooldownSet = new HashSet<>(keySet);
+    public @NotNull Set<Cooldown> getActiveCooldowns() {
+        Set<Cooldown> keySet = this.activeCooldownMap.keySet();
+        Set<Cooldown> activeCooldownSet = new HashSet<>(keySet);
         return Collections.unmodifiableSet(activeCooldownSet);
     }
 
     @Override
-    public @NotNull Set<ICooldownSettings> getActiveCooldowns(@NotNull CooldownType cooldownType) {
-        Set<ICooldownSettings> allActiveCooldowns = getActiveCooldowns();
-        Set<ICooldownSettings> matchingSet = new HashSet<>();
+    public @NotNull Set<Cooldown> getActiveCooldowns(@NotNull CooldownType cooldownType) {
+        Set<Cooldown> allActiveCooldowns = getActiveCooldowns();
+        Set<Cooldown> matchingSet = new HashSet<>();
 
-        for (ICooldownSettings activeCooldown : allActiveCooldowns) {
+        for (Cooldown activeCooldown : allActiveCooldowns) {
             CooldownType activeType = activeCooldown.getCooldownType();
             if (cooldownType == activeType) {
                 matchingSet.add(activeCooldown);
@@ -77,12 +77,12 @@ public final class CooldownData implements ICooldownData {
     }
 
     @Override
-    public long getCooldownExpireTime(@NotNull ICooldownSettings settings) {
+    public long getCooldownExpireTime(@NotNull Cooldown settings) {
         return this.activeCooldownMap.getOrDefault(settings, 0L);
     }
 
     @Override
-    public void setCooldown(@NotNull ICooldownSettings settings, long expireMillis) {
+    public void setCooldown(@NotNull Cooldown settings, long expireMillis) {
         long systemMillis = System.currentTimeMillis();
         if (systemMillis >= expireMillis) {
             return;
@@ -92,22 +92,22 @@ public final class CooldownData implements ICooldownData {
     }
 
     @Override
-    public void removeCooldown(@NotNull ICooldownSettings settings) {
+    public void removeCooldown(@NotNull Cooldown settings) {
         this.activeCooldownMap.remove(settings);
     }
 
     @Override
-    public int getActionCount(@NotNull ICooldownSettings settings) {
+    public int getActionCount(@NotNull Cooldown settings) {
         return this.amountCooldownMap.getOrDefault(settings, 0);
     }
 
     @Override
-    public void setActionCount(@NotNull ICooldownSettings settings, int amount) {
+    public void setActionCount(@NotNull Cooldown settings, int amount) {
         this.amountCooldownMap.put(settings, amount);
     }
 
     public void loadActionCounts() {
-        ICooldownsX plugin = getCooldownsX();
+        CooldownsX plugin = getCooldownsX();
         PlayerDataManager playerDataManager = plugin.getPlayerDataManager();
         this.amountCooldownMap.clear();
 
@@ -118,10 +118,10 @@ public final class CooldownData implements ICooldownData {
             return;
         }
 
-        ICooldownManager cooldownManager = plugin.getCooldownManager();
+        PlayerCooldownManager cooldownManager = plugin.getCooldownManager();
         Set<String> cooldownIdSet = actionCountSection.getKeys(false);
         for (String cooldownId : cooldownIdSet) {
-            ICooldownSettings settings = cooldownManager.getCooldownSettings(cooldownId);
+            Cooldown settings = cooldownManager.getCooldownSettings(cooldownId);
             if (settings == null) {
                 continue;
             }
@@ -133,7 +133,7 @@ public final class CooldownData implements ICooldownData {
 
     @Override
     public void saveActionCounts() {
-        ICooldownsX plugin = getCooldownsX();
+        CooldownsX plugin = getCooldownsX();
         PlayerDataManager playerDataManager = plugin.getPlayerDataManager();
 
         OfflinePlayer player = getOfflinePlayer();
@@ -141,9 +141,9 @@ public final class CooldownData implements ICooldownData {
         playerData.set("action-count", null);
 
         ConfigurationSection actionCountSection = playerData.createSection("action-count");
-        Set<Entry<ICooldownSettings, Integer>> amountMapEntrySet = this.amountCooldownMap.entrySet();
-        for (Entry<ICooldownSettings, Integer> entry : amountMapEntrySet) {
-            ICooldownSettings settings = entry.getKey();
+        Set<Entry<Cooldown, Integer>> amountMapEntrySet = this.amountCooldownMap.entrySet();
+        for (Entry<Cooldown, Integer> entry : amountMapEntrySet) {
+            Cooldown settings = entry.getKey();
             String id = settings.getId();
             int count = entry.getValue();
             actionCountSection.set(id, count);
@@ -152,7 +152,7 @@ public final class CooldownData implements ICooldownData {
         playerDataManager.save(player);
     }
 
-    private @NotNull ICooldownsX getCooldownsX() {
+    private @NotNull CooldownsX getCooldownsX() {
         return this.plugin;
     }
 }

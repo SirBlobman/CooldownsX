@@ -10,15 +10,15 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import com.github.sirblobman.api.configuration.PlayerDataManager;
+import com.github.sirblobman.cooldowns.api.configuration.Cooldown;
 import com.github.sirblobman.cooldowns.api.configuration.CooldownType;
-import com.github.sirblobman.cooldowns.api.configuration.ICooldownSettings;
 
 /**
  * Interface for CooldownsX player data.
  *
  * @author SirBlobman
  */
-public interface ICooldownData {
+public interface PlayerCooldown {
     /**
      * @return The player id that owns this data.
      */
@@ -37,20 +37,20 @@ public interface ICooldownData {
     /**
      * @return A set of all cooldowns that are currently active.
      */
-    @NotNull Set<ICooldownSettings> getActiveCooldowns();
+    @NotNull Set<Cooldown> getActiveCooldowns();
 
     /**
      * @param cooldownType A type to use as a filter.
      * @return A filtered set of active cooldowns based on the type.
      */
-    @NotNull Set<ICooldownSettings> getActiveCooldowns(@NotNull CooldownType cooldownType);
+    @NotNull Set<Cooldown> getActiveCooldowns(@NotNull CooldownType cooldownType);
 
     /**
      * @param settings The cooldown settings object.
      * @return The active cooldown expire time for the specified cooldown,
      * or {@code 0L} if the cooldown is not active.
      */
-    long getCooldownExpireTime(@NotNull ICooldownSettings settings);
+    long getCooldownExpireTime(@NotNull Cooldown settings);
 
     /**
      * Set an expire time for the specified cooldown settings.
@@ -59,14 +59,14 @@ public interface ICooldownData {
      * @param expireTime The expire time for the cooldown.
      * @see System#currentTimeMillis()
      */
-    void setCooldown(@NotNull ICooldownSettings settings, long expireTime);
+    void setCooldown(@NotNull Cooldown settings, long expireTime);
 
     /**
      * Remove an active cooldown.
      *
      * @param settings The cooldown settings object.
      */
-    void removeCooldown(@NotNull ICooldownSettings settings);
+    void removeCooldown(@NotNull Cooldown settings);
 
     /**
      * @param settings The cooldown settings object.
@@ -74,14 +74,14 @@ public interface ICooldownData {
      * For example, if the cooldown type is {@link CooldownType#CONSUME_ITEM},
      * then it will be the amount of items eaten.
      */
-    int getActionCount(@NotNull ICooldownSettings settings);
+    int getActionCount(@NotNull Cooldown settings);
 
     /**
      * @param settings The cooldown settings object.
      * @param count    The amount of times to set.
-     * @see #getActionCount(ICooldownSettings)
+     * @see #getActionCount(Cooldown)
      */
-    void setActionCount(@NotNull ICooldownSettings settings, int count);
+    void setActionCount(@NotNull Cooldown settings, int count);
 
     /**
      * Load all the action counts from the player data file.

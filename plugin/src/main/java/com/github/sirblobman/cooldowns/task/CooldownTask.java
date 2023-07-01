@@ -8,34 +8,34 @@ import com.github.sirblobman.api.folia.FoliaHelper;
 import com.github.sirblobman.api.folia.details.TaskDetails;
 import com.github.sirblobman.api.folia.scheduler.TaskScheduler;
 import com.github.sirblobman.api.language.LanguageManager;
-import com.github.sirblobman.cooldowns.api.ICooldownsX;
-import com.github.sirblobman.cooldowns.api.data.ICooldownData;
-import com.github.sirblobman.cooldowns.api.manager.ICooldownManager;
+import com.github.sirblobman.cooldowns.api.CooldownsX;
+import com.github.sirblobman.cooldowns.api.data.PlayerCooldown;
+import com.github.sirblobman.cooldowns.api.data.PlayerCooldownManager;
 
 public abstract class CooldownTask extends TaskDetails {
-    private final ICooldownsX plugin;
+    private final CooldownsX plugin;
 
-    public CooldownTask(@NotNull ICooldownsX plugin) {
+    public CooldownTask(@NotNull CooldownsX plugin) {
         super(plugin.getPlugin());
         this.plugin = plugin;
     }
 
-    protected final @NotNull ICooldownsX getCooldownsX() {
+    protected final @NotNull CooldownsX getCooldownsX() {
         return this.plugin;
     }
 
     protected final @NotNull LanguageManager getLanguageManager() {
-        ICooldownsX plugin = getCooldownsX();
+        CooldownsX plugin = getCooldownsX();
         return plugin.getLanguageManager();
     }
 
-    protected final @NotNull ICooldownManager getCooldownManager() {
-        ICooldownsX plugin = getCooldownsX();
+    protected final @NotNull PlayerCooldownManager getCooldownManager() {
+        CooldownsX plugin = getCooldownsX();
         return plugin.getCooldownManager();
     }
 
-    protected final @NotNull ICooldownData getCooldownData(Player player) {
-        ICooldownManager cooldownManager = getCooldownManager();
+    protected final @NotNull PlayerCooldown getCooldownData(Player player) {
+        PlayerCooldownManager cooldownManager = getCooldownManager();
         return cooldownManager.getData(player);
     }
 
@@ -43,7 +43,7 @@ public abstract class CooldownTask extends TaskDetails {
         setDelay(1L);
         setPeriod(1L);
 
-        ICooldownsX cooldownsX = getCooldownsX();
+        CooldownsX cooldownsX = getCooldownsX();
         FoliaHelper foliaHelper = cooldownsX.getFoliaHelper();
         TaskScheduler scheduler = foliaHelper.getScheduler();
         scheduler.scheduleAsyncTask(this);

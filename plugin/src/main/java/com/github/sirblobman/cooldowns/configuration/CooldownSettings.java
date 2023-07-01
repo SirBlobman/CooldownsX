@@ -24,11 +24,11 @@ import com.github.sirblobman.combatlogx.api.ICombatLogX;
 import com.github.sirblobman.combatlogx.api.manager.ICombatManager;
 import com.github.sirblobman.cooldowns.api.configuration.CombatMode;
 import com.github.sirblobman.cooldowns.api.configuration.CooldownType;
-import com.github.sirblobman.cooldowns.api.configuration.ICooldownSettings;
+import com.github.sirblobman.cooldowns.api.configuration.Cooldown;
 import com.github.sirblobman.api.shaded.xseries.XMaterial;
 import com.github.sirblobman.api.shaded.xseries.XPotion;
 
-public final class CooldownSettings implements ICooldownSettings {
+public final class CooldownSettings implements Cooldown {
     private final String id;
 
     private int amount;

@@ -1,4 +1,4 @@
-package com.github.sirblobman.cooldowns.api.dictionary;
+package com.github.sirblobman.cooldowns.api.configuration;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
  * @param <E> The enum class for this dictionary.
  * @author SirBlobman
  */
-public interface IDictionary<E extends Enum<E>> {
+public interface EnumDictionary<E extends Enum<E>> {
     /**
      * @param key The enum value to use as a key.
      * @return The dictionary entry for the key.

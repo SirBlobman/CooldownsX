@@ -7,11 +7,10 @@ import org.bukkit.entity.EntityType;
 import com.github.sirblobman.api.configuration.ConfigurationManager;
 import com.github.sirblobman.api.configuration.PlayerDataManager;
 import com.github.sirblobman.api.language.LanguageManager;
-import com.github.sirblobman.api.nms.MultiVersionHandler;
 import com.github.sirblobman.api.plugin.ConfigurablePlugin;
 import com.github.sirblobman.api.plugin.IMultiVersionPlugin;
-import com.github.sirblobman.cooldowns.api.dictionary.IDictionary;
-import com.github.sirblobman.cooldowns.api.manager.ICooldownManager;
+import com.github.sirblobman.cooldowns.api.configuration.EnumDictionary;
+import com.github.sirblobman.cooldowns.api.data.PlayerCooldownManager;
 import com.github.sirblobman.api.shaded.xseries.XMaterial;
 import com.github.sirblobman.api.shaded.xseries.XPotion;
 
@@ -20,7 +19,7 @@ import com.github.sirblobman.api.shaded.xseries.XPotion;
  *
  * @author SirBlobman
  */
-public interface ICooldownsX extends IMultiVersionPlugin {
+public interface CooldownsX extends IMultiVersionPlugin {
     /**
      * @return The Bukkit plugin instance for CooldownsX.
      */
@@ -42,29 +41,24 @@ public interface ICooldownsX extends IMultiVersionPlugin {
     @NotNull PlayerDataManager getPlayerDataManager();
 
     /**
-     * @return The MultiVersionHandler instance for CooldownsX
-     */
-    @NotNull MultiVersionHandler getMultiVersionHandler();
-
-    /**
      * @return The cooldown manager instance.
      */
-    @NotNull ICooldownManager getCooldownManager();
+    @NotNull PlayerCooldownManager getCooldownManager();
 
     /**
      * @return The dictionary instance to map XMaterial keys to strings.
      */
-    @NotNull IDictionary<XMaterial> getMaterialDictionary();
+    @NotNull EnumDictionary<XMaterial> getMaterialDictionary();
 
     /**
      * @return The dictionary instance to map XPotion keys to strings.
      */
-    @NotNull IDictionary<XPotion> getPotionDictionary();
+    @NotNull EnumDictionary<XPotion> getPotionDictionary();
 
     /**
      * @return The dictionary instance to map EntityType keys to strings.
      */
-    @NotNull IDictionary<EntityType> getEntityDictionary();
+    @NotNull EnumDictionary<EntityType> getEntityDictionary();
 
     /**
      * @return {@code true} if the plugin has debug-mode enabled, otherwise {@code false}.

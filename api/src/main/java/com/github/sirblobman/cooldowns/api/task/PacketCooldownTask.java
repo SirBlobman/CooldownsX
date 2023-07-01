@@ -8,14 +8,14 @@ import org.bukkit.entity.Player;
 import com.github.sirblobman.api.folia.details.EntityTaskDetails;
 import com.github.sirblobman.api.nms.MultiVersionHandler;
 import com.github.sirblobman.api.nms.PlayerHandler;
-import com.github.sirblobman.cooldowns.api.ICooldownsX;
+import com.github.sirblobman.cooldowns.api.CooldownsX;
 
 public final class PacketCooldownTask extends EntityTaskDetails<Player> {
-    private final ICooldownsX plugin;
+    private final CooldownsX plugin;
     private final Material material;
     private final int ticks;
 
-    public PacketCooldownTask(@NotNull ICooldownsX plugin, @NotNull Player entity, @NotNull Material material,
+    public PacketCooldownTask(@NotNull CooldownsX plugin, @NotNull Player entity, @NotNull Material material,
                               int ticks) {
         super(plugin.getPlugin(), entity);
         setDelay(1L);
@@ -38,12 +38,12 @@ public final class PacketCooldownTask extends EntityTaskDetails<Player> {
         playerHandler.sendCooldownPacket(player, material, ticks);
     }
 
-    private @NotNull ICooldownsX getCooldownsX() {
+    private @NotNull CooldownsX getCooldownsX() {
         return this.plugin;
     }
 
     private @NotNull MultiVersionHandler getMultiVersionHandler() {
-        ICooldownsX plugin = getCooldownsX();
+        CooldownsX plugin = getCooldownsX();
         return plugin.getMultiVersionHandler();
     }
 

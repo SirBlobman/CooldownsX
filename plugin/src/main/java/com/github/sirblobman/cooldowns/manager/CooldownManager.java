@@ -26,39 +26,39 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.github.sirblobman.api.configuration.ConfigurationManager;
 import com.github.sirblobman.api.utility.ConfigurationHelper;
-import com.github.sirblobman.cooldowns.api.ICooldownsX;
+import com.github.sirblobman.cooldowns.api.CooldownsX;
 import com.github.sirblobman.cooldowns.api.configuration.CombatMode;
+import com.github.sirblobman.cooldowns.api.configuration.Cooldown;
 import com.github.sirblobman.cooldowns.api.configuration.CooldownType;
-import com.github.sirblobman.cooldowns.api.configuration.ICooldownSettings;
-import com.github.sirblobman.cooldowns.api.data.ICooldownData;
-import com.github.sirblobman.cooldowns.api.manager.ICooldownManager;
+import com.github.sirblobman.cooldowns.api.data.PlayerCooldown;
+import com.github.sirblobman.cooldowns.api.data.PlayerCooldownManager;
 import com.github.sirblobman.cooldowns.configuration.ActionBarSettings;
 import com.github.sirblobman.cooldowns.configuration.CooldownSettings;
 import com.github.sirblobman.cooldowns.object.CooldownData;
 import com.github.sirblobman.api.shaded.xseries.XMaterial;
 import com.github.sirblobman.api.shaded.xseries.XPotion;
 
-public final class CooldownManager implements ICooldownManager {
-    private final ICooldownsX plugin;
-    private final Map<UUID, ICooldownData> cooldownDataMap;
-    private final Map<String, ICooldownSettings> cooldownSettingsMap;
+public final class CooldownManager implements PlayerCooldownManager {
+    private final CooldownsX plugin;
+    private final Map<UUID, PlayerCooldown> cooldownDataMap;
+    private final Map<String, Cooldown> cooldownSettingsMap;
 
-    public CooldownManager(@NotNull ICooldownsX plugin) {
+    public CooldownManager(@NotNull CooldownsX plugin) {
         this.plugin = plugin;
         this.cooldownDataMap = new ConcurrentHashMap<>();
         this.cooldownSettingsMap = new HashMap<>();
     }
 
     @Override
-    public @NotNull ICooldownData getData(@NotNull OfflinePlayer player) {
+    public @NotNull PlayerCooldown getData(@NotNull OfflinePlayer player) {
         UUID playerId = player.getUniqueId();
-        ICooldownData cooldownData = this.cooldownDataMap.getOrDefault(playerId, null);
+        PlayerCooldown cooldownData = this.cooldownDataMap.getOrDefault(playerId, null);
         if (cooldownData != null) {
             return cooldownData;
         }
 
-        ICooldownsX plugin = getCooldownsX();
-        ICooldownData newData = new CooldownData(plugin, player);
+        CooldownsX plugin = getCooldownsX();
+        PlayerCooldown newData = new CooldownData(plugin, player);
 
         ConfigurationManager configurationManager = getConfigurationManager();
         YamlConfiguration configuration = configurationManager.get("config.yml");
@@ -71,13 +71,13 @@ public final class CooldownManager implements ICooldownManager {
     }
 
     @Override
-    public @Nullable ICooldownSettings getCooldownSettings(@NotNull String id) {
+    public @Nullable Cooldown getCooldownSettings(@NotNull String id) {
         return this.cooldownSettingsMap.get(id);
     }
 
-    public @NotNull List<ICooldownSettings> getAllCooldownSettings() {
-        Collection<ICooldownSettings> valueCollection = this.cooldownSettingsMap.values();
-        List<ICooldownSettings> cooldownSettingsList = new ArrayList<>(valueCollection);
+    public @NotNull List<Cooldown> getAllCooldownSettings() {
+        Collection<Cooldown> valueCollection = this.cooldownSettingsMap.values();
+        List<Cooldown> cooldownSettingsList = new ArrayList<>(valueCollection);
         return Collections.unmodifiableList(cooldownSettingsList);
     }
 
@@ -183,17 +183,17 @@ public final class CooldownManager implements ICooldownManager {
         printDebug("Reload Cooldown Settings End");
     }
 
-    private @NotNull ICooldownsX getCooldownsX() {
+    private @NotNull CooldownsX getCooldownsX() {
         return this.plugin;
     }
 
     private @NotNull JavaPlugin getJavaPlugin() {
-        ICooldownsX plugin = getCooldownsX();
+        CooldownsX plugin = getCooldownsX();
         return plugin.getPlugin();
     }
 
     private @NotNull ConfigurationManager getConfigurationManager() {
-        ICooldownsX plugin = getCooldownsX();
+        CooldownsX plugin = getCooldownsX();
         return plugin.getConfigurationManager();
     }
 

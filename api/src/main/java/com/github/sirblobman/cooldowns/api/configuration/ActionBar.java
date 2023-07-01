@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author SirBlobman
  */
-public interface IActionBarSettings extends Comparable<IActionBarSettings> {
+public interface ActionBar extends Comparable<ActionBar> {
     /**
      * @return {@code true} if the action bar should be sent, otherwise {@code false}.
      */

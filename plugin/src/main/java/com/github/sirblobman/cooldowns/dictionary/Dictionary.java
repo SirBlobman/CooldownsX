@@ -8,23 +8,23 @@ import org.jetbrains.annotations.NotNull;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import com.github.sirblobman.api.configuration.ConfigurationManager;
-import com.github.sirblobman.cooldowns.api.ICooldownsX;
-import com.github.sirblobman.cooldowns.api.dictionary.IDictionary;
+import com.github.sirblobman.cooldowns.api.CooldownsX;
+import com.github.sirblobman.cooldowns.api.configuration.EnumDictionary;
 
-public abstract class Dictionary<E extends Enum<E>> implements IDictionary<E> {
-    private final ICooldownsX plugin;
+public abstract class Dictionary<E extends Enum<E>> implements EnumDictionary<E> {
+    private final CooldownsX plugin;
     private final String fileName;
     private final Class<E> enumClass;
     private final Map<E, String> dictionary;
 
-    public Dictionary(@NotNull ICooldownsX plugin, @NotNull String fileName, @NotNull Class<E> enumClass) {
+    public Dictionary(@NotNull CooldownsX plugin, @NotNull String fileName, @NotNull Class<E> enumClass) {
         this.plugin = plugin;
         this.fileName = fileName;
         this.enumClass = enumClass;
         this.dictionary = new EnumMap<>(this.enumClass);
     }
 
-    protected final @NotNull ICooldownsX getPlugin() {
+    protected final @NotNull CooldownsX getPlugin() {
         return this.plugin;
     }
 
@@ -37,7 +37,7 @@ public abstract class Dictionary<E extends Enum<E>> implements IDictionary<E> {
     }
 
     protected final @NotNull ConfigurationManager getConfigurationManager() {
-        ICooldownsX plugin = getPlugin();
+        CooldownsX plugin = getPlugin();
         return plugin.getConfigurationManager();
     }
 

@@ -22,8 +22,10 @@ Review the table below for placeholder information:
 CooldownsX has a useful API that is hosted on my own repository.
 To use the api, add the following values to your `pom.xml` file:
 
-```xml
+<details>
+<summary>Maven Repository</summary>
 
+```xml
 <repositories>
     <!-- SirBlobman Public Repository -->
     <repository>
@@ -32,9 +34,11 @@ To use the api, add the following values to your `pom.xml` file:
     </repository>
 </repositories>
 ```
+</details>
+<details>
+<summary>Maven Dependency</summary>
 
 ```xml
-
 <dependencies>
     <!-- CooldownsX -->
     <dependency>
@@ -45,11 +49,15 @@ To use the api, add the following values to your `pom.xml` file:
     </dependency>
 </dependencies>
 ```
+</details>
 
 ## API Usage
 
 To use the API you should make sure that CooldownsX is enabled on the server first.  
 The main things you need to know are how to get the plugin instance and how to get data for a player:
+
+<details>
+<summary>Example Code</summary>
 
 ```java
 import org.bukkit.Bukkit;
@@ -57,44 +65,45 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
-import com.github.sirblobman.cooldowns.api.ICooldownsX;
-import com.github.sirblobman.cooldowns.api.configuration.ICooldownSettings;
-import com.github.sirblobman.cooldowns.api.data.ICooldownData;
-import com.github.sirblobman.cooldowns.api.manager.ICooldownManager;
+import com.github.sirblobman.cooldowns.api.CooldownsX;
+import com.github.sirblobman.cooldowns.api.configuration.Cooldown;
+import com.github.sirblobman.cooldowns.api.data.PlayerCooldown;
+import com.github.sirblobman.cooldowns.api.data.PlayerCooldownManager;
 
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 public final class CooldownHelper {
-    public ICooldownsX getCooldownsX() {
+    public @NotNull CooldownsX getCooldownsX() {
         PluginManager pluginManager = Bukkit.getPluginManager();
         Plugin plugin = pluginManager.getPlugin("CooldownsX");
-        return (ICooldownsX) plugin;
+        return (CooldownsX) plugin;
     }
 
-    public ICooldownData getData(Player player) {
-        ICooldownsX plugin = getCooldownsX();
-        ICooldownManager cooldownManager = plugin.getCooldownManager();
-        return cooldownManager.getData(player);
+    public @NotNull PlayerCooldown getData(@NotNull Player player) {
+        CooldownsX plugin = getCooldownsX();
+        PlayerCooldownManager manager = plugin.getCooldownManager();
+        return manager.getData(player);
     }
-
-    @Nullable
-    public ICooldownSettings getCooldownSettings(String id) {
-        ICooldownsX plugin = getCooldownsX();
-        ICooldownManager cooldownManager = plugin.getCooldownManager();
-        return cooldownManager.getCooldownSettings(id);
+    
+    public @Nullable Cooldown getCooldownSettings(@NotNull String id) {
+        CooldownsX plugin = getCooldownsX();
+        PlayerCooldownManager manager = plugin.getCooldownManager();
+        return manager.getCooldownSettings(id);
     }
 
     /*
      *  You can check the expiration time of a specific cooldown for a player:
      */
-    public long getCooldownExpireMillis(Player player, String id) {
-        ICooldownSettings cooldownSettings = getCooldownSettings(id);
-        if (cooldownSettings == null) {
+    public long getCooldownExpireMillis(@NotNull Player player, @NotNull String id) {
+        Cooldown cooldown = getCooldownSettings(id);
+        if (cooldown == null) {
             return 0L;
         }
 
-        ICooldownData cooldownData = getData(player);
-        return cooldownData.getCooldownExpireTime(cooldownSettings);
+        PlayerCooldown data = getData(player);
+        return data.getCooldownExpireTime(cooldown);
     }
 }
 ```
+</details>

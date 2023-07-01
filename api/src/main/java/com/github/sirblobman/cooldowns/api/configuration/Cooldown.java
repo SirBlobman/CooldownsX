@@ -20,7 +20,7 @@ import com.github.sirblobman.api.shaded.xseries.XPotion;
  *
  * @author SirBlobman
  */
-public interface ICooldownSettings {
+public interface Cooldown {
     /**
      * @return The id in the configuration.
      */
@@ -98,7 +98,7 @@ public interface ICooldownSettings {
     /**
      * @return The action bar settings for this cooldown.
      */
-    @NotNull IActionBarSettings getActionBarSettings();
+    @NotNull ActionBar getActionBarSettings();
 
     /**
      * @return The message format for the cooldown message.

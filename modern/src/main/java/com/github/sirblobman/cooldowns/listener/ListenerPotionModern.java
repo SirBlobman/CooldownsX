@@ -22,10 +22,10 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import com.github.sirblobman.api.utility.ItemUtility;
-import com.github.sirblobman.cooldowns.api.ICooldownsX;
+import com.github.sirblobman.cooldowns.api.CooldownsX;
+import com.github.sirblobman.cooldowns.api.configuration.Cooldown;
 import com.github.sirblobman.cooldowns.api.configuration.CooldownType;
-import com.github.sirblobman.cooldowns.api.configuration.ICooldownSettings;
-import com.github.sirblobman.cooldowns.api.data.ICooldownData;
+import com.github.sirblobman.cooldowns.api.data.PlayerCooldown;
 import com.github.sirblobman.cooldowns.api.listener.CooldownListener;
 import com.github.sirblobman.cooldowns.modern.ModernHelper;
 import com.github.sirblobman.api.shaded.xseries.XMaterial;
@@ -38,7 +38,7 @@ public final class ListenerPotionModern extends CooldownListener {
         POTION_MATERIAL_SET = EnumSet.of(XMaterial.POTION, XMaterial.SPLASH_POTION, XMaterial.LINGERING_POTION);
     }
 
-    public ListenerPotionModern(@NotNull ICooldownsX plugin) {
+    public ListenerPotionModern(@NotNull CooldownsX plugin) {
         super(plugin);
     }
 
@@ -61,10 +61,10 @@ public final class ListenerPotionModern extends CooldownListener {
         Player player = e.getPlayer();
         printDebug("Player: " + player.getName());
 
-        ICooldownData cooldownData = getCooldownData(player);
-        Set<ICooldownSettings> allActiveCooldowns = cooldownData.getActiveCooldowns(CooldownType.POTION);
-        Set<ICooldownSettings> activeCooldowns = filter(allActiveCooldowns, potionList);
-        ICooldownSettings activeCooldown = checkActiveCooldowns(player, activeCooldowns);
+        PlayerCooldown cooldownData = getCooldownData(player);
+        Set<Cooldown> allActiveCooldowns = cooldownData.getActiveCooldowns(CooldownType.POTION);
+        Set<Cooldown> activeCooldowns = filter(allActiveCooldowns, potionList);
+        Cooldown activeCooldown = checkActiveCooldowns(player, activeCooldowns);
 
         if (activeCooldown != null) {
             printDebug("Found active cooldown '" + activeCooldown.getId() + "for potion s" + potionList + ".");
@@ -101,19 +101,19 @@ public final class ListenerPotionModern extends CooldownListener {
             return;
         }
 
-        Set<ICooldownSettings> cooldownSettingsList = fetchCooldowns(CooldownType.POTION);
+        Set<Cooldown> cooldownSettingsList = fetchCooldowns(CooldownType.POTION);
         if (cooldownSettingsList.isEmpty()) {
             printDebug("No POTION cooldowns available, ignoring.");
             return;
         }
 
-        ICooldownData cooldownData = getCooldownData(player);
+        PlayerCooldown cooldownData = getCooldownData(player);
         PotionEffectType bukkitPotion = newEffect.getType();
         XPotion potion = XPotion.matchXPotion(bukkitPotion);
 
-        Set<ICooldownSettings> allActiveCooldowns = cooldownData.getActiveCooldowns(CooldownType.POTION);
-        Set<ICooldownSettings> activeCooldowns = filter(allActiveCooldowns, potion);
-        ICooldownSettings activeCooldown = checkActiveCooldowns(player, activeCooldowns);
+        Set<Cooldown> allActiveCooldowns = cooldownData.getActiveCooldowns(CooldownType.POTION);
+        Set<Cooldown> activeCooldowns = filter(allActiveCooldowns, potion);
+        Cooldown activeCooldown = checkActiveCooldowns(player, activeCooldowns);
 
         if (activeCooldown != null) {
             printDebug("Found active cooldown '" + activeCooldown.getId() + "for potion " + potion + ".");
@@ -127,8 +127,8 @@ public final class ListenerPotionModern extends CooldownListener {
             printDebug("No active cooldowns for potion " + potion + ".");
         }
 
-        Set<ICooldownSettings> allValidCooldowns = fetchCooldowns(CooldownType.POTION);
-        Set<ICooldownSettings> validCooldowns = filter(allValidCooldowns, potion);
+        Set<Cooldown> allValidCooldowns = fetchCooldowns(CooldownType.POTION);
+        Set<Cooldown> validCooldowns = filter(allValidCooldowns, potion);
         checkValidCooldowns(player, validCooldowns);
     }
 

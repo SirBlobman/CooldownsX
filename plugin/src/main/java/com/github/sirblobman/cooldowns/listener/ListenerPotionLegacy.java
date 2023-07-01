@@ -27,10 +27,10 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.github.sirblobman.api.utility.ItemUtility;
 import com.github.sirblobman.api.utility.VersionUtility;
-import com.github.sirblobman.cooldowns.api.ICooldownsX;
+import com.github.sirblobman.cooldowns.api.CooldownsX;
 import com.github.sirblobman.cooldowns.api.configuration.CooldownType;
-import com.github.sirblobman.cooldowns.api.configuration.ICooldownSettings;
-import com.github.sirblobman.cooldowns.api.data.ICooldownData;
+import com.github.sirblobman.cooldowns.api.configuration.Cooldown;
+import com.github.sirblobman.cooldowns.api.data.PlayerCooldown;
 import com.github.sirblobman.cooldowns.api.listener.CooldownListener;
 import com.github.sirblobman.cooldowns.modern.ModernHelper;
 import com.github.sirblobman.cooldowns.object.FakeCancellable;
@@ -44,7 +44,7 @@ public final class ListenerPotionLegacy extends CooldownListener {
         POTION_MATERIAL_SET = EnumSet.of(XMaterial.POTION, XMaterial.SPLASH_POTION, XMaterial.LINGERING_POTION);
     }
 
-    public ListenerPotionLegacy(@NotNull ICooldownsX plugin) {
+    public ListenerPotionLegacy(@NotNull CooldownsX plugin) {
         super(plugin);
     }
 
@@ -194,17 +194,17 @@ public final class ListenerPotionLegacy extends CooldownListener {
         printDebug("Checking consume potion for player '" + player.getName() + "'...");
         printDebug("Potions to check: " + potionList);
 
-        Set<ICooldownSettings> allPotionCooldowns = fetchCooldowns(CooldownType.POTION);
+        Set<Cooldown> allPotionCooldowns = fetchCooldowns(CooldownType.POTION);
         if (allPotionCooldowns.isEmpty()) {
             printDebug("No cooldowns available for type POTION, ignoring event.");
             return;
         }
 
-        ICooldownData cooldownData = getCooldownData(player);
-        Set<ICooldownSettings> activePotionCooldowns = cooldownData.getActiveCooldowns(CooldownType.POTION);
-        Set<ICooldownSettings> filteredActiveCooldowns = filter(activePotionCooldowns, potionList);
+        PlayerCooldown cooldownData = getCooldownData(player);
+        Set<Cooldown> activePotionCooldowns = cooldownData.getActiveCooldowns(CooldownType.POTION);
+        Set<Cooldown> filteredActiveCooldowns = filter(activePotionCooldowns, potionList);
 
-        ICooldownSettings activeCooldown = checkActiveCooldowns(player, filteredActiveCooldowns);
+        Cooldown activeCooldown = checkActiveCooldowns(player, filteredActiveCooldowns);
         if (activeCooldown != null) {
             String cooldownId = activeCooldown.getId();
             printDebug("Found matching and active potion cooldown: '" + cooldownId + "'.");
@@ -222,7 +222,7 @@ public final class ListenerPotionLegacy extends CooldownListener {
         printDebug("No active potion cooldowns match the current list.");
         printDebug("Checking new cooldowns...");
 
-        Set<ICooldownSettings> validCooldowns = filter(allPotionCooldowns, potionList);
+        Set<Cooldown> validCooldowns = filter(allPotionCooldowns, potionList);
         checkValidCooldowns(player, validCooldowns);
     }
 }

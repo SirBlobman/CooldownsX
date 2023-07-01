@@ -7,12 +7,12 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.github.sirblobman.api.configuration.ConfigurationManager;
-import com.github.sirblobman.cooldowns.api.ICooldownsX;
-import com.github.sirblobman.cooldowns.api.data.ICooldownData;
+import com.github.sirblobman.cooldowns.api.CooldownsX;
+import com.github.sirblobman.cooldowns.api.data.PlayerCooldown;
 import com.github.sirblobman.cooldowns.api.listener.CooldownListener;
 
 public final class ListenerQuit extends CooldownListener {
-    public ListenerQuit(ICooldownsX plugin) {
+    public ListenerQuit(CooldownsX plugin) {
         super(plugin);
     }
 
@@ -25,7 +25,7 @@ public final class ListenerQuit extends CooldownListener {
         }
 
         Player player = e.getPlayer();
-        ICooldownData cooldownData = getCooldownData(player);
+        PlayerCooldown cooldownData = getCooldownData(player);
         cooldownData.saveActionCounts();
     }
 }

@@ -17,9 +17,9 @@ import com.github.sirblobman.api.language.LanguageManager;
 import com.github.sirblobman.api.plugin.ConfigurablePlugin;
 import com.github.sirblobman.api.update.SpigotUpdateManager;
 import com.github.sirblobman.api.utility.VersionUtility;
-import com.github.sirblobman.cooldowns.api.ICooldownsX;
-import com.github.sirblobman.cooldowns.api.dictionary.IDictionary;
-import com.github.sirblobman.cooldowns.api.manager.ICooldownManager;
+import com.github.sirblobman.cooldowns.api.CooldownsX;
+import com.github.sirblobman.cooldowns.api.configuration.EnumDictionary;
+import com.github.sirblobman.cooldowns.api.data.PlayerCooldownManager;
 import com.github.sirblobman.cooldowns.command.CommandCooldownsX;
 import com.github.sirblobman.cooldowns.dictionary.EntityDictionary;
 import com.github.sirblobman.cooldowns.dictionary.MaterialDictionary;
@@ -40,7 +40,7 @@ import com.github.sirblobman.api.shaded.bstats.charts.SimplePie;
 import com.github.sirblobman.api.shaded.xseries.XMaterial;
 import com.github.sirblobman.api.shaded.xseries.XPotion;
 
-public final class CooldownPlugin extends ConfigurablePlugin implements ICooldownsX {
+public final class CooldownPlugin extends ConfigurablePlugin implements CooldownsX {
     private final CooldownManager cooldownManager;
     private final MaterialDictionary materialDictionary;
     private final PotionDictionary potionDictionary;
@@ -110,40 +110,40 @@ public final class CooldownPlugin extends ConfigurablePlugin implements ICooldow
         LanguageManager languageManager = getLanguageManager();
         languageManager.reloadLanguages();
 
-        IDictionary<XMaterial> materialDictionary = getMaterialDictionary();
+        EnumDictionary<XMaterial> materialDictionary = getMaterialDictionary();
         materialDictionary.reloadConfiguration();
         materialDictionary.saveConfiguration();
 
-        IDictionary<XPotion> potionDictionary = getPotionDictionary();
+        EnumDictionary<XPotion> potionDictionary = getPotionDictionary();
         potionDictionary.reloadConfiguration();
         potionDictionary.saveConfiguration();
 
-        IDictionary<EntityType> entityDictionary = getEntityDictionary();
+        EnumDictionary<EntityType> entityDictionary = getEntityDictionary();
         entityDictionary.reloadConfiguration();
         entityDictionary.saveConfiguration();
 
-        ICooldownManager cooldownManager = getCooldownManager();
+        PlayerCooldownManager cooldownManager = getCooldownManager();
         cooldownManager.reloadConfig();
         registerTasks();
     }
 
     @Override
-    public @NotNull ICooldownManager getCooldownManager() {
+    public @NotNull PlayerCooldownManager getCooldownManager() {
         return this.cooldownManager;
     }
 
     @Override
-    public @NotNull IDictionary<XMaterial> getMaterialDictionary() {
+    public @NotNull EnumDictionary<XMaterial> getMaterialDictionary() {
         return this.materialDictionary;
     }
 
     @Override
-    public @NotNull IDictionary<XPotion> getPotionDictionary() {
+    public @NotNull EnumDictionary<XPotion> getPotionDictionary() {
         return this.potionDictionary;
     }
 
     @Override
-    public @NotNull IDictionary<EntityType> getEntityDictionary() {
+    public @NotNull EnumDictionary<EntityType> getEntityDictionary() {
         return this.entityDictionary;
     }
 

@@ -10,14 +10,14 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 
-import com.github.sirblobman.cooldowns.api.ICooldownsX;
+import com.github.sirblobman.cooldowns.api.CooldownsX;
+import com.github.sirblobman.cooldowns.api.configuration.Cooldown;
 import com.github.sirblobman.cooldowns.api.configuration.CooldownType;
-import com.github.sirblobman.cooldowns.api.configuration.ICooldownSettings;
-import com.github.sirblobman.cooldowns.api.data.ICooldownData;
+import com.github.sirblobman.cooldowns.api.data.PlayerCooldown;
 import com.github.sirblobman.cooldowns.api.listener.CooldownListener;
 
 public final class ListenerPlaceEntity extends CooldownListener {
-    public ListenerPlaceEntity(@NotNull ICooldownsX plugin) {
+    public ListenerPlaceEntity(@NotNull CooldownsX plugin) {
         super(plugin);
     }
 
@@ -34,16 +34,16 @@ public final class ListenerPlaceEntity extends CooldownListener {
     }
 
     private void checkPlaceEntity(@NotNull Player player, @NotNull EntityType entityType, @NotNull Cancellable e) {
-        Set<ICooldownSettings> cooldownSettingsList = fetchCooldowns(CooldownType.PLACE_ENTITY);
+        Set<Cooldown> cooldownSettingsList = fetchCooldowns(CooldownType.PLACE_ENTITY);
         if (cooldownSettingsList.isEmpty()) {
             return;
         }
 
-        ICooldownData cooldownData = getCooldownData(player);
-        Set<ICooldownSettings> allActiveCooldowns = cooldownData.getActiveCooldowns(CooldownType.PLACE_ENTITY);
-        Set<ICooldownSettings> activeCooldownSet = filter(allActiveCooldowns, entityType);
+        PlayerCooldown cooldownData = getCooldownData(player);
+        Set<Cooldown> allActiveCooldowns = cooldownData.getActiveCooldowns(CooldownType.PLACE_ENTITY);
+        Set<Cooldown> activeCooldownSet = filter(allActiveCooldowns, entityType);
 
-        ICooldownSettings activeCooldown = checkActiveCooldowns(player, activeCooldownSet);
+        Cooldown activeCooldown = checkActiveCooldowns(player, activeCooldownSet);
         if (activeCooldown != null) {
             e.setCancelled(true);
             sendCooldownMessage(player, activeCooldown, entityType);
@@ -51,8 +51,8 @@ public final class ListenerPlaceEntity extends CooldownListener {
             return;
         }
 
-        Set<ICooldownSettings> allValidCooldowns = fetchCooldowns(CooldownType.CONSUME_ITEM);
-        Set<ICooldownSettings> validCooldownSet = filter(allValidCooldowns, entityType);
+        Set<Cooldown> allValidCooldowns = fetchCooldowns(CooldownType.CONSUME_ITEM);
+        Set<Cooldown> validCooldownSet = filter(allValidCooldowns, entityType);
         checkValidCooldowns(player, validCooldownSet);
     }
 }

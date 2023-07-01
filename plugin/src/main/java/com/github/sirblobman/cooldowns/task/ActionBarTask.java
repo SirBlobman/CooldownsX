@@ -13,15 +13,15 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.github.sirblobman.api.language.LanguageManager;
-import com.github.sirblobman.cooldowns.api.ICooldownsX;
-import com.github.sirblobman.cooldowns.api.configuration.IActionBarSettings;
-import com.github.sirblobman.cooldowns.api.configuration.ICooldownSettings;
-import com.github.sirblobman.cooldowns.api.data.ICooldownData;
+import com.github.sirblobman.cooldowns.api.CooldownsX;
+import com.github.sirblobman.cooldowns.api.configuration.ActionBar;
+import com.github.sirblobman.cooldowns.api.configuration.Cooldown;
+import com.github.sirblobman.cooldowns.api.data.PlayerCooldown;
 import com.github.sirblobman.api.shaded.adventure.text.Component;
 import com.github.sirblobman.api.shaded.adventure.text.minimessage.MiniMessage;
 
 public final class ActionBarTask extends CooldownTask {
-    public ActionBarTask(@NotNull ICooldownsX plugin) {
+    public ActionBarTask(@NotNull CooldownsX plugin) {
         super(plugin);
     }
 
@@ -34,32 +34,32 @@ public final class ActionBarTask extends CooldownTask {
     }
 
     private void checkActionBar(@NotNull Player player) {
-        ICooldownData cooldownData = getCooldownData(player);
-        Set<ICooldownSettings> activeCooldowns = cooldownData.getActiveCooldowns();
+        PlayerCooldown cooldownData = getCooldownData(player);
+        Set<Cooldown> activeCooldowns = cooldownData.getActiveCooldowns();
         if (activeCooldowns.isEmpty()) {
             return;
         }
 
-        List<ICooldownSettings> cooldownSettingsList = activeCooldowns.parallelStream()
+        List<Cooldown> cooldownSettingsList = activeCooldowns.parallelStream()
                 .filter(settings -> settings.getActionBarSettings().isEnabled())
-                .sorted(Comparator.comparing(ICooldownSettings::getActionBarSettings).reversed())
+                .sorted(Comparator.comparing(Cooldown::getActionBarSettings).reversed())
                 .collect(Collectors.toList());
         if (cooldownSettingsList.isEmpty()) {
             return;
         }
 
-        ICooldownSettings cooldownSettings = cooldownSettingsList.get(0);
+        Cooldown cooldownSettings = cooldownSettingsList.get(0);
         sendActionBar(player, cooldownSettings);
     }
 
-    private void sendActionBar(@NotNull Player player, @NotNull ICooldownSettings settings) {
-        IActionBarSettings actionBarSettings = settings.getActionBarSettings();
+    private void sendActionBar(@NotNull Player player, @NotNull Cooldown settings) {
+        ActionBar actionBarSettings = settings.getActionBarSettings();
         String messageFormat = actionBarSettings.getMessageFormat();
         if (messageFormat == null || messageFormat.isEmpty()) {
             return;
         }
 
-        ICooldownData cooldownData = getCooldownData(player);
+        PlayerCooldown cooldownData = getCooldownData(player);
         double expireTimeMillis = cooldownData.getCooldownExpireTime(settings);
         double systemTimeMillis = System.currentTimeMillis();
         double timeLeftMillis = Math.max(0.0D, expireTimeMillis - systemTimeMillis);
