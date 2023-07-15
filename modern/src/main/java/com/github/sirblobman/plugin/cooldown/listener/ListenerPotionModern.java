@@ -76,6 +76,10 @@ public final class ListenerPotionModern extends CooldownListener {
         } else {
             printDebug("No active cooldowns for potion " + potionList + ".");
         }
+
+        Set<Cooldown> allValidCooldowns = fetchCooldowns(CooldownType.POTION);
+        Set<Cooldown> validCooldowns = filter(allValidCooldowns, potionList);
+        checkValidCooldowns(player, validCooldowns);
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
