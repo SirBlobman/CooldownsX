@@ -15,8 +15,8 @@ import org.bukkit.inventory.ItemStack;
 
 import com.github.sirblobman.api.utility.ItemUtility;
 import com.github.sirblobman.plugin.cooldown.api.CooldownsX;
-import com.github.sirblobman.plugin.cooldown.api.configuration.CooldownType;
 import com.github.sirblobman.plugin.cooldown.api.configuration.Cooldown;
+import com.github.sirblobman.plugin.cooldown.api.configuration.CooldownType;
 import com.github.sirblobman.plugin.cooldown.api.data.PlayerCooldown;
 import com.github.sirblobman.plugin.cooldown.api.listener.CooldownListener;
 import com.github.sirblobman.plugin.cooldown.modern.ModernHelper;

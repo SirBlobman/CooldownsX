@@ -23,8 +23,8 @@ import com.github.sirblobman.api.utility.Validate;
 import com.github.sirblobman.combatlogx.api.ICombatLogX;
 import com.github.sirblobman.combatlogx.api.manager.ICombatManager;
 import com.github.sirblobman.plugin.cooldown.api.configuration.CombatMode;
-import com.github.sirblobman.plugin.cooldown.api.configuration.CooldownType;
 import com.github.sirblobman.plugin.cooldown.api.configuration.Cooldown;
+import com.github.sirblobman.plugin.cooldown.api.configuration.CooldownType;
 import com.github.sirblobman.api.shaded.xseries.XMaterial;
 import com.github.sirblobman.api.shaded.xseries.XPotion;
 
