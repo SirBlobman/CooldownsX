@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import com.github.sirblobman.api.shaded.xseries.XBlock;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -162,7 +163,6 @@ public abstract class CooldownListener extends PluginListener<ConfigurablePlugin
      * @param block The block to use to match the XMaterial value.
      * @return The XMaterial value, or {@link XMaterial#AIR} if there is an error.
      */
-    @SuppressWarnings("deprecation")
     protected final @NotNull XMaterial getXMaterial(@Nullable Block block) {
         if (block == null) {
             return XMaterial.AIR;
@@ -170,14 +170,7 @@ public abstract class CooldownListener extends PluginListener<ConfigurablePlugin
 
         try {
             Material bukkitMaterial = block.getType();
-            int minorVersion = VersionUtility.getMinorVersion();
-            if (minorVersion < 13) {
-                byte data = block.getData();
-                int materialId = bukkitMaterial.getId();
-                return XMaterial.matchXMaterial(materialId, data).orElse(XMaterial.AIR);
-            } else {
-                return XMaterial.matchXMaterial(bukkitMaterial);
-            }
+            return XMaterial.matchXMaterial(bukkitMaterial);
         } catch (IllegalArgumentException ex) {
             return XMaterial.AIR;
         }
