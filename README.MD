@@ -6,9 +6,9 @@ use items strategically instead of spamming them.
 
 ## Requirements
 
-- Java 8 required, Java 17 recommended.
-- [Spigot](https://spigotmc.org/), [Paper](https://papermc.io/downloads/paper), or [Folia](https://papermc.io/software/folia) 1.8.8 - 1.20.1.
-- [BlueSlimeCore](https://jenkins.sirblobman.xyz/job/SirBlobman/job/BlueSlimeCore/) 2.9.3 or higher.
+- Java 17
+- [Spigot](https://spigotmc.org/), [Paper](https://papermc.io/downloads/paper), or [Folia](https://papermc.io/software/folia) 1.16.5 - 1.21.4
+- [BlueSlimeCore](https://jenkins.sirblobman.xyz/job/SirBlobman/job/BlueSlimeCore/) 2.9.6 or higher.
 
 ## Placeholders
 
