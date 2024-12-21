@@ -151,4 +151,10 @@ public interface Cooldown {
      * @see #getBypassPermission()
      */
     boolean canBypass(@NotNull Permissible permissible);
+
+    /**
+     * @param player The player to check.
+     * @return {@code true} if the player is in the wrong combat mode for this cooldown.
+     */
+    boolean checkCombatMode(@NotNull Player player);
 }

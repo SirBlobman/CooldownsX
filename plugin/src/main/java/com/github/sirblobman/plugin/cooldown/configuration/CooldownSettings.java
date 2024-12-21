@@ -182,6 +182,29 @@ public final class CooldownSettings implements Cooldown {
     }
 
     @Override
+    public boolean checkCombatMode(@NotNull Player player) {
+        CombatMode combatMode = getCombatMode();
+        if (combatMode == CombatMode.IGNORE || isCombatLogXMissing()) {
+            return false;
+        }
+
+        PluginManager pluginManager = Bukkit.getPluginManager();
+        Plugin pluginCombatLogX = pluginManager.getPlugin("CombatLogX");
+        if (pluginCombatLogX == null) {
+            throw new IllegalStateException("CombatLogX is null but the plugin is enabled?");
+        }
+
+        ICombatLogX combatLogX = (ICombatLogX) pluginCombatLogX;
+        ICombatManager combatManager = combatLogX.getCombatManager();
+        boolean combat = combatManager.isInCombat(player);
+        return switch (combatMode) {
+            case TRUE -> (!combat);
+            case FALSE -> combat;
+            default -> false;
+        };
+    }
+
+    @Override
     public boolean isUsePacketCooldown() {
         return this.usePacketCooldown;
     }
@@ -263,18 +286,12 @@ public final class CooldownSettings implements Cooldown {
         ICombatManager combatManager = combatLogX.getCombatManager();
         boolean combat = combatManager.isInCombat(player);
 
-        switch (combatMode) {
-            case TRUE:
-                return (combat ? getCooldownSeconds() : 0);
-            case FALSE:
-                return (combat ? 0 : getCooldownSeconds());
-            case DIFFERENT:
-                return (combat ? getCombatCooldownSeconds() : getCooldownSeconds());
-            default:
-                break;
-        }
-
-        return 0;
+        return switch (combatMode) {
+            case TRUE -> (combat ? getCooldownSeconds() : 0);
+            case FALSE -> (combat ? 0 : getCooldownSeconds());
+            case DIFFERENT -> (combat ? getCombatCooldownSeconds() : getCooldownSeconds());
+            default -> 0;
+        };
     }
 
     private boolean isCombatLogXMissing() {
@@ -351,11 +368,10 @@ public final class CooldownSettings implements Cooldown {
             return true;
         }
 
-        if (!(object instanceof CooldownSettings)) {
+        if (!(object instanceof CooldownSettings other)) {
             return false;
         }
 
-        CooldownSettings other = (CooldownSettings) object;
         String id1 = this.getId();
         String id2 = other.getId();
         return Objects.equals(id1, id2);

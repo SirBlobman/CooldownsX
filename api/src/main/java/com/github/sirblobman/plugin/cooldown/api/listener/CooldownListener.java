@@ -302,6 +302,11 @@ public abstract class CooldownListener extends PluginListener<ConfigurablePlugin
                 continue;
             }
 
+            if (cooldown.checkCombatMode(player)) {
+                printDebug("Player has combat mode mismatch, skipping.");
+                continue;
+            }
+
             long systemMillis = System.currentTimeMillis();
             long expireMillis = cooldownData.getCooldownExpireTime(cooldown);
             if (systemMillis >= expireMillis) {
