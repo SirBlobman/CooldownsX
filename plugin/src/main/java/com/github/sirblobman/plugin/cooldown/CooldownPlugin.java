@@ -21,6 +21,7 @@ import com.github.sirblobman.plugin.cooldown.api.CooldownsX;
 import com.github.sirblobman.plugin.cooldown.api.configuration.EnumDictionary;
 import com.github.sirblobman.plugin.cooldown.api.data.PlayerCooldownManager;
 import com.github.sirblobman.plugin.cooldown.command.CommandCooldownsX;
+import com.github.sirblobman.plugin.cooldown.configuration.MainConfiguration;
 import com.github.sirblobman.plugin.cooldown.dictionary.EntityDictionary;
 import com.github.sirblobman.plugin.cooldown.dictionary.MaterialDictionary;
 import com.github.sirblobman.plugin.cooldown.dictionary.PotionDictionary;
@@ -46,11 +47,14 @@ public final class CooldownPlugin extends ConfigurablePlugin implements Cooldown
     private final PotionDictionary potionDictionary;
     private final EntityDictionary entityDictionary;
 
+    private final MainConfiguration configuration;
+
     public CooldownPlugin() {
         this.cooldownManager = new CooldownManager(this);
         this.materialDictionary = new MaterialDictionary(this);
         this.potionDictionary = new PotionDictionary(this);
         this.entityDictionary = new EntityDictionary(this);
+        this.configuration = new MainConfiguration();
     }
 
     @Override
@@ -122,6 +126,9 @@ public final class CooldownPlugin extends ConfigurablePlugin implements Cooldown
         entityDictionary.reloadConfiguration();
         entityDictionary.saveConfiguration();
 
+        MainConfiguration mainConfig = getConfiguration();
+        mainConfig.load(configurationManager.get("config.yml"));
+
         PlayerCooldownManager cooldownManager = getCooldownManager();
         cooldownManager.reloadConfig();
         registerTasks();
@@ -145,6 +152,10 @@ public final class CooldownPlugin extends ConfigurablePlugin implements Cooldown
     @Override
     public @NotNull EnumDictionary<EntityType> getEntityDictionary() {
         return this.entityDictionary;
+    }
+
+    public @NotNull MainConfiguration getConfiguration() {
+        return this.configuration;
     }
 
     private void registerCommands() {
@@ -175,9 +186,8 @@ public final class CooldownPlugin extends ConfigurablePlugin implements Cooldown
     }
 
     private void registerTasks() {
-        ConfigurationManager configurationManager = getConfigurationManager();
-        YamlConfiguration configuration = configurationManager.get("config.yml");
-        if (configuration.getBoolean("use-action-bar")) {
+        MainConfiguration configuration = getConfiguration();
+        if(configuration.isUseActionBar()) {
             ActionBarTask actionBarTask = new ActionBarTask(this);
             actionBarTask.startAsync();
         }

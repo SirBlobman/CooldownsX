@@ -7,3 +7,8 @@ use-action-bar: true
 # Should CooldownsX save amounts used for items that use that features?
 # If this is set to false, amount used will reset every time you restart your server.
 save-amounts-used: true
+
+# Settings for Potion Triggers
+potion-triggers:
+  beacons: true
+  tipped-arrows: true
