@@ -5,7 +5,6 @@ import java.util.logging.Logger;
 import org.jetbrains.annotations.NotNull;
 
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -21,7 +20,7 @@ import com.github.sirblobman.plugin.cooldown.api.CooldownsX;
 import com.github.sirblobman.plugin.cooldown.api.configuration.EnumDictionary;
 import com.github.sirblobman.plugin.cooldown.api.data.PlayerCooldownManager;
 import com.github.sirblobman.plugin.cooldown.command.CommandCooldownsX;
-import com.github.sirblobman.plugin.cooldown.configuration.MainConfiguration;
+import com.github.sirblobman.plugin.cooldown.api.configuration.MainConfiguration;
 import com.github.sirblobman.plugin.cooldown.dictionary.EntityDictionary;
 import com.github.sirblobman.plugin.cooldown.dictionary.MaterialDictionary;
 import com.github.sirblobman.plugin.cooldown.dictionary.PotionDictionary;
@@ -154,6 +153,7 @@ public final class CooldownPlugin extends ConfigurablePlugin implements Cooldown
         return this.entityDictionary;
     }
 
+    @Override
     public @NotNull MainConfiguration getConfiguration() {
         return this.configuration;
     }

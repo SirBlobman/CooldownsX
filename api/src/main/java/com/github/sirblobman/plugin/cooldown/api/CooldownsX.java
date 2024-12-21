@@ -10,6 +10,7 @@ import com.github.sirblobman.api.language.LanguageManager;
 import com.github.sirblobman.api.plugin.ConfigurablePlugin;
 import com.github.sirblobman.api.plugin.IMultiVersionPlugin;
 import com.github.sirblobman.plugin.cooldown.api.configuration.EnumDictionary;
+import com.github.sirblobman.plugin.cooldown.api.configuration.MainConfiguration;
 import com.github.sirblobman.plugin.cooldown.api.data.PlayerCooldownManager;
 import com.github.sirblobman.api.shaded.xseries.XMaterial;
 import com.github.sirblobman.api.shaded.xseries.XPotion;
@@ -29,6 +30,11 @@ public interface CooldownsX extends IMultiVersionPlugin {
      * @return The ConfigurationManager instance for CooldownsX.
      */
     @NotNull ConfigurationManager getConfigurationManager();
+
+    /**
+     * @return The MainConfiguration instance for CooldownsX
+     */
+    @NotNull MainConfiguration getConfiguration();
 
     /**
      * @return The LanguageManager instance for CooldownsX

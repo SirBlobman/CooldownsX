@@ -1,4 +1,10 @@
-package com.github.sirblobman.plugin.cooldown.configuration;
+package com.github.sirblobman.plugin.cooldown.api.configuration;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -10,11 +16,10 @@ public final class MainConfiguration implements IConfigurable {
     private boolean debugMode;
     private boolean useActionBar;
     private boolean saveAmountsUsed;
-
-    private final PotionTriggers potionTriggers;
+    private final Set<String> potionTriggerSet;
 
     public MainConfiguration() {
-        this.potionTriggers = new PotionTriggers();
+        potionTriggerSet = new HashSet<>();
     }
 
     @Override
@@ -23,8 +28,8 @@ public final class MainConfiguration implements IConfigurable {
         setSaveAmountsUsed(config.getBoolean("save-amounts-used", true));
         setUseActionBar(config.getBoolean("use-action-bar",true));
 
-        ConfigurationSection potionTriggersSection = getOrCreateSection(config, "potion-triggers");
-        this.potionTriggers.load(potionTriggersSection);
+        List<String> potionTriggerSet = config.getStringList("potion-triggers");
+        setPotionTriggers(potionTriggerSet);
     }
 
     public boolean isDebugMode() {
@@ -51,7 +56,18 @@ public final class MainConfiguration implements IConfigurable {
         this.saveAmountsUsed = saveAmountsUsed;
     }
 
-    public @NotNull PotionTriggers getPotionTriggers() {
-        return this.potionTriggers;
+    public void setPotionTriggers(Collection<String> potionTriggerSet) {
+        this.potionTriggerSet.clear();
+        this.potionTriggerSet.addAll(potionTriggerSet);
+    }
+
+    public @NotNull Set<String> getPotionTriggers() {
+        return Collections.unmodifiableSet(this.potionTriggerSet);
+    }
+
+    public boolean isPotionTrigger(@NotNull Enum<?> enumValue) {
+        String enumName = enumValue.name();
+        Set<String> potionTriggerSet = getPotionTriggers();
+        return potionTriggerSet.contains(enumName);
     }
 }

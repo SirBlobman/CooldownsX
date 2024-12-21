@@ -8,7 +8,11 @@ use-action-bar: true
 # If this is set to false, amount used will reset every time you restart your server.
 save-amounts-used: true
 
-# Settings for Potion Triggers
+# List of allowed potion causes.
+# This option only works on newer versions (1.14.4+)
+# Full list here: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/event/entity/EntityPotionEffectEvent.Cause.html
 potion-triggers:
-  beacons: true
-  tipped-arrows: true
+  - AREA_EFFECT_CLOUD
+  - FOOD
+  - POTION_DRINK
+  - POTION_SPLASH

@@ -92,13 +92,19 @@ public final class ListenerPotionModern extends CooldownListener {
             return;
         }
 
+        EntityPotionEffectEvent.Cause cause = e.getCause();
+        String causeName = cause.name();
+        if (!getCooldownsX().getConfiguration().isPotionTrigger(cause)) {
+            printDebug("Event cause '" + causeName + "' is not in the potion-triggers list.");
+            return;
+        }
+
         Entity entity = e.getEntity();
-        if (!(entity instanceof Player)) {
+        if (!(entity instanceof Player player)) {
             printDebug("Entity is not player, ignoring.");
             return;
         }
 
-        Player player = (Player) entity;
         PotionEffect newEffect = e.getNewEffect();
         if (newEffect == null) {
             printDebug("New effect is null, ignoring.");
@@ -151,11 +157,10 @@ public final class ListenerPotionModern extends CooldownListener {
         }
 
         ItemMeta itemMeta = item.getItemMeta();
-        if (!(itemMeta instanceof PotionMeta)) {
+        if (!(itemMeta instanceof PotionMeta potionMeta)) {
             return Collections.emptyList();
         }
 
-        PotionMeta potionMeta = (PotionMeta) itemMeta;
         if (!potionMeta.hasCustomEffects()) {
             return Collections.emptyList();
         }

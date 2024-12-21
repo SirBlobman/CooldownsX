@@ -26,26 +26,25 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.github.sirblobman.api.configuration.ConfigurationManager;
 import com.github.sirblobman.api.utility.ConfigurationHelper;
-import com.github.sirblobman.plugin.cooldown.CooldownPlugin;
 import com.github.sirblobman.plugin.cooldown.api.CooldownsX;
 import com.github.sirblobman.plugin.cooldown.api.configuration.CombatMode;
 import com.github.sirblobman.plugin.cooldown.api.configuration.Cooldown;
 import com.github.sirblobman.plugin.cooldown.api.configuration.CooldownType;
+import com.github.sirblobman.plugin.cooldown.api.configuration.MainConfiguration;
 import com.github.sirblobman.plugin.cooldown.api.data.PlayerCooldown;
 import com.github.sirblobman.plugin.cooldown.api.data.PlayerCooldownManager;
 import com.github.sirblobman.plugin.cooldown.configuration.ActionBarSettings;
 import com.github.sirblobman.plugin.cooldown.configuration.CooldownSettings;
-import com.github.sirblobman.plugin.cooldown.configuration.MainConfiguration;
 import com.github.sirblobman.plugin.cooldown.object.CooldownData;
 import com.github.sirblobman.api.shaded.xseries.XMaterial;
 import com.github.sirblobman.api.shaded.xseries.XPotion;
 
 public final class CooldownManager implements PlayerCooldownManager {
-    private final CooldownPlugin plugin;
+    private final CooldownsX plugin;
     private final Map<UUID, PlayerCooldown> cooldownDataMap;
     private final Map<String, Cooldown> cooldownSettingsMap;
 
-    public CooldownManager(@NotNull CooldownPlugin plugin) {
+    public CooldownManager(@NotNull CooldownsX plugin) {
         this.plugin = plugin;
         this.cooldownDataMap = new ConcurrentHashMap<>();
         this.cooldownSettingsMap = new HashMap<>();
@@ -59,7 +58,7 @@ public final class CooldownManager implements PlayerCooldownManager {
             return cooldownData;
         }
 
-        CooldownPlugin plugin = getCooldownsX();
+        CooldownsX plugin = getCooldownsX();
         PlayerCooldown newData = new CooldownData(plugin, player);
 
         MainConfiguration configuration = plugin.getConfiguration();
@@ -184,17 +183,17 @@ public final class CooldownManager implements PlayerCooldownManager {
         printDebug("Reload Cooldown Settings End");
     }
 
-    private @NotNull CooldownPlugin getCooldownsX() {
+    private @NotNull CooldownsX getCooldownsX() {
         return this.plugin;
     }
 
     private @NotNull JavaPlugin getJavaPlugin() {
-        CooldownPlugin plugin = getCooldownsX();
+        CooldownsX plugin = getCooldownsX();
         return plugin.getPlugin();
     }
 
     private @NotNull ConfigurationManager getConfigurationManager() {
-        CooldownPlugin plugin = getCooldownsX();
+        CooldownsX plugin = getCooldownsX();
         return plugin.getConfigurationManager();
     }
 
@@ -204,7 +203,7 @@ public final class CooldownManager implements PlayerCooldownManager {
     }
 
     private boolean isDebugModeDisabled() {
-        CooldownPlugin plugin = getCooldownsX();
+        CooldownsX plugin = getCooldownsX();
         MainConfiguration configuration = plugin.getConfiguration();
         return !configuration.isDebugMode();
     }
