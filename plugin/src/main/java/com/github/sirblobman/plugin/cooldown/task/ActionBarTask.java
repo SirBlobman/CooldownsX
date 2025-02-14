@@ -43,7 +43,7 @@ public final class ActionBarTask extends CooldownTask {
         List<Cooldown> cooldownSettingsList = activeCooldowns.parallelStream()
                 .filter(settings -> settings.getActionBarSettings().isEnabled())
                 .sorted(Comparator.comparing(Cooldown::getActionBarSettings).reversed())
-                .collect(Collectors.toList());
+                .toList();
         if (cooldownSettingsList.isEmpty()) {
             return;
         }

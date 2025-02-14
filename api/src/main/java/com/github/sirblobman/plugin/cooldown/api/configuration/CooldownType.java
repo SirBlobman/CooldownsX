@@ -26,8 +26,7 @@ public enum CooldownType {
 
     /**
      * Gaining a potion effect.
-     * Includes drinking and splash potions for 1.8.8-1.12.2.
-     * Uses EntityPotionEffectEvent in 1.13.2+ to detect when potions are added to a player.
+     * Uses EntityPotionEffectEvent to detect when potions are added to a player.
      * Requires a potion effect type.
      */
     POTION,

@@ -46,25 +46,23 @@ public final class ModernHelper {
         }
 
         ItemMeta itemMeta = item.getItemMeta();
-        if (!(itemMeta instanceof PotionMeta)) {
+        if (!(itemMeta instanceof PotionMeta potionMeta)) {
             return Collections.emptyList();
         }
 
         List<XPotion> potionList = new ArrayList<>();
-        PotionMeta potionMeta = (PotionMeta) itemMeta;
-
         PotionData basePotionData = potionMeta.getBasePotionData();
         PotionType basePotionType = basePotionData.getType();
         PotionEffectType baseEffectType = basePotionType.getEffectType();
         if (baseEffectType != null) {
-            XPotion xpotion = XPotion.matchXPotion(baseEffectType);
+            XPotion xpotion = XPotion.of(baseEffectType);
             potionList.add(xpotion);
         }
 
         List<PotionEffect> customEffectList = potionMeta.getCustomEffects();
         for (PotionEffect customEffect : customEffectList) {
             PotionEffectType customEffectType = customEffect.getType();
-            XPotion xpotion = XPotion.matchXPotion(customEffectType);
+            XPotion xpotion = XPotion.of(customEffectType);
             potionList.add(xpotion);
         }
 

@@ -27,7 +27,6 @@ import com.github.sirblobman.plugin.cooldown.dictionary.PotionDictionary;
 import com.github.sirblobman.plugin.cooldown.listener.ListenerConsume;
 import com.github.sirblobman.plugin.cooldown.listener.ListenerInteract;
 import com.github.sirblobman.plugin.cooldown.listener.ListenerPlaceEntity;
-import com.github.sirblobman.plugin.cooldown.listener.ListenerPotionLegacy;
 import com.github.sirblobman.plugin.cooldown.listener.ListenerPotionModern;
 import com.github.sirblobman.plugin.cooldown.listener.ListenerPotionThrow;
 import com.github.sirblobman.plugin.cooldown.listener.ListenerUndying;
@@ -77,9 +76,9 @@ public final class CooldownPlugin extends ConfigurablePlugin implements Cooldown
     @Override
     public void onEnable() {
         int minorVersion = VersionUtility.getMinorVersion();
-        if (minorVersion < 8) {
+        if (minorVersion < 16) {
             Logger logger = getLogger();
-            logger.warning("This plugin requires version 1.8.8 or above!");
+            logger.warning("This plugin requires version 1.16.5 or above!");
             setEnabled(false);
             return;
         }
@@ -90,7 +89,7 @@ public final class CooldownPlugin extends ConfigurablePlugin implements Cooldown
         languageManager.onPluginEnable();
 
         registerCommands();
-        registerListeners(minorVersion);
+        registerListeners();
         registerHooks();
 
         registerUpdateChecker();
@@ -162,27 +161,13 @@ public final class CooldownPlugin extends ConfigurablePlugin implements Cooldown
         new CommandCooldownsX(this).register();
     }
 
-    private void registerListeners(int minorVersion) {
+    private void registerListeners() {
         new ListenerConsume(this).register();
         new ListenerInteract(this).register();
         new ListenerPotionThrow(this).register();
-
-        // Totem of Undying was added in 1.11
-        if (minorVersion >= 11) {
-            new ListenerUndying(this).register();
-        }
-
-        // EntityPotionEffectEvent was added in Spigot 1.13.2
-        if (minorVersion >= 13) {
-            new ListenerPotionModern(this).register();
-        } else {
-            new ListenerPotionLegacy(this).register();
-        }
-
-        // EntityPlaceEvent was drafted in Spigot 1.13.2
-        if (minorVersion >= 13) {
-            new ListenerPlaceEntity(this).register();
-        }
+        new ListenerUndying(this).register();
+        new ListenerPotionModern(this).register();
+        new ListenerPlaceEntity(this).register();
     }
 
     private void registerTasks() {

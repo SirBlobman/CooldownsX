@@ -144,7 +144,7 @@ public final class CooldownManager implements PlayerCooldownManager {
                 CooldownType cooldownType = CooldownType.valueOf(cooldownTypeName);
                 List<XMaterial> materialList = materialNameList.stream().map(XMaterial::matchXMaterial)
                         .filter(Optional::isPresent).map(Optional::get).collect(Collectors.toList());
-                List<XPotion> potionList = potionNameList.stream().map(XPotion::matchXPotion)
+                List<XPotion> potionList = potionNameList.stream().map(XPotion::of)
                         .filter(Optional::isPresent).map(Optional::get).collect(Collectors.toList());
                 List<EntityType> entityList = new ArrayList<>(ConfigurationHelper.parseEnums(entityTypeList,
                         EntityType.class));

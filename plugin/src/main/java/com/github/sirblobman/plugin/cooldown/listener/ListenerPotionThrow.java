@@ -35,12 +35,11 @@ public final class ListenerPotionThrow extends CooldownListener {
         printDebug("Detected ProjectileLaunchEvent...");
 
         Projectile projectile = e.getEntity();
-        if (!(projectile instanceof ThrownPotion)) {
+        if (!(projectile instanceof ThrownPotion thrownPotion)) {
             printDebug("Projectile was not a thrown potion, ignoring event.");
             return;
         }
 
-        ThrownPotion thrownPotion = (ThrownPotion) projectile;
         List<XPotion> potionList = getPotionEffects(thrownPotion);
         if(potionList.isEmpty()) {
             printDebug("Thrown potion does not have any effects, ignoring event.");
@@ -48,12 +47,11 @@ public final class ListenerPotionThrow extends CooldownListener {
         }
 
         ProjectileSource shooter = thrownPotion.getShooter();
-        if(!(shooter instanceof Player)) {
+        if(!(shooter instanceof Player player)) {
             printDebug("Potion thrower is not player, ignoring event.");
             return;
         }
 
-        Player player = (Player) shooter;
         checkPotionThrow(player, potionList, e);
     }
 
@@ -63,7 +61,7 @@ public final class ListenerPotionThrow extends CooldownListener {
         Collection<PotionEffect> thrownPotionEffects = thrownPotion.getEffects();
         for (PotionEffect thrownPotionEffect : thrownPotionEffects) {
             PotionEffectType thrownPotionEffectType = thrownPotionEffect.getType();
-            XPotion xpotion = XPotion.matchXPotion(thrownPotionEffectType);
+            XPotion xpotion = XPotion.of(thrownPotionEffectType);
             potionList.add(xpotion);
         }
 

@@ -119,7 +119,7 @@ public final class ListenerPotionModern extends CooldownListener {
 
         PlayerCooldown cooldownData = getCooldownData(player);
         PotionEffectType bukkitPotion = newEffect.getType();
-        XPotion potion = XPotion.matchXPotion(bukkitPotion);
+        XPotion potion = XPotion.of(bukkitPotion);
 
         Set<Cooldown> allActiveCooldowns = cooldownData.getActiveCooldowns(CooldownType.POTION);
         Set<Cooldown> activeCooldowns = filter(allActiveCooldowns, potion);
@@ -169,7 +169,7 @@ public final class ListenerPotionModern extends CooldownListener {
         List<PotionEffect> customEffectList = potionMeta.getCustomEffects();
         for (PotionEffect customEffect : customEffectList) {
             PotionEffectType customEffectType = customEffect.getType();
-            XPotion xpotion = XPotion.matchXPotion(customEffectType);
+            XPotion xpotion = XPotion.of(customEffectType);
             potionList.add(xpotion);
         }
 

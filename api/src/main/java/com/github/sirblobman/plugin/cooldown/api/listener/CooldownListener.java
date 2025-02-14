@@ -182,7 +182,7 @@ public abstract class CooldownListener extends PluginListener<ConfigurablePlugin
      * @param ticks    The amount of time (in ticks) for the cooldown.
      */
     protected final void sendPacket(@NotNull Player player, @NotNull XMaterial material, int ticks) {
-        Material bukkitMaterial = material.parseMaterial();
+        Material bukkitMaterial = material.get();
         if (bukkitMaterial == null) {
             return;
         }
