@@ -16,7 +16,6 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 
 import com.github.sirblobman.api.utility.ItemUtility;
-import com.github.sirblobman.api.utility.VersionUtility;
 import com.github.sirblobman.api.shaded.xseries.XPotion;
 
 public final class ModernHelper {
@@ -25,17 +24,11 @@ public final class ModernHelper {
             return false;
         }
 
-        int minorVersion = VersionUtility.getMinorVersion();
-        if (minorVersion < 14) {
-            return false;
-        }
-
         ItemMeta itemMeta = item.getItemMeta();
-        if (!(itemMeta instanceof CrossbowMeta)) {
+        if (!(itemMeta instanceof CrossbowMeta crossbowMeta)) {
             return false;
         }
 
-        CrossbowMeta crossbowMeta = (CrossbowMeta) itemMeta;
         return !crossbowMeta.hasChargedProjectiles();
     }
 

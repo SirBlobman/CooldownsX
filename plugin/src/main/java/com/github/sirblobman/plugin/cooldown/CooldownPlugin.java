@@ -76,9 +76,9 @@ public final class CooldownPlugin extends ConfigurablePlugin implements Cooldown
     @Override
     public void onEnable() {
         int minorVersion = VersionUtility.getMinorVersion();
-        if (minorVersion < 18) {
+        if (minorVersion < 21) {
             Logger logger = getLogger();
-            logger.warning("This plugin requires version 1.18.2 or above!");
+            logger.warning("This plugin requires version 1.21.7 or above!");
             setEnabled(false);
             return;
         }
