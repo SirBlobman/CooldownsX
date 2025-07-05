@@ -2,10 +2,10 @@
 ## You can add as many entries as you need.
 
 ## Extra Information:
-## material: https://github.com/CryptoMorin/XSeries/blob/master/src/main/java/com/cryptomorin/xseries/XMaterial.java
-## potion-effect: https://github.com/CryptoMorin/XSeries/blob/master/src/main/java/com/cryptomorin/xseries/XPotion.java
-## cooldown-type: https://github.com/SirBlobman/CooldownsX/blob/main/api/src/main/java/com/github/sirblobman/plugin/cooldown/api/configuration/CooldownType.java
-## combat-mode: https://github.com/SirBlobman/CooldownsX/blob/main/api/src/main/java/com/github/sirblobman/plugin/cooldown/api/configuration/CombatMode.java
+## material: https://github.com/CryptoMorin/XSeries/blob/af84e0462c3fe2779b979508c6a7ce2e6471b85b/core/src/main/java/com/cryptomorin/xseries/XMaterial.java
+## potion-effect: https://github.com/CryptoMorin/XSeries/blob/af84e0462c3fe2779b979508c6a7ce2e6471b85b/core/src/main/java/com/cryptomorin/xseries/XPotion.java
+## cooldown-type: https://github.com/SirBlobman/CooldownsX/blob/c4a7efb5dbecf70901018b7727e6698e257c5c2f/api/src/main/java/com/github/sirblobman/plugin/cooldown/api/configuration/CooldownType.java
+## combat-mode: https://github.com/SirBlobman/CooldownsX/blob/c4a7efb5dbecf70901018b7727e6698e257c5c2f/api/src/main/java/com/github/sirblobman/plugin/cooldown/api/configuration/CombatMode.java
 ## entity: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/EntityType.html
 
 # Example One: Ender Pearl Cooldown of 10 seconds.
