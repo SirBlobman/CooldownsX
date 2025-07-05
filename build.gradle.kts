@@ -1,6 +1,3 @@
-val coreVersion = fetchProperty("version.core", "invalid")
-rootProject.ext.set("coreVersion", coreVersion)
-
 val baseVersion = fetchProperty("version.base", "invalid")
 val betaString = fetchProperty("version.beta", "false")
 val jenkinsBuildNumber = fetchEnv("BUILD_NUMBER", null, "Unofficial")
@@ -44,18 +41,21 @@ subprojects {
     version = rootProject.version
 
     java {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
 
     repositories {
-        mavenCentral()
-        maven("https://nexus.sirblobman.xyz/public/")
+        mavenCentral() // Maven Central
+        maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/") // SpigotMC Repository
+        maven("https://oss.sonatype.org/content/repositories/snapshots/") // Sonatype OSS
+        maven("https://nexus.sirblobman.xyz/public/") // SirBlobman Public
     }
 
     dependencies {
-        compileOnly("org.jetbrains:annotations:26.0.1")
-        compileOnly("com.github.sirblobman.api:core:$coreVersion")
+        compileOnly("org.jetbrains:annotations:26.0.2") // JetBrains Annotations
+        compileOnly("org.spigotmc:spigot-api:1.21.7-R0.1-SNAPSHOT") // Spigot API
+        compileOnly("com.github.sirblobman.api:core:2.9-SNAPSHOT") // BlueSlimeCore
     }
 
     tasks {

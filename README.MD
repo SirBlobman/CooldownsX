@@ -6,9 +6,9 @@ use items strategically instead of spamming them.
 
 ## Requirements
 
-- Java 17
-- [Spigot](https://spigotmc.org/), [Paper](https://papermc.io/downloads/paper), or [Folia](https://papermc.io/software/folia) 1.18.2 - 1.21.4
-- [BlueSlimeCore](https://jenkins.sirblobman.xyz/job/SirBlobman/job/BlueSlimeCore/) 2.9.6 or higher.
+- Java 21
+- [Spigot](https://spigotmc.org/), [Paper](https://papermc.io/downloads/paper), or [Folia](https://papermc.io/software/folia) 1.21.7
+- [BlueSlimeCore](https://jenkins.sirblobman.xyz/job/SirBlobman/job/BlueSlimeCore/) 2.9.7 or higher.
 
 ## Placeholders
 
@@ -49,7 +49,7 @@ To use the api, add the following values to your `pom.xml` file:
     <dependency>
         <groupId>com.github.sirblobman.plugin.cooldowns</groupId>
         <artifactId>cooldowns-api</artifactId>
-        <version>5.1.0-SNAPSHOT</version>
+        <version>6.0.0-SNAPSHOT</version>
         <scope>provided</scope>
     </dependency>
 </dependencies>

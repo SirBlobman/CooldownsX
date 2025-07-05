@@ -51,12 +51,11 @@ public final class ModernHelper {
         }
 
         List<XPotion> potionList = new ArrayList<>();
-        PotionData basePotionData = potionMeta.getBasePotionData();
-        PotionType basePotionType = basePotionData.getType();
-        PotionEffectType baseEffectType = basePotionType.getEffectType();
-        if (baseEffectType != null) {
-            XPotion xpotion = XPotion.of(baseEffectType);
-            potionList.add(xpotion);
+
+        PotionType basePotionType = potionMeta.getBasePotionType();
+        if (basePotionType != null) {
+            XPotion potion = XPotion.of(basePotionType);
+            potionList.add(potion);
         }
 
         List<PotionEffect> customEffectList = potionMeta.getCustomEffects();

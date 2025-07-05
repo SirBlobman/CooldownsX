@@ -28,7 +28,7 @@ dependencies {
     compileOnly("org.spigotmc:spigot-api:1.18.2-R0.1-SNAPSHOT")
 
     // Plugin Dependencies
-    compileOnly("com.github.sirblobman.combatlogx:api:11.5-SNAPSHOT") // CombatLogX
+    compileOnly("com.github.sirblobman.combatlogx:api:11.6-SNAPSHOT") // CombatLogX
     compileOnly("me.clip:placeholderapi:2.11.6") // PlaceholderAPI
 }
 
