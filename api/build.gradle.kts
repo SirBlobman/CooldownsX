@@ -33,9 +33,6 @@ java {
     withJavadocJar()
 }
 
-repositories {
-}
-
 publishing {
     repositories {
         maven("https://nexus.sirblobman.xyz/public/") {
