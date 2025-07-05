@@ -88,7 +88,7 @@ public final class ListenerPotionThrow extends CooldownListener {
             printDebug("Found matching and active potion throw cooldown: '" + cooldownId + "'.");
 
             e.setCancelled(true);
-            XPotion firstPotion = potionList.get(0);
+            XPotion firstPotion = potionList.getFirst();
             sendCooldownMessage(player, activeCooldown, firstPotion);
             printDebug("Cancelled event and triggered message for player.");
 
