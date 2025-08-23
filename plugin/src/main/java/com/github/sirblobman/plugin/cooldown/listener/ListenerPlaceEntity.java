@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.entity.EntityPlaceEvent;
 
 import com.github.sirblobman.plugin.cooldown.api.CooldownsX;
 import com.github.sirblobman.plugin.cooldown.api.configuration.Cooldown;
@@ -21,9 +22,8 @@ public final class ListenerPlaceEntity extends CooldownListener {
         super(plugin);
     }
 
-    @SuppressWarnings("deprecation") // Draft API
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-    public void onEntityPlace(org.bukkit.event.entity.EntityPlaceEvent e) {
+    public void onEntityPlace(EntityPlaceEvent e) {
         Player player = e.getPlayer();
         if (player == null) {
             return;

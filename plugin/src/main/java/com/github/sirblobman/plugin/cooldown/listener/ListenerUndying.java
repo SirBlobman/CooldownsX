@@ -25,11 +25,10 @@ public final class ListenerUndying extends CooldownListener {
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onResurrect(EntityResurrectEvent e) {
         Entity entity = e.getEntity();
-        if (!(entity instanceof Player)) {
+        if (!(entity instanceof Player player)) {
             return;
         }
 
-        Player player = (Player) entity;
         PlayerCooldown cooldownData = getCooldownData(player);
         Set<Cooldown> activeCooldowns = cooldownData.getActiveCooldowns(CooldownType.UNDYING);
 

@@ -20,11 +20,7 @@ repositories {
 }
 
 dependencies {
-    // Local Dependencies
-    implementation(project(":api"))
-    implementation(project(":modern"))
-
-    // Plugin Dependencies
+    implementation(project(":api")) // CooldownsX API
     compileOnly("com.github.sirblobman.combatlogx:api:11.6-SNAPSHOT") // CombatLogX
     compileOnly("me.clip:placeholderapi:2.11.6") // PlaceholderAPI
 }
