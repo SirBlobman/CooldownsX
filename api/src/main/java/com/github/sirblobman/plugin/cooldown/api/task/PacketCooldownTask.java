@@ -4,10 +4,9 @@ import org.jetbrains.annotations.NotNull;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import com.github.sirblobman.api.folia.details.EntityTaskDetails;
-import com.github.sirblobman.api.nms.MultiVersionHandler;
-import com.github.sirblobman.api.nms.PlayerHandler;
 import com.github.sirblobman.plugin.cooldown.api.CooldownsX;
 
 public final class PacketCooldownTask extends EntityTaskDetails<Player> {
@@ -18,7 +17,6 @@ public final class PacketCooldownTask extends EntityTaskDetails<Player> {
     public PacketCooldownTask(@NotNull CooldownsX plugin, @NotNull Player entity, @NotNull Material material,
                               int ticks) {
         super(plugin.getPlugin(), entity);
-        setDelay(1L);
 
         this.plugin = plugin;
         this.material = material;
@@ -34,22 +32,22 @@ public final class PacketCooldownTask extends EntityTaskDetails<Player> {
 
         int ticks = getTicks();
         Material material = getMaterial();
-        PlayerHandler playerHandler = getPlayerHandler();
-        playerHandler.sendCooldownPacket(player, material, ticks);
+
+        // Use ItemStack variant - Paper reads the item's use_cooldown component
+        // (cooldown_group) and applies cooldown to the correct group.
+        // For 1.21.2+ items like ender_pearl this routes through the new cooldown
+        // group system; for older items it falls back to per-material cooldown.
+        try {
+            ItemStack stack = new ItemStack(material);
+            player.setCooldown(stack, ticks);
+        } catch (Throwable t) {
+            // Fallback for older API
+            player.setCooldown(material, ticks);
+        }
     }
 
     private @NotNull CooldownsX getCooldownsX() {
         return this.plugin;
-    }
-
-    private @NotNull MultiVersionHandler getMultiVersionHandler() {
-        CooldownsX plugin = getCooldownsX();
-        return plugin.getMultiVersionHandler();
-    }
-
-    private @NotNull PlayerHandler getPlayerHandler() {
-        MultiVersionHandler multiVersionHandler = getMultiVersionHandler();
-        return multiVersionHandler.getPlayerHandler();
     }
 
     private @NotNull Material getMaterial() {
