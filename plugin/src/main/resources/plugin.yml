@@ -1,11 +1,11 @@
-name: "${pluginName}"
-prefix: "${pluginPrefix}"
-description: "${pluginDescription}"
-website: "${pluginWebsite}"
+name: "CooldownsX"
+prefix: "CooldownsX"
+description: "Configurable cooldowns for items, potions, and totems."
+website: "https://www.spigotmc.org/resources/41981/"
 
-main: "${pluginMainClass}"
-version: "${pluginVersion}"
-api-version: "1.21.8"
+main: "com.github.sirblobman.plugin.cooldown.CooldownPlugin"
+version: "${version}"
+api-version: "26.2"
 
 folia-supported: true
 

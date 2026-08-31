@@ -1,5 +1,7 @@
 pipeline {
-    agent any
+    agent {
+        label "jdk25"
+    }
 
     options {
         githubProjectProperty(projectUrlStr: "https://github.com/SirBlobman/CooldownsX")
@@ -19,16 +21,22 @@ pipeline {
     }
 
     stages {
-        stage ("Gradle: Publish") {
+        stage ("Gradle: Build") {
             steps {
                 withGradle {
-                    script {
-                        sh("./gradlew --refresh-dependencies clean build")
-                        if (env.BRANCH_NAME == "main") {
-                            sh("./gradlew publish")
-                        }
-                        sh("./gradlew --stop")
-                    }
+                    sh("./gradlew --no-daemon --refresh-dependencies clean build")
+                }
+            }
+        }
+
+        stage ("Gradle: Publish") {
+            when {
+                branch "main"
+            }
+
+            steps {
+                withGradle {
+                    sh("./gradlew --no-daemon publish")
                 }
             }
         }
@@ -41,13 +49,21 @@ pipeline {
 
         always {
             script {
-                discordSend webhookURL: DISCORD_URL, title: "CooldownsX", link: "${env.BUILD_URL}",
-                        result: currentBuild.currentResult,
-                        description: """\
-                            **Branch:** ${env.GIT_BRANCH}
-                            **Build:** ${env.BUILD_NUMBER}
-                            **Status:** ${currentBuild.currentResult}""".stripIndent(),
-                        enableArtifactsList: false, showChangeset: true
+                def description = """
+                    **Branch:** ${env.GIT_BRANCH}
+                    **Build:** ${env.BUILD_NUMBER}
+                    **Status:** ${currentBuild.currentResult}
+                """
+
+                discordSend(
+                    webhookURL: DISCORD_URL,
+                    title: 'CooldownsX',
+                    link: env.BUILD_URL,
+                    result: currentBuild.currentResult,
+                    description: description.stripIndent(),
+                    enableArtifactsList: false,
+                    showChangeset: true
+                )
             }
         }
     }

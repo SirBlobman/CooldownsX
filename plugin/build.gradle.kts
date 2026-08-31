@@ -21,8 +21,8 @@ repositories {
 
 dependencies {
     implementation(project(":api")) // CooldownsX API
-    compileOnly("com.github.sirblobman.combatlogx:api:11.6-SNAPSHOT") // CombatLogX
-    compileOnly("me.clip:placeholderapi:2.11.6") // PlaceholderAPI
+    compileOnly("com.github.sirblobman.combatlogx:api:11.7-SNAPSHOT") // CombatLogX
+    compileOnly("me.clip:placeholderapi:2.12.3") // PlaceholderAPI
 }
 
 
@@ -40,28 +40,12 @@ tasks {
         dependsOn("shadowJar")
     }
 
-    processResources {
-        val pluginName = fetchProperty("bukkit.plugin.name", "")
-        val pluginPrefix = fetchProperty("bukkit.plugin.prefix", "")
-        val pluginDescription = fetchProperty("bukkit.plugin.description", "")
-        val pluginWebsite = fetchProperty("bukkit.plugin.website", "")
-        val pluginMainClass = fetchProperty("bukkit.plugin.main", "")
+    named<ProcessResources>("processResources") {
+        val pluginVersion = providers.provider { project.version.toString() }
+        inputs.property("version", pluginVersion)
 
         filesMatching("plugin.yml") {
-            expand(
-                mapOf(
-                    "pluginName" to pluginName,
-                    "pluginPrefix" to pluginPrefix,
-                    "pluginDescription" to pluginDescription,
-                    "pluginWebsite" to pluginWebsite,
-                    "pluginMainClass" to pluginMainClass,
-                    "pluginVersion" to version
-                )
-            )
-        }
-
-        filesMatching("config.yml") {
-            expand(mapOf("pluginVersion" to version))
+            expand(mapOf("version" to pluginVersion.get()))
         }
     }
 }

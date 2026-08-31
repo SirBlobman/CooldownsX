@@ -41,9 +41,9 @@ subprojects {
     version = rootProject.version
 
     java {
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
-        toolchain.languageVersion.set(JavaLanguageVersion.of(21))
+        sourceCompatibility = JavaVersion.VERSION_25
+        targetCompatibility = JavaVersion.VERSION_25
+        toolchain.languageVersion.set(JavaLanguageVersion.of(25))
     }
 
     repositories {
@@ -54,8 +54,8 @@ subprojects {
     }
 
     dependencies {
-        compileOnly("org.jetbrains:annotations:26.0.2") // JetBrains Annotations
-        compileOnly("org.spigotmc:spigot-api:1.21.8-R0.1-SNAPSHOT") // Spigot API
+        compileOnly("org.jetbrains:annotations:26.1.0") // JetBrains Annotations
+        compileOnly("org.spigotmc:spigot-api:26.2-R0.1-SNAPSHOT") // Spigot API
         compileOnly("com.github.sirblobman.api:core:2.9-SNAPSHOT") // BlueSlimeCore
     }
 
