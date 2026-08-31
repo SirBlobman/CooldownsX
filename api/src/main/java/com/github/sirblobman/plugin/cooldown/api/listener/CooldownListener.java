@@ -348,6 +348,11 @@ public abstract class CooldownListener extends PluginListener<ConfigurablePlugin
                 continue;
             }
 
+            if (cooldown.checkCombatMode(player)) {
+                printDebug("Player has combat mode mismatch, skipping.");
+                continue;
+            }
+
             int amount = cooldown.getAmount();
             if (amount > 1) {
                 int used = cooldownData.getActionCount(cooldown);
