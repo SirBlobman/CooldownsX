@@ -16,10 +16,6 @@ pipeline {
         githubPush()
     }
 
-    tools {
-        jdk "JDK 21"
-    }
-
     stages {
         stage ("Gradle: Build") {
             steps {
