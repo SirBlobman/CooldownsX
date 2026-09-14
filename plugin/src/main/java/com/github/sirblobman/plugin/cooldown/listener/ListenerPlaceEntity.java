@@ -51,7 +51,7 @@ public final class ListenerPlaceEntity extends CooldownListener {
             return;
         }
 
-        Set<Cooldown> allValidCooldowns = fetchCooldowns(CooldownType.CONSUME_ITEM);
+        Set<Cooldown> allValidCooldowns = fetchCooldowns(CooldownType.PLACE_ENTITY);
         Set<Cooldown> validCooldownSet = filter(allValidCooldowns, entityType);
         checkValidCooldowns(player, validCooldownSet);
     }
